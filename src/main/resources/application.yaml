@@ -1,0 +1,22 @@
+jwt:
+  header: Authorization
+  secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
+  expire_time: 600 # 10 min
+
+spring:
+  datasource:
+    url: jdbc:sqlite:db.sqlite
+    driver-class-name: org.sqlite.JDBC
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+    show-sql: true
+    # table create 후 data.sql initialize
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
