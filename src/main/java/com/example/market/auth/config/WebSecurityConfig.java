@@ -1,5 +1,6 @@
-package com.example.market.common.Config;
+package com.example.market.auth.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,17 +23,33 @@ public class WebSecurityConfig {
             HttpSecurity http
     ) throws Exception {
         http
+                // form 에서 보내지는 post 요청을 시큐리티가 막는것을 방지하기 위해 추가
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         // no-auth 로 오는 요청은 모두 허가
                         auth -> auth
-                                // 어떤 경로에 대한 설정인지
-                                .requestMatchers("/no-auth")
-                                // 이 경로에 도달할 수 있는 사람에 대한 설정 (모두)
-                                .permitAll()
-                                .requestMatchers("/users/my-profile")
+                                .requestMatchers(
+                                        "/users/my-profile",
+                                        "/users/home"
+                                        )
                                 .authenticated()
-
+                                .requestMatchers("/users/register")
+                                .anonymous()
+                )
+                // html form 요소를 이용해 로그인을 시키는 설정
+                .formLogin(
+                        formLogin -> formLogin
+                                // 어떤 경로로 요청을 보내면 로그인 페이지가 나오는지
+                                .loginPage("/users/login")
+                                // 아무 설정 없이 로그인에 성공한 뒤 이동할 URL
+                                .defaultSuccessUrl("/users/my-profile")
+                                // 로그인에 실패시 이동할 URL
+                                .failureUrl("/users/login?fail")
+                                .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/users/logout")
+                        .logoutSuccessUrl("/users/login")
                 )
         ;
 
@@ -40,17 +57,7 @@ public class WebSecurityConfig {
     }
 
 
-    @Bean
-    public UserDetailsManager userDetailsManager() {
-        UserDetails user1 = User.withUsername("user1")
-                .password("password1")
-                .build();
-        // Spring Security에서 기본으로 제공하는
-        // 메모리 기반 사용자 관리 클래스 + 사용자 1
-        return new InMemoryUserDetailsManager(user1);
-
-    }
-
+    // 비밀번호 암호화 클래스
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
