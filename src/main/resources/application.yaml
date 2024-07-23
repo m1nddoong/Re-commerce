@@ -1,7 +1,6 @@
-#jwt:
-#  header: Authorization
-#  secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
-#
+jwt:
+  header: Authorization
+  secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
 spring:
   datasource:
     url: jdbc:sqlite:db.sqlite
