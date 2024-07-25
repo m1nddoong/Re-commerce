@@ -42,14 +42,18 @@ public class MemberService implements UserDetailsService {
             // 비밀번호, 비밀번호 확인이 일치하지 않음
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        if (memberRepository.existsByUsername(dto.getUsername())) {
-            // 사용자 이름이 이미 존재
+        if (memberRepository.existsByEmail(dto.getEmail())) {
+            // 동일한 이메일이 이미 존재
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         return MemberDto.fromEntity(memberRepository.save(Member.builder()
-                .username(dto.getUsername())
+                .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .nickname(dto.getNickname())
+                .username(dto.getUsername())
+                .age(dto.getAge())
+                .phone(dto.getPhone())
                 .build()));
     }
 
@@ -57,7 +61,7 @@ public class MemberService implements UserDetailsService {
     public JwtResponseDto signIn(
             JwtRequestDto dto
     ) {
-        Member member = memberRepository.findByUsername(dto.getUsername())
+        Member member = memberRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         if (!passwordEncoder.matches(
