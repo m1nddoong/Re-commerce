@@ -1,6 +1,6 @@
 package com.example.market.auth.jwt;
 
-import com.example.auth.entity.CustomUserDetails;
+import com.example.market.auth.service.MemberService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,30 +11,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Slf4j
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     // 사용자 정보를 찾기위한 UserDetailsService 또는 Manager
-    private final UserDetailsManager manager;
-
-    public JwtTokenFilter(
-            JwtTokenUtils jwtTokenUtils,
-            UserDetailsManager manager
-    ) {
-        this.jwtTokenUtils = jwtTokenUtils;
-        this.manager = manager;
-    }
+    private final MemberService memberService;
 
     @Override
     protected void doFilterInternal(
@@ -59,7 +48,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                         .parseClaims(token)
                         .getSubject();
 
-                UserDetails userDetails = manager.loadUserByUsername(username);
+                UserDetails userDetails = memberService.loadUserByUsername(username);
                 for (GrantedAuthority authority :userDetails.getAuthorities()) {
                     log.info("authority: {}", authority.getAuthority());
                 }
@@ -67,7 +56,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 // 인증 정보 생성
                 AbstractAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-//                                CustomUserDetails.builder()
+//                                CustomMemberDetails.builder()
 //                                        .username(username)
 //                                        .build(),
                                 // manager에서 실제 사용자 정보 조회

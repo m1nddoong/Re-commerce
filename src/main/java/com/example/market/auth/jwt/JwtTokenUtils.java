@@ -24,7 +24,7 @@ public class JwtTokenUtils {
     private final JwtParser jwtParser;
 
     public JwtTokenUtils(
-            @Value("{jwt.secret}")
+            @Value("${jwt.secret}")
             String jwtSecret
     ) {
         this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));

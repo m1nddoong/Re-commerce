@@ -18,22 +18,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //private String uuid;
 
     // 유저 네임은 Null 일 수 없고, 유일한 값이다
     @Column(nullable = false, unique = true)
     private String username;
     private String password;
 
-    // private Integer age;
-    // private String email;
-    // private String phone;
-    // private String role;
-//    @Setter
-//    private String profile;
 }
 
