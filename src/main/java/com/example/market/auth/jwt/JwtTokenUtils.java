@@ -1,5 +1,6 @@
 package com.example.market.auth.jwt;
 
+import com.example.market.auth.entity.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -10,8 +11,8 @@ import java.sql.Date;
 import java.time.Instant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import com.example.market.auth.entity.User;
 
 
 // JWT 관련된 기능을 만드는 곳
@@ -36,7 +37,7 @@ public class JwtTokenUtils {
     }
 
     // UserDetails를 받아서 JWT로 변환하는 메서드
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
         // JWT에 담고싶은 정보를 Claims로 만든다
 
         // 현재 호출되었을 떄 epoch time
@@ -55,6 +56,23 @@ public class JwtTokenUtils {
                 .signWith(this.signingKey)
                 .compact();
     }
+
+
+    public String generateToken(User user) {
+        Instant now = Instant.now();
+        Claims jwtClaims = Jwts.claims()
+                .setSubject(String.valueOf(user.getUuid()))
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(now.plusSeconds(60 * 60)));
+
+        // 최종적으로 JWT를 발급한다.
+        return Jwts.builder()
+                .setClaims(jwtClaims)
+                .signWith(this.signingKey)
+                .compact();
+    }
+
+
 
     // 정상적인 JWT인지를 판단하는 메서드
     public boolean validate(String token) {

@@ -1,6 +1,6 @@
 package com.example.market.auth.jwt;
 
-import com.example.market.auth.service.MemberService;
+import com.example.market.auth.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     // 사용자 정보를 찾기위한 UserDetailsService 또는 Manager
-    private final MemberService memberService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(
@@ -33,34 +33,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         log.debug("try jwt filter");
         // 1. Authorization 헤더를 회수
-        String authHeader
-                // = request.getHeader("Authorization");
-                = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         // 2. Authorization 헤더가 존재하는지 + Bearer로 시작하는지
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.split(" ")[1];
             // 3. Token이 유효한 토큰인지
             if (jwtTokenUtils.validate(token)) {
                 // 4. 유효하다면 해당 토큰을 바탕으로 사용자 정보를 SecurityContext에 등록
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
-                // 사용자 정보 회수
-                String username = jwtTokenUtils
+                String userUUID = jwtTokenUtils
                         .parseClaims(token)
                         .getSubject();
+                // 원래는 username으로 DB에서 사용자를 조회하여 userDetails 객체에 저장하는 것 -> uuid 로 변경
+                UserDetails userDetails = userService.loadUserByUsername(userUUID);
 
-                UserDetails userDetails = memberService.loadUserByUsername(username);
-                for (GrantedAuthority authority :userDetails.getAuthorities()) {
-                    log.info("authority: {}", authority.getAuthority());
-                }
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 // 인증 정보 생성
                 AbstractAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-//                                CustomMemberDetails.builder()
-//                                        .username(username)
-//                                        .build(),
-                                // manager에서 실제 사용자 정보 조회
-                                // manager.loadUserByUsername(username),
                                 userDetails,
                                 token,
                                 userDetails.getAuthorities()
@@ -69,6 +59,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
                 log.info("set security context with jwt");
+                log.info("{}", SecurityContextHolder.getContext().getAuthentication().getName());
+
+
+
             }
             else {
                 log.warn("jwt validation failed");

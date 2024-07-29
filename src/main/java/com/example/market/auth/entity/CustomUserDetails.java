@@ -1,42 +1,36 @@
 package com.example.market.auth.entity;
 
 import java.util.Collection;
+import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomMemberDetails implements UserDetails {
-    @Getter
-    private Long id;
-    private String username;
-    private String password;
-
-    public static CustomMemberDetails fromEntity(Member entity) {
-        return CustomMemberDetails.builder()
-                .id(entity.getId())
-                .username(entity.getUsername())
-                .password(entity.getPassword())
-                .build();
-    }
+public class CustomUserDetails implements UserDetails {
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(
+                new SimpleGrantedAuthority(user.getRole().getName())
+        );
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return user.getUsername();
     }
 }

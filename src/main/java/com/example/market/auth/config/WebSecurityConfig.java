@@ -1,7 +1,8 @@
 package com.example.market.auth.config;
 
+import com.example.market.auth.jwt.JwtTokenFilter;
 import com.example.market.auth.jwt.JwtTokenUtils;
-import com.example.market.auth.service.MemberService;
+import com.example.market.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,13 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 // Bean을 비롯해서 여러 설정을 하기 위한 Bean 객체
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final MemberService memberService;
+    private final UserService userService;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -30,13 +32,14 @@ public class WebSecurityConfig {
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/members/my-profile"
+                                "/users/my-profile-update"
                         )
                         .authenticated()
                         .requestMatchers(
-                                "/members/sign-up",
-                                "/members/sign-in",
-                                "/members/validate/**"
+                                "/users/sign-up",
+                                "/users/sign-in",
+                                "/users/validate/**",
+                                "/users/my-profile"
                         )
                         .anonymous()
                 )
@@ -44,14 +47,14 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                // JWT 필터를 권한 필터 앞에 삽입
-//                .addFilterBefore(
-//                        new JwtTokenFilter(
-//                                jwtTokenUtils,
-//                                userService
-//                        ),
-//                        AuthorizationFilter.class
-//                )
+                 // JWT 필터를 권한 필터 앞에 삽입
+                .addFilterBefore(
+                        new JwtTokenFilter(
+                                jwtTokenUtils,
+                                userService
+                        ),
+                        AuthorizationFilter.class
+                )
         ;
         return http.build();
 
