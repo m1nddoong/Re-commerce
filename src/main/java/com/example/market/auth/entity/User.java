@@ -47,6 +47,7 @@ public class User {
     @Setter
     private String businessNum;
 
+    @Setter
     @ManyToOne
     private Role role;
 }

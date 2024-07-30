@@ -32,14 +32,13 @@ public class WebSecurityConfig {
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/users/my-profile-update"
+                                "/users/my-profile",
+                                "/users/update-profile"
                         )
                         .authenticated()
                         .requestMatchers(
                                 "/users/sign-up",
-                                "/users/sign-in",
-                                "/users/validate/**",
-                                "/users/my-profile"
+                                "/users/sign-in"
                         )
                         .anonymous()
                 )

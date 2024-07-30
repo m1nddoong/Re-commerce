@@ -11,9 +11,4 @@ public class CreateUserDto {
     private String email; // ID
     private String password; // 비밀번호
     private String passwordCheck;
-    private String nickname; // 닉네임
-    private String username; // 성명
-    private Integer age; // 나이
-    private String phone; // 전화번호
-    private String profileImg;
 }

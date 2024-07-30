@@ -1,6 +1,7 @@
 package com.example.market.auth.controller;
 
 import com.example.market.auth.dto.CreateUserDto;
+import com.example.market.auth.dto.UpdateUserDto;
 import com.example.market.auth.dto.UserDto;
 import com.example.market.auth.jwt.JwtRequestDto;
 import com.example.market.auth.jwt.JwtResponseDto;
@@ -62,6 +63,18 @@ public class UserController {
         return userService.signIn(dto);
     }
 
+    /**
+     * 사용자 프로필 업데이트
+     *
+     * @param dto 성명, 닉네임, 나이, 전화번호
+     */
+    @PutMapping("/update-profile")
+    public ResponseEntity<UserDto> updateProfile(
+            @RequestBody
+            UpdateUserDto dto
+    ) {
+        return ResponseEntity.ok(userService.updateProfile(dto));
+    }
 
     /**
      * 마이 프로필 확인

@@ -2,6 +2,7 @@ package com.example.market.auth.service;
 
 import com.example.market.auth.controller.AuthenticationFacade;
 import com.example.market.auth.dto.CreateUserDto;
+import com.example.market.auth.dto.UpdateUserDto;
 import com.example.market.auth.dto.UserDto;
 import com.example.market.auth.entity.CustomUserDetails;
 import com.example.market.auth.entity.Role;
@@ -41,7 +42,9 @@ public class UserService implements UserDetailsService {
     // 원래는 username 을 이용해 사용자 정보를 조회하지만 -> uuid 를 사용
     public UserDetails loadUserByUsername(String uuid) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findUserByUuid(UUID.fromString(uuid));
-        if (optionalUser.isEmpty()) throw new UsernameNotFoundException("uuid no found");
+        if (optionalUser.isEmpty()) {
+            throw new UsernameNotFoundException("uuid no found");
+        }
         User user = optionalUser.get();
 
         // 조회된 사용자 정보를 바탕으로 CustomUserDetails 로 만들기
@@ -51,11 +54,10 @@ public class UserService implements UserDetailsService {
 
     }
 
-
     /**
      * 회원 가입
      *
-     * @param dto 회원가입 정보
+     * @param dto 이메일, 비밀번호, 비밀번호 확인
      */
     @Transactional
     public UserDto signUp(
@@ -72,23 +74,22 @@ public class UserService implements UserDetailsService {
 
         String uuid = UUID.randomUUID().toString();
         // 최초 회원가입 시 "INACTIVE_USER" 로 등록됨
-        Optional<Role> optionalRole = roleRepository.findById(1L);
-        if (optionalRole.isEmpty()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        Role role = roleRepository.findById(1L)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         return UserDto.fromEntity(userRepository.save(User.builder()
                 .uuid(UUID.fromString(uuid))
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getNickname())
-                .username(dto.getUsername())
-                .age(dto.getAge())
-                .phone(dto.getPhone())
-                .profileImg(dto.getProfileImg())
-                .role(optionalRole.get())
+                .role(role)
                 .build()));
     }
 
-
+    /**
+     * 로그인
+     *
+     * @param dto (토큰 정보)
+     */
     public JwtResponseDto signIn(
             JwtRequestDto dto
     ) {
@@ -120,10 +121,27 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    public UserDto updateProfile(
+            UpdateUserDto dto
+    ) {
+        User currentUser = authenticationFacade.extractUser();
+        Role role = roleRepository.findById(2L)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
+        currentUser.setUsername(dto.getUsername());
+        currentUser.setNickname(dto.getNickname());
+        currentUser.setAge(dto.getAge());
+        currentUser.setPhone(dto.getPhone());
+        currentUser.setRole(role);
+
+        return UserDto.fromEntity(userRepository.save(currentUser));
+    }
+
     public UserDto myProfile() {
         // 일단 사용자 확인
         User user = authenticationFacade.extractUser();
         return UserDto.fromEntity(user);
     }
+
 
 }
