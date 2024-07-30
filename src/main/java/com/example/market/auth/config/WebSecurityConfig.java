@@ -33,7 +33,8 @@ public class WebSecurityConfig {
                         .permitAll()
                         .requestMatchers(
                                 "/users/my-profile",
-                                "/users/update-profile"
+                                "/users/update-profile-info",
+                                "/users/update-profile-img"
                         )
                         .authenticated()
                         .requestMatchers(

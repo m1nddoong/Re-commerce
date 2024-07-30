@@ -63,18 +63,6 @@ public class UserController {
         return userService.signIn(dto);
     }
 
-    /**
-     * 사용자 프로필 업데이트
-     *
-     * @param dto 성명, 닉네임, 나이, 전화번호
-     */
-    @PutMapping("/update-profile")
-    public ResponseEntity<UserDto> updateProfile(
-            @RequestBody
-            UpdateUserDto dto
-    ) {
-        return ResponseEntity.ok(userService.updateProfile(dto));
-    }
 
     /**
      * 마이 프로필 확인
@@ -84,29 +72,30 @@ public class UserController {
         return userService.myProfile();
     }
 
+    /**
+     * 사용자 프로필 업데이트
+     *
+     * @param dto 성명, 닉네임, 나이, 전화번호
+     */
+    @PutMapping("/update-profile-info")
+    public ResponseEntity<UserDto> updateProfile(
+            @RequestBody
+            UpdateUserDto dto
+    ) {
+        return ResponseEntity.ok(userService.updateProfile(dto));
+    }
+
 
     /**
      * 프로필 img 업로드
      */
-    @PutMapping(
-            value = "multipart",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public String multipart(
-            @RequestParam("name")
-            String name,
+    @PutMapping("/update-profile-img")
+    public ResponseEntity<String> multipart(
             // 파일을 받아주는 자료형을 MutlipartFile
             @RequestParam("file")
-            MultipartFile multipartFile
-    ) throws IOException {
-        // 저장할 경로 생성
-        Files.createDirectories(Path.of("media"));
-        // 저장할 파일 이름을 경로를 포함해 지정
-        Path downloadPath = Path.of("media/" + multipartFile.getOriginalFilename());
-        // 저장
-        multipartFile.transferTo(downloadPath);
-
-        return "http://location:8080/static" + multipartFile.getOriginalFilename();
+            MultipartFile profileImg
+    ) {
+      return ResponseEntity.ok(userService.uploadProfileImage(profileImg));
     }
 }
 
