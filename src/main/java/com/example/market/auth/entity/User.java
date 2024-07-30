@@ -9,12 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.Collection;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 @Builder
@@ -45,10 +47,9 @@ public class User {
     private String profileImg;
 
     @Setter
-    private String businessNum;
+    private String businessNum; // 사업자 등록 번호
 
     @Setter
-    @ManyToOne
-    private Role role;
+    private String authorities;
 }
 

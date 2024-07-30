@@ -1,5 +1,6 @@
 package com.example.market.auth.controller;
 
+import com.example.market.auth.dto.BusinessDto;
 import com.example.market.auth.dto.CreateUserDto;
 import com.example.market.auth.dto.UpdateUserDto;
 import com.example.market.auth.dto.UserDto;
@@ -8,8 +9,10 @@ import com.example.market.auth.jwt.JwtResponseDto;
 import com.example.market.auth.jwt.JwtTokenUtils;
 import com.example.market.auth.service.UserService;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.print.attribute.standard.Media;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -73,7 +76,7 @@ public class UserController {
     }
 
     /**
-     * 사용자 프로필 업데이트
+     * 프로필 필수 정보 기입
      *
      * @param dto 성명, 닉네임, 나이, 전화번호
      */
@@ -89,15 +92,32 @@ public class UserController {
     /**
      * 프로필 img 업로드
      */
-    @PutMapping("/update-profile-img")
-    public ResponseEntity<String> multipart(
+    @PutMapping(
+            value = "/update-profile-img",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<String> updateProfileImg(
             // 파일을 받아주는 자료형을 MutlipartFile
             @RequestParam("file")
             MultipartFile profileImg
     ) {
-      return ResponseEntity.ok(userService.uploadProfileImage(profileImg));
+        return ResponseEntity.ok(userService.uploadProfileImage(profileImg));
+    }
+
+    /**
+     * 사업자 등록 번호 신청
+     *
+     * @param dto 사업자 등록 번호
+     */
+    @PutMapping("/register-business-num")
+    public ResponseEntity<UserDto> registerBusinessNum(
+            @RequestBody
+            BusinessDto dto
+    ) {
+        return ResponseEntity.ok(userService.registerBusinessNum(dto));
     }
 }
+
 
 
 

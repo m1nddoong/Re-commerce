@@ -25,7 +25,8 @@ public class UserDto {
     @Setter
     private String phone;
     private String profileImg;
-    private Role role;
+    private String businessNum;
+    private String authorities;
 
 
     // static factory method
@@ -40,7 +41,8 @@ public class UserDto {
                 .age(entity.getAge())
                 .phone(entity.getPhone())
                 .profileImg(entity.getProfileImg())
-                .role(entity.getRole())
+                .businessNum(entity.getBusinessNum())
+                .authorities(entity.getAuthorities())
                 .build();
     }
 

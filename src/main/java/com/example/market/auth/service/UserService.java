@@ -1,6 +1,7 @@
 package com.example.market.auth.service;
 
 import com.example.market.auth.controller.AuthenticationFacade;
+import com.example.market.auth.dto.BusinessDto;
 import com.example.market.auth.dto.CreateUserDto;
 import com.example.market.auth.dto.UpdateUserDto;
 import com.example.market.auth.dto.UserDto;
@@ -10,7 +11,6 @@ import com.example.market.auth.entity.User;
 import com.example.market.auth.jwt.JwtRequestDto;
 import com.example.market.auth.jwt.JwtResponseDto;
 import com.example.market.auth.jwt.JwtTokenUtils;
-import com.example.market.auth.repo.RoleRepository;
 import com.example.market.auth.repo.UserRepository;
 import com.example.market.common.util.AppConstants;
 import jakarta.transaction.Transactional;
@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,7 +38,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationFacade authenticationFacade;
@@ -67,25 +68,21 @@ public class UserService implements UserDetailsService {
     public UserDto signUp(
             CreateUserDto dto
     ) {
+        // 비밀번호, 비밀번호 확인이 일치하지 않는지
         if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            // 비밀번호, 비밀번호 확인이 일치하지 않음
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        // 동일한 이메일이 이미 존재하는지
         if (userRepository.existsByEmail(dto.getEmail())) {
-            // 동일한 이메일이 이미 존재
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
         String uuid = UUID.randomUUID().toString();
-        // 최초 회원가입 시 "INACTIVE_USER" 로 등록됨
-        Role role = roleRepository.findById(1L)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-
         return UserDto.fromEntity(userRepository.save(User.builder()
                 .uuid(UUID.fromString(uuid))
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .role(role)
+                .authorities(Role.INACTIVE_USER.getRoles())
                 .build()));
     }
 
@@ -125,29 +122,46 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    /**
+     * 프로필 필수 정보 기입 -> 활성 사용자로 승급
+     * @param dto
+     * @return
+     */
     public UserDto updateProfile(
             UpdateUserDto dto
     ) {
         User currentUser = authenticationFacade.extractUser();
-        Role role = roleRepository.findById(2L)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         currentUser.setUsername(dto.getUsername());
         currentUser.setNickname(dto.getNickname());
         currentUser.setAge(dto.getAge());
         currentUser.setPhone(dto.getPhone());
-        currentUser.setRole(role);
+
+        // 모든 필드가 null이 아닌지 확인
+        boolean allFieldsNotNull = Stream.of(dto.getUsername(), dto.getNickname(), dto.getAge(), dto.getPhone())
+                .allMatch(Objects::nonNull);
+
+        if (allFieldsNotNull) {
+            currentUser.setAuthorities(Role.ACTIVE_USER.getRoles());
+        }
 
         return UserDto.fromEntity(userRepository.save(currentUser));
     }
 
+    /**
+     * 마이 프로필
+     * @return
+     */
     public UserDto myProfile() {
-        // 일단 사용자 확인
         User user = authenticationFacade.extractUser();
         return UserDto.fromEntity(user);
     }
 
-
+    /**
+     * 프로필 이미지 업로드
+     * @param profileImg
+     * @return
+     */
     public String uploadProfileImage(MultipartFile profileImg) {
         User currentUser = authenticationFacade.extractUser();
         // 기존 이미지 삭제
@@ -185,4 +199,12 @@ public class UserService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public UserDto registerBusinessNum(BusinessDto dto) {
+        User user = authenticationFacade.extractUser();
+        user.setBusinessNum(dto.getBusinessNum());
+        return UserDto.fromEntity(userRepository.save(user));
+    }
+
+
 }

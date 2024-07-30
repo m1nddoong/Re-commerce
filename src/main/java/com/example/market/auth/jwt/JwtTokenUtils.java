@@ -36,33 +36,17 @@ public class JwtTokenUtils {
 
     }
 
-    // UserDetails를 받아서 JWT로 변환하는 메서드
-    public String generateToken(CustomUserDetails userDetails) {
+    // User를 받아서 JWT로 변환하는 메서드
+    public String generateToken(User user) {
         // JWT에 담고싶은 정보를 Claims로 만든다
-
         // 현재 호출되었을 떄 epoch time
         Instant now = Instant.now();
         Claims jwtClaims = Jwts.claims()
                 // sub : 누구인지
-                .setSubject(userDetails.getUsername())
+                .setSubject(String.valueOf(user.getUuid()))
                 // iat : 언제 발급 되었는지
                 .setIssuedAt(Date.from(now))
                 // exp : 언제 만료 예정인지
-                .setExpiration(Date.from(now.plusSeconds(60 * 60 * 24 * 7)));
-
-        // 최종적으로 JWT를 발급한다.
-        return Jwts.builder()
-                .setClaims(jwtClaims)
-                .signWith(this.signingKey)
-                .compact();
-    }
-
-
-    public String generateToken(User user) {
-        Instant now = Instant.now();
-        Claims jwtClaims = Jwts.claims()
-                .setSubject(String.valueOf(user.getUuid()))
-                .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plusSeconds(60 * 60)));
 
         // 최종적으로 JWT를 발급한다.
