@@ -26,6 +26,7 @@ public class UserDto {
     private String phone;
     private String profileImg;
     private String businessNum;
+    private Boolean businessApply;
     private String authorities;
 
 
@@ -42,6 +43,7 @@ public class UserDto {
                 .phone(entity.getPhone())
                 .profileImg(entity.getProfileImg())
                 .businessNum(entity.getBusinessNum())
+                .businessApply(entity.getBusinessApply())
                 .authorities(entity.getAuthorities())
                 .build();
     }

@@ -42,8 +42,10 @@ public class WebSecurityConfig {
                                 "/users/sign-in"
                         )
                         .anonymous()
-                        .requestMatchers("/users/register-business-num")
+                        .requestMatchers("/users/business-application")
                         .hasAnyRole("ACTIVE", "OWNER")
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
                 )
                 // JWT를 사용하기 때문에 보안 관련 세션 해제
                 .sessionManagement(session -> session

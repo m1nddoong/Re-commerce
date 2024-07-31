@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -199,12 +201,10 @@ public class UserService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    public UserDto registerBusinessNum(BusinessDto dto) {
+    // 사업자 전환 신청
+    public UserDto businessApplication(BusinessDto dto) {
         User user = authenticationFacade.extractUser();
         user.setBusinessNum(dto.getBusinessNum());
         return UserDto.fromEntity(userRepository.save(user));
     }
-
-
 }

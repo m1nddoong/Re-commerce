@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,6 +49,9 @@ public class User {
 
     @Setter
     private String businessNum; // 사업자 등록 번호
+
+    @Setter
+    private Boolean businessApply; // 사업자 전환 신청 상태
 
     @Setter
     private String authorities;

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import javax.print.attribute.standard.Media;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,13 +110,14 @@ public class UserController {
      *
      * @param dto 사업자 등록 번호
      */
-    @PutMapping("/register-business-num")
-    public ResponseEntity<UserDto> registerBusinessNum(
+    @PutMapping("/business-application")
+    public ResponseEntity<UserDto> businessApplication(
             @RequestBody
             BusinessDto dto
     ) {
-        return ResponseEntity.ok(userService.registerBusinessNum(dto));
+        return ResponseEntity.ok(userService.businessApplication(dto));
     }
+
 }
 
 
