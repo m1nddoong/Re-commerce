@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
+@Component
 public class FileHandlerUtils {
     public String saveImage(MultipartFile image) {
         String imgDir = "media/img/profiles/";

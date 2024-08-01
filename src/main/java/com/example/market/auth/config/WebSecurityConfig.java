@@ -42,8 +42,11 @@ public class WebSecurityConfig {
                                 "/users/sign-in"
                         )
                         .anonymous()
-                        .requestMatchers("/users/business-application")
-                        .hasAnyRole("ACTIVE", "OWNER")
+                        .requestMatchers(
+                                "/users/business-application",
+                                "/trade-item/**"
+                        )
+                        .hasRole("ACTIVE")
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
 

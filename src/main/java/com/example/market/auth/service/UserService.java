@@ -151,6 +151,7 @@ public class UserService implements UserDetailsService {
      * 마이 프로필
      * @return
      */
+
     public UserDto myProfile() {
         User user = authenticationFacade.extractUser();
         return UserDto.fromEntity(user);

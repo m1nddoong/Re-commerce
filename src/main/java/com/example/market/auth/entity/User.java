@@ -2,16 +2,20 @@ package com.example.market.auth.entity;
 
 
 
+import com.example.market.trade.entity.TradeItem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,6 +61,9 @@ public class User {
 
     @Setter
     private String authorities;
+
+    @OneToMany(mappedBy = "user")
+    private List<TradeItem> tradeItem;
 
 }
 
