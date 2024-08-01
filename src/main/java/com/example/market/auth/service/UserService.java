@@ -207,14 +207,4 @@ public class UserService implements UserDetailsService {
         user.setBusinessNum(dto.getBusinessNum());
         return UserDto.fromEntity(userRepository.save(user));
     }
-
-    // 사업자 전환 신청 목록 확인 (관리자 전용)
-    public List<UserDto> businessApplicationList() {
-        List<User> userList = userRepository.findAllByBusinessApplyTrue();
-        List<UserDto> userDtoList = new ArrayList<>();
-        for (User user : userList) {
-            userDtoList.add(UserDto.fromEntity(user));
-        }
-        return userDtoList;
-    }
 }

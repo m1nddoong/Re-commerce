@@ -4,6 +4,8 @@ package com.example.market.auth.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,9 +53,10 @@ public class User {
     private String businessNum; // 사업자 등록 번호
 
     @Setter
-    private Boolean businessApply; // 사업자 전환 신청 상태
+    private BusinessStatus businessStatus; // 사업자 전환 신청 상태
 
     @Setter
     private String authorities;
+
 }
 

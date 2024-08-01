@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,23 +32,23 @@ public class AdminController {
 
 
     // 관리자의 사업자 전환 신청 수락
-    @PostMapping("/business-application-approval/{uuid}")
-    public ResponseEntity<UserDto> businessApplactionApproval(
-            @RequestParam("uuid")
+    @PutMapping("/business-application-approval/{uuid}")
+    public ResponseEntity<UserDto> businessApplicationApproval(
+            @PathVariable
             UUID uuid
     ) {
-        return ResponseEntity.ok(adminService.businessApplcationApproval(uuid));
+        return ResponseEntity.ok(adminService.businessApplicationApproval(uuid));
     }
 
 
 
     // 관리자의 사업자 전환 신청 거절
-    @PostMapping("/business-application-rejection/{uuid}")
-    public ResponseEntity<Void> businessApplcationRejection(
-            @RequestParam("uuid")
+    @PutMapping("/business-application-rejection/{uuid}")
+    public ResponseEntity<Void> businessApplicationRejection(
+            @PathVariable
             UUID uuid
     ) {
-        adminService.businessApplcationRejection(uuid);
+        adminService.businessApplicationRejection(uuid);
         return ResponseEntity.ok().build();
     }
 }

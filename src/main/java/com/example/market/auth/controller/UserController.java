@@ -36,8 +36,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtils jwtTokenUtils;
 
     /**
      * 회원가입

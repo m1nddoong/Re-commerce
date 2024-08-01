@@ -1,6 +1,8 @@
 package com.example.market.auth.service;
 
 import com.example.market.auth.dto.UserDto;
+import com.example.market.auth.entity.BusinessStatus;
+import com.example.market.auth.entity.Role;
 import com.example.market.auth.entity.User;
 import com.example.market.auth.repo.UserRepository;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class AdminService {
 
     // 사업자 전환 신청 목록 확인 (관리자 전용)
     public List<UserDto> businessApplicationList() {
-        List<User> userList = userRepository.findAllByBusinessApplyTrue();
+        List<User> userList = userRepository.findAllByBusinessStatus(BusinessStatus.APPLIED);
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : userList) {
             userDtoList.add(UserDto.fromEntity(user));
@@ -30,14 +32,19 @@ public class AdminService {
     }
 
     // 사업자 전환 신청 수락
-    public UserDto businessApplcationApproval(UUID uuid) {
+    public UserDto businessApplicationApproval(UUID uuid) {
         User user = userRepository.findUserByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        user.setBusinessApply(true);
+        user.setBusinessStatus(BusinessStatus.APPROVED);
+        user.setAuthorities(Role.BUSINESS_USER.getRoles());
+
         return UserDto.fromEntity(userRepository.save(user));
     }
 
-    public void businessApplcationRejection(UUID uuid) {
-        userRepository.deleteUserByUuid(uuid);
+    public void businessApplicationRejection(UUID uuid) {
+        User user = userRepository.findUserByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setBusinessStatus(BusinessStatus.REJECTED);
+        userRepository.save(user);
     }
 }

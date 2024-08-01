@@ -13,22 +13,6 @@ public enum Role {
     ADMIN ("ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN");
 
     private final String roles;
-
-    // 문자열로 주어진 역할에 해당하는 권한을 조회한다.
-    public static String getIncludingRoles (String role) {
-        return Role.valueOf(role).getRoles();
-    }
-
-    // 기존 Role 객체의 권한에 새로운 권한을 추가한다.
-    public static String addRole(Role role, String addRole) {
-        String priorRoles = role.getRoles();
-        priorRoles += "," + addRole;
-        return priorRoles;
-    }
-
-    public static String addRole(String roles, Role role) {
-        return roles + "," + role.getRoles();
-    }
 }
 
 
