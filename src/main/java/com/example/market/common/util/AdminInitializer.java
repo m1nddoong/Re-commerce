@@ -1,11 +1,10 @@
-package com.example.market.auth.util;
+package com.example.market.common.util;
 
 import com.example.market.auth.entity.BusinessStatus;
 import com.example.market.auth.entity.User;
 import com.example.market.auth.repo.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.DeclareWarning;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

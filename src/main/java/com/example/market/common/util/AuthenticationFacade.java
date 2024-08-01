@@ -1,4 +1,4 @@
-package com.example.market.auth.controller;
+package com.example.market.common.util;
 
 import com.example.market.auth.entity.CustomUserDetails;
 import com.example.market.auth.entity.User;

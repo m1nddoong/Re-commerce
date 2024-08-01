@@ -1,6 +1,6 @@
 package com.example.market.auth.service;
 
-import com.example.market.auth.controller.AuthenticationFacade;
+import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.auth.dto.BusinessDto;
 import com.example.market.auth.dto.CreateUserDto;
 import com.example.market.auth.dto.UpdateUserDto;
@@ -13,13 +13,9 @@ import com.example.market.auth.jwt.JwtResponseDto;
 import com.example.market.auth.jwt.JwtTokenUtils;
 import com.example.market.auth.repo.UserRepository;
 import com.example.market.common.util.AppConstants;
+import com.example.market.common.util.FileHandlerUtils;
 import jakarta.transaction.Transactional;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,6 +39,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationFacade authenticationFacade;
+    private final FileHandlerUtils fileHandlerUtils;
 
 
     @Override
@@ -168,9 +165,9 @@ public class UserService implements UserDetailsService {
         User currentUser = authenticationFacade.extractUser();
         // 기존 이미지 삭제
         String oldProfile = currentUser.getProfileImg();
-        if (oldProfile != null) deleteImage(oldProfile);
+        if (oldProfile != null) fileHandlerUtils.deleteImage(oldProfile);
 
-        String imagePath = saveImage(profileImg);
+        String imagePath = fileHandlerUtils.saveImage(profileImg);
         imagePath = imagePath.replaceAll("\\\\", "/");
         currentUser.setProfileImg(imagePath);
 
@@ -178,29 +175,6 @@ public class UserService implements UserDetailsService {
         return "done";
     }
 
-
-    public String saveImage(MultipartFile image) {
-        String imgDir = "media/img/profiles/";
-        String imgName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-        Path imgPath = Path.of(imgDir + imgName);
-
-        try {
-            Files.createDirectories(Path.of(imgDir));
-            image.transferTo(imgPath);
-            log.info(image.getName());
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return imgPath.toString();
-    }
-
-    public void deleteImage(String imagePath) {
-        try {
-            Files.deleteIfExists(Path.of(imagePath));
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
     // 사업자 전환 신청
     public UserDto businessApplication(BusinessDto dto) {
         User user = authenticationFacade.extractUser();
