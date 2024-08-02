@@ -1,15 +1,12 @@
 package com.example.market.trade.service;
 
-import com.example.market.auth.entity.CustomUserDetails;
 import com.example.market.auth.entity.User;
-import com.example.market.auth.repo.UserRepository;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.common.util.FileHandlerUtils;
 import com.example.market.trade.dto.TradeItemDto;
 import com.example.market.trade.entity.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
 import com.example.market.trade.repo.TradeItemRepository;
-import java.io.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -62,10 +59,10 @@ public class TradeItemService {
         TradeItem targetTradeItem = tradeItemRepository.findById(tradeItemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // 내가 삭제하고자 하는 물건을 소유한 사람이 맞는지 체크
-//        if (currentUser.getUuid() != targetTradeItem.getUser().getUuid()) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-//        }
+        // 내가 수정하고자 하는 물건을 소유한 사람이 맞는지 email 을 가지고 판단
+        if (!currentUser.getEmail().equals(targetTradeItem.getUser().getEmail())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         // 기존 이미지 삭제 후 새로운 이미지 저장
         String oldImage = targetTradeItem.getImage();
@@ -89,10 +86,10 @@ public class TradeItemService {
         TradeItem targetTradeItem = tradeItemRepository.findById(tradeItemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // 내가 삭제하고자 하는 물건을 소유한 사람이 맞는지 체크
-//        if (currentUser.getUuid() != targetTradeItem.getUser().getUuid()) {
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+        // 내가 삭제하고자 하는 물건을 소유한 사람이 맞는지 email 을 가지고 판단
+        if (!currentUser.getEmail().equals(targetTradeItem.getUser().getEmail())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
         tradeItemRepository.deleteById(tradeItemId);
     }
 }

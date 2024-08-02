@@ -36,7 +36,7 @@ public class TradeItem { // 물품 정보
     private ItemStatus itemStatus;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

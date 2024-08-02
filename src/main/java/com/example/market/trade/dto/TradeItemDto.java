@@ -1,17 +1,14 @@
 package com.example.market.trade.dto;
 
 
-import com.example.market.auth.entity.User;
 import com.example.market.trade.entity.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @Builder

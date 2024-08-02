@@ -1,12 +1,7 @@
 package com.example.market.auth.dto;
 
 
-import com.example.market.auth.entity.Role;
 import com.example.market.auth.entity.User;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.util.Objects;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

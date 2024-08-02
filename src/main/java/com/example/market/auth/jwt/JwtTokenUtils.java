@@ -1,6 +1,6 @@
 package com.example.market.auth.jwt;
 
-import com.example.market.auth.entity.CustomUserDetails;
+import com.example.market.auth.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,6 @@ import java.time.Instant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.example.market.auth.entity.User;
 
 
 // JWT 관련된 기능을 만드는 곳

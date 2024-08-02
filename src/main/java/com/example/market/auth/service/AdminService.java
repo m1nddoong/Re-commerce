@@ -2,8 +2,8 @@ package com.example.market.auth.service;
 
 import com.example.market.auth.dto.UserDto;
 import com.example.market.auth.entity.BusinessStatus;
-import com.example.market.auth.entity.Role;
 import com.example.market.auth.entity.User;
+import com.example.market.auth.entity.Role;
 import com.example.market.auth.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 

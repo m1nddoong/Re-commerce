@@ -9,16 +9,17 @@ spring:
     resources:
       static-locations: file:/media/, classpath:/static
   datasource:
-    url: jdbc:sqlite:db.sqlite
-    driver-class-name: org.sqlite.JDBC
-    # username: sa
-    # password: password
+    # driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/market
+    username: seonik
+    password:
   jpa:
     hibernate:
       # 테이블 생성 시 create
       ddl-auto: create
     show-sql: true
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     # table create 후 data.sql 로 초기화할 때 사용
     # defer-datasource-initialization: true
   sql:
