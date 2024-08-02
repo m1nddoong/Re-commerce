@@ -59,8 +59,8 @@ public class AdminInitializer implements ApplicationRunner {
                 .phone("010-3535-0909")
                 .profileImg(null)
                 .businessNum("623-46-2424")
-                .businessStatus(BusinessStatus.APPLIED)
-                .authorities("ROLE_ACTIVE")
+                .businessStatus(BusinessStatus.APPROVED)
+                .authorities("ROLE_ACTIVE,ROLE_OWNER")
                 .build());
 
         // 일반 사용자 2

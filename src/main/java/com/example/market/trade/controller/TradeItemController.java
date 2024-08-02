@@ -2,6 +2,7 @@ package com.example.market.trade.controller;
 
 import com.example.market.trade.dto.TradeItemDto;
 import com.example.market.trade.service.TradeItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class TradeItemController {
             }
     )
     public ResponseEntity<TradeItemDto> createTradeItem(
-            @RequestPart("dto")
+            @Valid @RequestPart("dto")
             TradeItemDto dto,
             @RequestPart(value = "img", required = false)
             MultipartFile tradeItemImg
@@ -57,7 +58,7 @@ public class TradeItemController {
             }
     )
     public ResponseEntity<TradeItemDto> updateTradeItem(
-            @RequestPart(value = "dto", required = false)
+            @Valid @RequestPart(value = "dto", required = false)
             TradeItemDto dto,
             @RequestPart(value = "img", required = false)
             MultipartFile tradeItemImg,

@@ -55,7 +55,6 @@ public class UserService implements UserDetailsService {
         return CustomUserDetails.builder()
                 .user(user)
                 .build();
-
     }
 
     /**
