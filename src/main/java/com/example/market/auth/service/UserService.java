@@ -67,13 +67,13 @@ public class UserService implements UserDetailsService {
             CreateUserDto dto
     ) {
         // 비밀번호, 비밀번호 확인이 일치하지 않는지
-        //if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-        //    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        //}
+        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호 확인이 일치하지 않음");
+        }
         // 동일한 이메일이 이미 존재하는지
-//        if (userRepository.existsByEmail(dto.getEmail())) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-//        }
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이메일 중복");
+        }
 
         String uuid = UUID.randomUUID().toString();
         return UserDto.fromEntity(userRepository.save(User.builder()
@@ -82,6 +82,9 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .authorities(Role.INACTIVE_USER.getRoles())
                 .build()));
+
+
+
     }
 
     /**
