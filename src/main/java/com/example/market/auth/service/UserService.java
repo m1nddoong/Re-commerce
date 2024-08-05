@@ -82,9 +82,6 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .authorities(Role.INACTIVE_USER.getRoles())
                 .build()));
-
-
-
     }
 
     /**

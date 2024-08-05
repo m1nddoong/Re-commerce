@@ -7,8 +7,6 @@ import com.example.market.auth.dto.CreateUserDto;
 import com.example.market.auth.dto.UserDto;
 import com.example.market.auth.service.UserService;
 import com.example.market.util.JsonUtil;
-import java.io.IOException;
-import java.sql.Statement;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +26,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * [단위 테스트]
+ * : 단위 테스트는 애플리케이션의 가장 작은 단위인 메서드나 클래스를 독립적으로 테스트 (개별 메서드 테스트용)
+ * - Mock 객체 사용
+ *   - UserService 는 Mock 객체로 되어 있으며,
+ *   - UserController 의 동작만 테스트한다.
+ *   - 실제 데이터 베이스나, 전체 Spring Context 를 로드하지 않는다.
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
