@@ -31,12 +31,18 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// PostgreSQL
 	implementation 'org.postgresql:postgresql:42.7.2'
+
+	// sqlite
+//	runtimeOnly 'org.xerial:sqlite-jdbc:3.41.2.2'
+//	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
 
 	// jjwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -46,8 +52,7 @@ dependencies {
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {

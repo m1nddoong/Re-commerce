@@ -34,8 +34,10 @@ public class User {
     private UUID uuid;
 
     // 유저 네임은 Null 일 수 없고, 유일한 값이다
+    @Setter
     @Column(nullable = false, unique = true)
     private String email;
+    @Setter
     private String password;
 
     @Setter
