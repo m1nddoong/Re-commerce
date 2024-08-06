@@ -1,4 +1,4 @@
-package com.example.market.slicetest;
+package com.example.market.unittest;
 
 
 import com.example.market.auth.entity.User;
@@ -33,7 +33,6 @@ public class UserRepositoryTest {
     public void testCreateUser() {
         // given
         String email = "alex@naver.com";
-
         User user = User.builder()
                 .email(email)
                 .build();
@@ -41,9 +40,12 @@ public class UserRepositoryTest {
         // when
         User result = userRepository.save(user);
 
+        // then
         assertEquals(email, result.getEmail());
         assertNotNull(result.getId());
     }
+
+
 
 }
 

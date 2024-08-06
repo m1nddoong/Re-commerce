@@ -36,7 +36,6 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-
     @Test
     @DisplayName("CreateUserDto로 사용자 생성")
     public void testSignUp() {
