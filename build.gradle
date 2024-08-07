@@ -40,10 +40,6 @@ dependencies {
 	// PostgreSQL
 	implementation 'org.postgresql:postgresql:42.7.2'
 
-	// sqlite
-//	runtimeOnly 'org.xerial:sqlite-jdbc:3.41.2.2'
-//	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
-
 	// jjwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -51,6 +47,9 @@ dependencies {
 
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// TSID
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.6'
 
 
 }

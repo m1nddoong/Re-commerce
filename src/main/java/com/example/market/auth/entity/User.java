@@ -3,12 +3,14 @@ package com.example.market.auth.entity;
 
 
 import com.example.market.trade.entity.TradeItem;
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Builder
@@ -24,16 +27,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 // @SuperBuilder
-// PostgreSQL 에서 테이블명을 user 로 사용할 수 없으므로 테이블명 변경
 @Table(name = "users")
-
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Tsid
     private Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
     private UUID uuid;
 
-    // 유저 네임은 Null 일 수 없고, 유일한 값이다
     @Column(nullable = false, unique = true)
     private String email;
     private String password;
@@ -57,6 +59,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<TradeItem> tradeItem;
-
 }
 

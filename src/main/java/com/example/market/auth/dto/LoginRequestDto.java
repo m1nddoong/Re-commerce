@@ -1,9 +1,9 @@
-package com.example.market.auth.jwt;
+package com.example.market.auth.dto;
 
 import lombok.Data;
 
 @Data
-public class JwtRequestDto {
+public class LoginRequestDto {
     private String email;
     private String password;
 }

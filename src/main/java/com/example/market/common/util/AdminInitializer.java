@@ -80,9 +80,9 @@ public class AdminInitializer implements ApplicationRunner {
                 .authorities("ROLE_ACTIVE")
                 .build());
 
-        // 일반 사용자 3
+        // 일반 사용자 3 - 테스트용
         userRepository.save(User.builder()
-                .uuid(UUID.randomUUID())
+                .uuid(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                 .email("user3@naver.com")
                 .password(passwordEncoder.encode("5555"))
                 .username("정형돈")

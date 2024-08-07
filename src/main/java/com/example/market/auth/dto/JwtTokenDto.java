@@ -1,19 +1,16 @@
-package com.example.market.auth.jwt;
+package com.example.market.auth.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
+
 @Data
 @Builder
-public class JwtResponseDto {
+public class JwtTokenDto {
     private String uuid;
-    // accessToken
     private String accessToken;
-
-    // 만료일
+    private String refreshToken;
     private LocalDateTime expiredDate;
-
-    // 토큰 만료 시간
-    private Integer expiredSecond;
+    private Long expiredSecond;
 }
