@@ -1,8 +1,10 @@
 package com.example.market.auth.service;
 
 import com.example.market.auth.entity.CustomUserDetails;
+import com.example.market.auth.entity.RefreshToken;
 import com.example.market.auth.entity.User;
 import com.example.market.auth.jwt.TokenType;
+import com.example.market.auth.repo.RefreshTokenRepository;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.auth.dto.BusinessDto;
 import com.example.market.auth.dto.CreateUserDto;
@@ -39,6 +41,7 @@ public class UserService implements UserDetailsService {
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationFacade authenticationFacade;
     private final FileHandlerUtils fileHandlerUtils;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     @Override
@@ -86,9 +89,9 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 로그인
-     *
-     * @param dto (토큰 정보)
+     * 로그인 (Access Token 발급)
+     * @param dto 이메일, 비밀번호
+     * @return accessToken
      */
     public JwtTokenDto signIn(
             LoginRequestDto dto
@@ -96,34 +99,50 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        // 입력한 비밀번호 체크
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
+        // 입력한 비밀번호가 저장된 비밀번호와 일치하는지 확인
         if (!passwordEncoder.matches(
                 dto.getPassword(),
                 user.getPassword()
         )) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+        String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
+        String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
 
-        // JWT 토큰 발급
-        // 원래 dto 를 바탕으로 CustomUseDetails 를 만들어서 generateToken 메서드를 호출해줬는데
-        // CustomUserDetails 로 만들어주기 전에 일단 토큰 발급?
+        // 토큰을 발급 받고 나서 redis 에 저장하는 로직
+        refreshTokenRepository.save(RefreshToken.builder()
+                .uuid(String.valueOf(user.getUuid()))
+                .refreshToken(newRefreshToken)
+                .build());
+
+        // JWT 토큰 발급 -> JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
                 .uuid(String.valueOf(user.getUuid()))
-                .accessToken(jwtTokenUtils.generateToken(user, TokenType.ACCESS))
-                .refreshToken(jwtTokenUtils.generateToken(user, TokenType.ACCESS))
-                // 토큰 만료 날짜
-                .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis()))
-                // 토큰 만료 시간 (초단위)
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
                 .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
                 .build();
+
+
+
     }
 
     /**
+     * Refresh Token 으로 AccessToken 재방급
+     * @return accessToken
+     */
+//    public JwtTokenDto refreshToken() {
+//
+//    }
+
+
+
+
+
+    /**
      * 프로필 필수 정보 기입 -> 활성 사용자로 승급
+     *
      * @param dto
      * @return
      */
@@ -150,6 +169,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * 마이 프로필
+     *
      * @return
      */
 
@@ -160,6 +180,7 @@ public class UserService implements UserDetailsService {
 
     /**
      * 프로필 이미지 업로드
+     *
      * @param profileImg
      * @return
      */
@@ -167,7 +188,9 @@ public class UserService implements UserDetailsService {
         User currentUser = authenticationFacade.extractUser();
         // 기존 이미지 삭제
         String oldProfile = currentUser.getProfileImg();
-        if (oldProfile != null) fileHandlerUtils.deleteImage(oldProfile);
+        if (oldProfile != null) {
+            fileHandlerUtils.deleteImage(oldProfile);
+        }
 
         String imagePath = fileHandlerUtils.saveImage(profileImg);
         imagePath = imagePath.replaceAll("\\\\", "/");
@@ -183,4 +206,6 @@ public class UserService implements UserDetailsService {
         user.setBusinessNum(dto.getBusinessNum());
         return UserDto.fromEntity(userRepository.save(user));
     }
+
+
 }

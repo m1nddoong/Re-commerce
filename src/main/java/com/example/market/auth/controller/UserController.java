@@ -42,18 +42,25 @@ public class UserController {
     }
 
     /**
-     * 로그인(JWT 토큰 발급)
+     * 로그인(JWT access 토큰 발급)
      *
      * @param dto usenname, password
      * @return token
      */
     @PostMapping("/sign-in")
-    public JwtTokenDto signIn(
+    public ResponseEntity<JwtTokenDto> signIn(
             @RequestBody
             LoginRequestDto dto
     ) {
-        return userService.signIn(dto);
+        return ResponseEntity.ok(userService.signIn(dto));
     }
+
+//    @GetMapping("/sign-in")
+//    public ResponseEntity<JwtTokenDto> refreshToken() {
+//        return ResponseEntity.ok(userService.refreshToken());
+//    }
+
+
 
 
     /**
