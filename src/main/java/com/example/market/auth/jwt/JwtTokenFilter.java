@@ -31,8 +31,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserService userService;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -69,24 +67,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             // 4. accessToken 이 유효하지 않다면
             else {
                 log.warn("jwt validation failed");
-                // 만료된 access token을 가지고 redis 에 저장되어 있는 토큰 정보를 가져온다.
-                RefreshToken foundTokenInfo = refreshTokenRepository.findByAccessToken(accessToken)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-                // 가져온 토큰 정보에서 refreshToken 정보를 받아오고
-                String refreshToken = foundTokenInfo.getRefreshToken();
-                // 받아온 refreshToken 가 유효하다면
-                if (jwtTokenUtils.validate(refreshToken)) {
-                    // redis 에 저장된 토큰 정보의 uuid 정보를 가지고 사용자 정보를 가져온다.
-                    String uuid = foundTokenInfo.getUserUuid();
-                    User foundUser = userRepository.findUserByUuid(UUID.fromString(uuid))
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-                    // 사용자 정보로 다시 Access Token 을 만들어 발급한 뒤 refreshToken 과 함꼐 redis 업데이트
-                    accessToken = jwtTokenUtils.generateToken(foundUser, TokenType.ACCESS);
-                    refreshTokenRepository.save(new RefreshToken(uuid, refreshToken, accessToken));
-                }
-                // 탈취범에 의해 refreshToken 이 탈취되어 내 refreshToken 마저도 변경된 상태
-                // 로그아웃이 되더라도 redis 에 남아있는 탈취범이 발급한 refreshToken 을 어찌할 방법이 없다.
             }
         }
         // 5. 다음 필터 호출

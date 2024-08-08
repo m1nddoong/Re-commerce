@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
 
-    /**
-     * 회원가입
-     *
-     * @param dto 사용자의 username, password
-     * @return 새로운 사용자를 생성 후 DB 저장
-     */
     @PostMapping("/sign-up")
     public ResponseEntity<UserDto> signUp(
             @RequestBody
@@ -41,12 +36,6 @@ public class UserController {
         return ResponseEntity.ok(userService.signUp(dto));
     }
 
-    /**
-     * 로그인(JWT access 토큰 발급)
-     *
-     * @param dto usenname, password
-     * @return token
-     */
     @PostMapping("/sign-in")
     public ResponseEntity<JwtTokenDto> signIn(
             @RequestBody
@@ -55,27 +44,21 @@ public class UserController {
         return ResponseEntity.ok(userService.signIn(dto));
     }
 
-//    @GetMapping("/sign-in")
-//    public ResponseEntity<JwtTokenDto> refreshToken() {
-//        return ResponseEntity.ok(userService.refreshToken());
-//    }
+    @GetMapping("/sign-out")
+    public ResponseEntity<String> signOut(
+            @RequestHeader("Authentication")
+            String accessToken
+    ) {
+        userService.signOut(accessToken);
+        return ResponseEntity.ok("{}");
+    }
 
 
-
-
-    /**
-     * 마이 프로필 확인
-     */
     @GetMapping("/my-profile")
     public UserDto myProfile() {
         return userService.myProfile();
     }
 
-    /**
-     * 프로필 필수 정보 기입
-     *
-     * @param dto 성명, 닉네임, 나이, 전화번호
-     */
     @PutMapping("/update-profile-info")
     public ResponseEntity<UserDto> updateProfile(
             @RequestBody
@@ -84,10 +67,6 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfile(dto));
     }
 
-
-    /**
-     * 프로필 img 업로드
-     */
     @PutMapping(
             value = "/update-profile-img",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -100,11 +79,6 @@ public class UserController {
         return ResponseEntity.ok(userService.uploadProfileImage(profileImg));
     }
 
-    /**
-     * 사업자 등록 번호 신청
-     *
-     * @param dto 사업자 등록 번호
-     */
     @PutMapping("/business-application")
     public ResponseEntity<UserDto> businessApplication(
             @RequestBody

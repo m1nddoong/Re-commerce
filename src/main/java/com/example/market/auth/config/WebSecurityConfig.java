@@ -63,9 +63,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,
-                                userService,
-                                refreshTokenRepository,
-                                userRepository
+                                userService
                         ),
                         AuthorizationFilter.class
                 )

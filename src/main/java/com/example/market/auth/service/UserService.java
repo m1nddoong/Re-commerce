@@ -90,27 +90,25 @@ public class UserService implements UserDetailsService {
 
     /**
      * 로그인 (Access Token 발급)
+     *
      * @param dto 이메일, 비밀번호
      * @return accessToken
      */
     public JwtTokenDto signIn(
             LoginRequestDto dto
     ) {
+        // email 을 기반으로 사용자를 조회, 입력한 비밀번호가 저장된 비밀번호와 일치하는지 확인
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-
-        // 입력한 비밀번호가 저장된 비밀번호와 일치하는지 확인
         if (!passwordEncoder.matches(
                 dto.getPassword(),
                 user.getPassword()
         )) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        // accessToken, refreshToken 생성
+        // accessToken, refreshToken 생성 후 redis에 uuid, accessToken, refreshToken 저장
         String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
         String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
-
-        // redis에 uuid, accessToken, refreshToken 저장
         refreshTokenRepository.save(RefreshToken.builder()
                 .userUuid(String.valueOf(user.getUuid()))
                 .accessToken(newAccessToken)
@@ -125,21 +123,16 @@ public class UserService implements UserDetailsService {
                 .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
                 .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
                 .build();
-
-
-
     }
 
     /**
-     * Refresh Token 으로 AccessToken 재방급
-     * @return accessToken
+     * 로그아웃
+     * @param accessToken 액세스 토큰
      */
-//    public JwtTokenDto refreshToken() {
-//
-//    }
-
-
-
+    public void signOut(String accessToken) {
+        refreshTokenRepository.delete(refreshTokenRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
 
 
     /**
