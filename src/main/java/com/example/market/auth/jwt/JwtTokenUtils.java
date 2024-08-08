@@ -5,6 +5,7 @@ import com.example.market.auth.repo.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -37,27 +38,26 @@ public class JwtTokenUtils {
 
     }
 
-    // User를 받아서 JWT로 변환하는 메서드
+    // User를 받아서 담고싶은 정보를 Claims로 만들어 JWT으로 변환 후 발급
     public String generateToken(User user, TokenType tokenType) {
-        // JWT에 담고싶은 정보를 Claims로 만들기
-        // 현재 호출되었을 떄 epoch time
         Instant now = Instant.now();
         Claims jwtClaims = Jwts.claims()
-                // sub : 누구인지
-                .setSubject(String.valueOf(user.getUuid()))
-                // iat : 언제 발급 되었는지
                 .setIssuedAt(Date.from(now))
-                // exp : 언제 만료 예정인지
                 .setExpiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())));
 
-
-        // 최종적으로 JWT를 발급한다.
+        // accessToken의 경우 사용자 정보 포함
+        if (tokenType == TokenType.ACCESS) {
+            jwtClaims.setSubject(String.valueOf(user.getUuid()));
+        }
+        // refreshToken의 경우 사용자 정보 포함X
+        else {
+            jwtClaims.setSubject("refreshToken");
+        }
         return Jwts.builder()
                 .setClaims(jwtClaims)
                 .signWith(this.signingKey)
                 .compact();
     }
-
 
 
     // 정상적인 JWT인지를 판단하는 메서드

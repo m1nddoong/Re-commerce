@@ -106,16 +106,18 @@ public class UserService implements UserDetailsService {
         )) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+        // accessToken, refreshToken 생성
         String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
         String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
 
-        // 토큰을 발급 받고 나서 redis 에 저장하는 로직
+        // redis에 uuid, accessToken, refreshToken 저장
         refreshTokenRepository.save(RefreshToken.builder()
-                .uuid(String.valueOf(user.getUuid()))
+                .userUuid(String.valueOf(user.getUuid()))
+                .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
                 .build());
 
-        // JWT 토큰 발급 -> JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
+        // JWT 토큰 발급 -> 이후 JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
                 .uuid(String.valueOf(user.getUuid()))
                 .accessToken(newAccessToken)

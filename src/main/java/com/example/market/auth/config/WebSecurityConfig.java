@@ -2,6 +2,8 @@ package com.example.market.auth.config;
 
 import com.example.market.auth.jwt.JwtTokenFilter;
 import com.example.market.auth.jwt.JwtTokenUtils;
+import com.example.market.auth.repo.RefreshTokenRepository;
+import com.example.market.auth.repo.UserRepository;
 import com.example.market.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,8 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserService userService;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -59,7 +63,9 @@ public class WebSecurityConfig {
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,
-                                userService
+                                userService,
+                                refreshTokenRepository,
+                                userRepository
                         ),
                         AuthorizationFilter.class
                 )
