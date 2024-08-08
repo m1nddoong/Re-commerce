@@ -72,11 +72,11 @@ public class UserService implements UserDetailsService {
     ) {
         // 비밀번호, 비밀번호 확인이 일치하지 않는지
         if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호 확인이 일치하지 않음");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         // 동일한 이메일이 이미 존재하는지
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이메일 중복");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         String uuid = UUID.randomUUID().toString();
@@ -97,23 +97,30 @@ public class UserService implements UserDetailsService {
     public JwtTokenDto signIn(
             LoginRequestDto dto
     ) {
-        // email 을 기반으로 사용자를 조회, 입력한 비밀번호가 저장된 비밀번호와 일치하는지 확인
+        // 사용자 존재 확인
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-        if (!passwordEncoder.matches(
-                dto.getPassword(),
-                user.getPassword()
-        )) {
+        // 비밀번호 체크
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         // accessToken, refreshToken 생성 후 redis에 uuid, accessToken, refreshToken 저장
         String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
         String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
+
         refreshTokenRepository.save(RefreshToken.builder()
-                .userUuid(String.valueOf(user.getUuid()))
-                .accessToken(newAccessToken)
+                .uuid(String.valueOf(user.getUuid()))
                 .refreshToken(newRefreshToken)
                 .build());
+
+        RefreshToken test = refreshTokenRepository.findById(String.valueOf(user.getUuid()))
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "refreshToken 조회 실패"));
+
+        log.info("저장된 RefreshToken 정보: {}", test.toString());
+        log.info("uuid: {}", test.getUuid());
+        log.info("refreshToken: {}", test.getRefreshToken());
+
+
 
         // JWT 토큰 발급 -> 이후 JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
@@ -126,11 +133,12 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 로그아웃
-     * @param accessToken 액세스 토큰
+     * 로그아웃 (redis 에서 token 정보 삭제)
+     *
+     * @param uuid 사용자 uuid
      */
-    public void signOut(String accessToken) {
-        refreshTokenRepository.delete(refreshTokenRepository.findByAccessToken(accessToken)
+    public void signOut(String uuid) {
+        refreshTokenRepository.delete(refreshTokenRepository.findById(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
@@ -138,8 +146,7 @@ public class UserService implements UserDetailsService {
     /**
      * 프로필 필수 정보 기입 -> 활성 사용자로 승급
      *
-     * @param dto
-     * @return
+     * @param dto 프로필 업데이트 정보
      */
     public UserDto updateProfile(
             UpdateUserDto dto
@@ -163,21 +170,16 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 마이 프로필
-     *
-     * @return
+     * 마이 프로필 조회
      */
-
     public UserDto myProfile() {
-        User user = authenticationFacade.extractUser();
-        return UserDto.fromEntity(user);
+        return UserDto.fromEntity(authenticationFacade.extractUser());
     }
 
     /**
      * 프로필 이미지 업로드
      *
-     * @param profileImg
-     * @return
+     * @param profileImg 프로필 이미지
      */
     public String uploadProfileImage(MultipartFile profileImg) {
         User currentUser = authenticationFacade.extractUser();
@@ -195,7 +197,10 @@ public class UserService implements UserDetailsService {
         return "done";
     }
 
-    // 사업자 전환 신청
+    /**
+     * 사업자 전환 신청
+     * @param dto 사업자 등록 번호
+     */
     public UserDto businessApplication(BusinessDto dto) {
         User user = authenticationFacade.extractUser();
         user.setBusinessNum(dto.getBusinessNum());

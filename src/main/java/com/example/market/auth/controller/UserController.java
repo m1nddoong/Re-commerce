@@ -53,10 +53,9 @@ public class UserController {
         return ResponseEntity.ok("{}");
     }
 
-
     @GetMapping("/my-profile")
-    public UserDto myProfile() {
-        return userService.myProfile();
+    public ResponseEntity<UserDto> myProfile() {
+        return ResponseEntity.ok(userService.myProfile());
     }
 
     @PutMapping("/update-profile-info")

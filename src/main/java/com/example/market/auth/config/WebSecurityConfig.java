@@ -32,7 +32,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/token/**"
+                                "/reissue-token"
                         )
                         .permitAll()
                         .requestMatchers(
