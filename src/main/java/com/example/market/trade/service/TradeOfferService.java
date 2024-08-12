@@ -5,6 +5,7 @@ import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.trade.dto.TradeOfferDto;
 import com.example.market.trade.entity.TradeItem;
 import com.example.market.trade.entity.TradeOffer;
+import com.example.market.trade.entity.TradeOffer.OfferStatus;
 import com.example.market.trade.repo.TradeItemRepository;
 import com.example.market.trade.repo.TradeOfferRepository;
 import java.util.List;
@@ -79,5 +80,23 @@ public class TradeOfferService {
                     .collect(Collectors.toList());
         }
         return response;
+    }
+
+    // 구매 제안 수락
+    public TradeOfferDto approvalTradeOffer(Long tradeOfferId) {
+        // 구매 제안 엔티티 불러오기
+        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        tradeOffer.setOfferStatus(OfferStatus.Approval); // 구매 제안 수락
+        return TradeOfferDto.fromEntity(tradeOfferRepository.save(tradeOffer));
+    }
+
+    // 구매 제안 거절
+    public TradeOfferDto rejectTradeOffer(Long tradeOfferId) {
+        // 구매 제안 엔티티 불러오기
+        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        tradeOffer.setOfferStatus(OfferStatus.Rejection);
+        return TradeOfferDto.fromEntity(tradeOfferRepository.save(tradeOffer));
     }
 }

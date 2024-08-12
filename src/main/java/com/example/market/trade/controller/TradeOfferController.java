@@ -35,20 +35,25 @@ public class TradeOfferController {
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeOfferService.getTradeOfferList(tradeItemId));
-
     }
 
     // 구매 제안 수락
-    @GetMapping("/{tradeItemId}/approval")
-    public void approvalTradeOffer() {
-
+    @GetMapping("/{tradeOfferId}/approval")
+    public ResponseEntity<TradeOfferDto> approvalTradeOffer(
+            @PathVariable("tradeOfferId")
+            Long tradeOfferId
+    ) {
+        return ResponseEntity.ok(tradeOfferService.approvalTradeOffer(tradeOfferId));
     }
 
 
     // 구매 제안 거절
-    @GetMapping("/{tradeItemId}/reject")
-    public void rejectionTradeOffer() {
-
+    @GetMapping("/{tradeOfferId}/reject")
+    public ResponseEntity<TradeOfferDto> rejectionTradeOffer(
+            @PathVariable("{tradeOfferId}")
+            Long tradeOfferId
+    ) {
+        return ResponseEntity.ok(tradeOfferService.rejectTradeOffer(tradeOfferId));
     }
 
     // 구매 제안 확정하기 (구매 제안 상태 : 확정 / 물품 상태 : 판매 완료)
