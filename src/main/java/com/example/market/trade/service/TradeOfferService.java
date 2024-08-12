@@ -3,12 +3,15 @@ package com.example.market.trade.service;
 import com.example.market.auth.entity.User;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.trade.dto.TradeOfferDto;
+import com.example.market.trade.entity.QTradeOffer;
 import com.example.market.trade.entity.TradeItem;
 import com.example.market.trade.entity.TradeItem.ItemStatus;
 import com.example.market.trade.entity.TradeOffer;
 import com.example.market.trade.entity.TradeOffer.OfferStatus;
 import com.example.market.trade.repo.TradeItemRepository;
 import com.example.market.trade.repo.TradeOfferRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class TradeOfferService {
     private final TradeOfferRepository tradeOfferRepository;
     private final TradeItemRepository tradeItemRepository;
     private final AuthenticationFacade authenticationFacade;
+    private final JPAQueryFactory jpaQueryFactory;
 
     // 구매 제안 등록
     public TradeOfferDto requestTradeOffer(Long tradeItemId) {
@@ -102,24 +106,30 @@ public class TradeOfferService {
     }
 
     // 구매 제안 확정, 물품 상태 판매 완료
+    @Transactional
     public TradeOfferDto confirmTradeOffer(Long tradeOfferId) {
-        // 구매 제안 엔티티 불러와 확정 상태 설정
+        // 구매 제안 엔티티 불러와 수락 상태일 경우, 확정 상태 설정
         TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        // 구매 제안을 확정 지울 수 있는건 구매 제안을 한 구매자이므로
-        // 사용자 체크
+        // 구매 제안을 한 사용자인지 체크
         User user = authenticationFacade.extractUser();
         if (!user.getId().equals(tradeOffer.getOfferingUser().getId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        // 구매 제안을 확정짓기
-        tradeOffer.setOfferStatus(OfferStatus.Confirm);
+        // 구매 제안의 상태가 수락 상태일 경우을 확정 상태로 변경
+        OfferStatus status = tradeOffer.getOfferStatus();
+        if (status.equals(OfferStatus.Approval)) {
+            tradeOffer.setOfferStatus(OfferStatus.Confirm);
 
-        // 확정되지 않은 다른 구매 제안의 상태는 모두 Reject
-        // .....
-
+            // QueryDSL을 사용한 배치 업데이트 (?)
+            // 확정되지 않은 다른 구매 제안의 상태는 모두 Reject
+            QTradeOffer qTradeOffer = QTradeOffer.tradeOffer;
+            jpaQueryFactory.update(qTradeOffer)
+                    .set(qTradeOffer.offerStatus, OfferStatus.Rejection)
+                    .where(qTradeOffer.offerStatus.in(OfferStatus.Wait, OfferStatus.Approval))
+                    .execute();
+        }
 
         // 중고 거래 물품을 판매 완료로 설정
         TradeItem tradeItem = tradeItemRepository.findById(tradeOfferId)

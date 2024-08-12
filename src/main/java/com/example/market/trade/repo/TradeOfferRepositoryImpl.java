@@ -2,6 +2,7 @@ package com.example.market.trade.repo;
 
 import com.example.market.trade.entity.QTradeOffer;
 import com.example.market.trade.entity.TradeOffer;
+import com.example.market.trade.entity.TradeOffer.OfferStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -35,6 +36,15 @@ public class TradeOfferRepositoryImpl implements TradeOfferRepositoryCustom {
         QTradeOffer tradeOffer = QTradeOffer.tradeOffer;
         return jpaQueryFactory.selectFrom(tradeOffer)
                 .where(tradeOffer.items.id.eq(tradeItemId))
+                .fetch();
+    }
+
+    // OfferStatus 가 Wailt 이거나 pproval 인 경우의 튜플 모두 검색
+    @Override
+    public List<TradeOffer> getTradeOfferListWithStatusNotConfirm() {
+        QTradeOffer tradeOffer = QTradeOffer.tradeOffer;
+        return jpaQueryFactory.selectFrom(tradeOffer)
+                .where(tradeOffer.offerStatus.eq(OfferStatus.Wait).or(tradeOffer.offerStatus.eq(OfferStatus.Approval)))
                 .fetch();
     }
 

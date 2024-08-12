@@ -41,12 +41,12 @@ public class TradeOffer { // 구매 제안 테이블
 
     // 구매 제안의 상태 (거절 상태, 수락 상태, 확정 상태)
     @Setter
-    // @Builder.Default
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private OfferStatus offerStatus;
+    private OfferStatus offerStatus = OfferStatus.Wait;
     public enum OfferStatus {
-        // 승인, 거절, 확정
-        Approval, Rejection, Confirm
+        // 대기, 승인, 거절, 확정
+        Wait, Approval, Rejection, Confirm
     }
 
 }

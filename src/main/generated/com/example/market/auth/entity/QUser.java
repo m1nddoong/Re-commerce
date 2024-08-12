@@ -2,7 +2,6 @@ package com.example.market.auth.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.auth.entity.User.BusinessStatus;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -27,7 +26,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath businessNum = createString("businessNum");
 
-    public final EnumPath<BusinessStatus> businessStatus = createEnum("businessStatus", BusinessStatus.class);
+    public final EnumPath<User.BusinessStatus> businessStatus = createEnum("businessStatus", User.BusinessStatus.class);
 
     public final StringPath email = createString("email");
 
