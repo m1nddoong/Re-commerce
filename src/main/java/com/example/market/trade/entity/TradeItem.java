@@ -2,6 +2,7 @@ package com.example.market.trade.entity;
 
 import com.example.market.auth.entity.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class TradeItem { // 물품 정보
     @Setter
     private ItemStatus itemStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

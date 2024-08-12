@@ -77,6 +77,4 @@ public class TradeItemController {
         tradeItemService.deleteTradeItem(tradeItemId);
         return ResponseEntity.noContent().build();
     }
-
-
 }

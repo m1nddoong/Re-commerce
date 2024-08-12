@@ -18,5 +18,4 @@ public class RefreshToken {
     @Id
     private String uuid;
     private String refreshToken;
-
 }

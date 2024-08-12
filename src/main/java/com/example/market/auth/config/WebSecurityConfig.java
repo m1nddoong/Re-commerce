@@ -48,7 +48,8 @@ public class WebSecurityConfig {
                         .anonymous()
                         .requestMatchers(
                                 "/users/business-application",
-                                "/trade-item/**"
+                                "/trade-item/**",
+                                "/trade-offer/**"
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers("/admin/**")

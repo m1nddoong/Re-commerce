@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public enum TokenType {
     REFRESH(24 * 60 * 60 * 1000), // 24시간 -> 밀리초
-    ACCESS(30 * 1000); // 30초 -> 밀리초
-    // ACCESS(60 * 60 * 1000); // 1시간 -> 밀리초
+    // ACCESS(30 * 1000); // 30초 -> 밀리초
+    ACCESS(60 * 60 * 1000); // 1시간 -> 밀리초
 
 
     private final long tokenValidMillis;

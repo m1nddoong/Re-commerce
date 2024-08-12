@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccessTokenDto {
-    // private String accessToken;
     private String uuid;
 }

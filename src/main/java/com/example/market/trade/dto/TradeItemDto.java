@@ -23,7 +23,8 @@ public class TradeItemDto {
     @NotNull
     private Long price;
     private ItemStatus itemStatus;
-    // 사용자의 상세정보를 숨기기 위함, User 객체 대신 필요한 정보만 포
+
+    // 사용자의 상세정보를 숨기기 위함, User 객체 대신 필요한 정보만 포함
     private String user;
 
     public static TradeItemDto fromEntity(TradeItem entity) {
