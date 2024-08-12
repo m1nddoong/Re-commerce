@@ -50,16 +50,19 @@ public class TradeOfferController {
     // 구매 제안 거절
     @GetMapping("/{tradeOfferId}/reject")
     public ResponseEntity<TradeOfferDto> rejectionTradeOffer(
-            @PathVariable("{tradeOfferId}")
+            @PathVariable("tradeOfferId")
             Long tradeOfferId
     ) {
         return ResponseEntity.ok(tradeOfferService.rejectTradeOffer(tradeOfferId));
     }
 
     // 구매 제안 확정하기 (구매 제안 상태 : 확정 / 물품 상태 : 판매 완료)
-
-    @GetMapping("/{tradeItemId}/confirm")
-    public void confirmTradeOffer() {
+    @GetMapping("/{tradeOfferId}/confirm")
+    public ResponseEntity<TradeOfferDto> confirmTradeOffer(
+            @PathVariable
+            Long tradeOfferId
+    ) {
+        return ResponseEntity.ok(tradeOfferService.confirmTradeOffer(tradeOfferId));
 
     }
 }

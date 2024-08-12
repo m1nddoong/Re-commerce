@@ -3,6 +3,7 @@ package com.example.market.trade.service;
 import com.example.market.auth.entity.User;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.trade.dto.TradeOfferDto;
+import com.example.market.trade.entity.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
 import com.example.market.trade.entity.TradeOffer;
 import com.example.market.trade.entity.TradeOffer.OfferStatus;
@@ -97,6 +98,27 @@ public class TradeOfferService {
         TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         tradeOffer.setOfferStatus(OfferStatus.Rejection);
+        return TradeOfferDto.fromEntity(tradeOfferRepository.save(tradeOffer));
+    }
+
+    // 구매 제안 확정, 물품 상태 판매 완료
+    public TradeOfferDto confirmTradeOffer(Long tradeOfferId) {
+        // 구매 제안 엔티티 불러와 확정 상태 설정
+        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // 구매 제안을 확정 지울 수 있는건 구매 제안을 한 구매자이므로
+        // 사용자 체크
+        User user = authenticationFacade.extractUser();
+        if (!user.getId().equals(tradeOffer.getOfferingUser().getId())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        // 구매 제안을 확정짓고, 중고 거래 물품을 판매 완료로 설정
+        tradeOffer.setOfferStatus(OfferStatus.Confirm);
+        TradeItem tradeItem = tradeItemRepository.findById(tradeOfferId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        tradeItem.setItemStatus(ItemStatus.SOLD);
         return TradeOfferDto.fromEntity(tradeOfferRepository.save(tradeOffer));
     }
 }
