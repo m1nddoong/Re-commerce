@@ -6,11 +6,10 @@ import com.example.market.trade.entity.TradeItem;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +18,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Builder
@@ -50,14 +48,40 @@ public class User {
     private String phone;
     @Setter
     private String profileImg;
-    @Setter
-    private String businessNum; // 사업자 등록 번호
-    @Setter
-    private BusinessStatus businessStatus; // 사업자 전환 신청 상태
-    @Setter
-    private String authorities;
 
     @OneToMany(mappedBy = "user")
     private List<TradeItem> tradeItem;
+
+    @Setter
+    private String businessNum; // 사업자 등록 번호
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private BusinessStatus businessStatus; // 사업자 전환 신청 상태
+    public enum BusinessStatus {
+        // 신청, 승인, 거절
+        APPLIED, APPROVED, REJECTED
+    }
+
+    @Setter
+    @Builder.Default
+    // @Enumerated(EnumType.STRING)
+    private String authorities = Role.INACTIVE_USER.getRoles();
+
+    @Getter
+    public enum Role {
+        INACTIVE_USER ("ROLE_INACTIVE"),
+        ACTIVE_USER ("ROLE_ACTIVE"),
+        BUSINESS_USER ("ROLE_ACTIVE,ROLE_OWNER"),
+        ADMIN ("ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN");
+
+        private final String roles;
+
+        // 생성자는 enum 클래스 내부에서 자동으로 관리됨
+        Role(String roles) {
+            this.roles = roles;
+        }
+
+    }
+
 }
 

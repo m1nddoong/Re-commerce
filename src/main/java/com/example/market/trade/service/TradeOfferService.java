@@ -3,8 +3,8 @@ package com.example.market.trade.service;
 import com.example.market.auth.entity.User;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.trade.dto.TradeOfferDto;
-import com.example.market.trade.entity.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
+import com.example.market.trade.entity.TradeItem.ItemStatus;
 import com.example.market.trade.entity.TradeOffer;
 import com.example.market.trade.entity.TradeOffer.OfferStatus;
 import com.example.market.trade.repo.TradeItemRepository;
@@ -114,8 +114,14 @@ public class TradeOfferService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        // 구매 제안을 확정짓고, 중고 거래 물품을 판매 완료로 설정
+        // 구매 제안을 확정짓기
         tradeOffer.setOfferStatus(OfferStatus.Confirm);
+
+        // 확정되지 않은 다른 구매 제안의 상태는 모두 Reject
+        // .....
+
+
+        // 중고 거래 물품을 판매 완료로 설정
         TradeItem tradeItem = tradeItemRepository.findById(tradeOfferId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         tradeItem.setItemStatus(ItemStatus.SOLD);

@@ -1,10 +1,11 @@
 package com.example.market.common.util;
 
-import com.example.market.auth.entity.BusinessStatus;
+
 import com.example.market.auth.entity.User;
+import com.example.market.auth.entity.User.BusinessStatus;
 import com.example.market.auth.repo.UserRepository;
-import com.example.market.trade.entity.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
+import com.example.market.trade.entity.TradeItem.ItemStatus;
 import com.example.market.trade.entity.TradeOffer;
 import com.example.market.trade.repo.TradeItemRepository;
 import com.example.market.trade.repo.TradeOfferRepository;

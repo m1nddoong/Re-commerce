@@ -28,7 +28,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
 
     public final StringPath image = createString("image");
 
-    public final EnumPath<ItemStatus> itemStatus = createEnum("itemStatus", ItemStatus.class);
+    public final EnumPath<TradeItem.ItemStatus> itemStatus = createEnum("itemStatus", TradeItem.ItemStatus.class);
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 

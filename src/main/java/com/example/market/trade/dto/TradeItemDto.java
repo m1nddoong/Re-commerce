@@ -1,7 +1,7 @@
 package com.example.market.trade.dto;
 
 
-import com.example.market.trade.entity.ItemStatus;
+import com.example.market.trade.entity.TradeItem.ItemStatus;
 import com.example.market.trade.entity.TradeItem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
