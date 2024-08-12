@@ -32,13 +32,10 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/reissue-token"
-                        )
-                        .permitAll()
-                        .requestMatchers(
                                 "/users/my-profile",
                                 "/users/update-profile-info",
-                                "/users/update-profile-img"
+                                "/users/update-profile-img",
+                                "/reissue-token"
                         )
                         .authenticated()
                         .requestMatchers(

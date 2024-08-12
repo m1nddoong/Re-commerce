@@ -20,6 +20,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TradeOffer { // 구매 제안 테이블

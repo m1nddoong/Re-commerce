@@ -3,24 +3,35 @@ package com.example.market.common.util;
 import com.example.market.auth.entity.BusinessStatus;
 import com.example.market.auth.entity.User;
 import com.example.market.auth.repo.UserRepository;
+import com.example.market.trade.entity.ItemStatus;
+import com.example.market.trade.entity.TradeItem;
+import com.example.market.trade.entity.TradeOffer;
+import com.example.market.trade.repo.TradeItemRepository;
+import com.example.market.trade.repo.TradeOfferRepository;
+import jakarta.transaction.Transactional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Profile("!test")
 @RequiredArgsConstructor
-public class AdminInitializer implements ApplicationRunner {
+public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
+    private final TradeItemRepository tradeItemRepository;
+    private final TradeOfferRepository tradeOfferRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        // 관리자 계정
+        // 관리자 계정 1
         userRepository.save(User.builder()
                 .uuid(UUID.randomUUID())
                 .email("admin123@naver.com")
@@ -35,7 +46,7 @@ public class AdminInitializer implements ApplicationRunner {
                 .authorities("ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN")
                 .build());
 
-        // 사업자 사용자
+        // 사업자 사용자 1
         userRepository.save(User.builder()
                 .uuid(UUID.randomUUID())
                 .email("owner123@naver.com")
@@ -80,7 +91,7 @@ public class AdminInitializer implements ApplicationRunner {
                 .authorities("ROLE_ACTIVE")
                 .build());
 
-        // 일반 사용자 3 - 테스트용
+        // 일반 사용자 3
         userRepository.save(User.builder()
                 .uuid(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                 .email("user3@naver.com")
@@ -109,5 +120,38 @@ public class AdminInitializer implements ApplicationRunner {
                 .businessStatus(null)
                 .authorities("ROLE_INACTIVE")
                 .build());
+
+        // 중고 거래 물품 등록 1
+        tradeItemRepository.save(TradeItem.builder()
+                .title("IPhone 12 pro 중고 판매")
+                .description("상태 좋습니다. 연락 주세요")
+                .image(null)
+                .price(500000L)
+                .itemStatus(ItemStatus.ON_SALE)
+                .user(userRepository.findByEmail("owner123@naver.com")
+                        .orElseThrow(()
+                                -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .build()
+        );
+
+        // 구매 제안 등록 1
+        tradeOfferRepository.save(TradeOffer.builder()
+                .items(tradeItemRepository.findById(1L)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .offeringUser(userRepository.findByEmail("user1@naver.com")
+                        .orElseThrow(()
+                                -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .build());
+
+        // 구매 제안 등록 1
+        tradeOfferRepository.save(TradeOffer.builder()
+                .items(tradeItemRepository.findById(1L)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .offeringUser(userRepository.findByEmail("user2@naver.com")
+                        .orElseThrow(()
+                                -> new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .build());
+
+
     }
 }

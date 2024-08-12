@@ -2,6 +2,7 @@ package com.example.market.trade.controller;
 
 import com.example.market.trade.dto.TradeOfferDto;
 import com.example.market.trade.service.TradeOfferService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +20,21 @@ public class TradeOfferController {
     // 구매 제안 등록 (어떤 물품에 대한 제안인지 pathVariable)
     @GetMapping("/{tradeItemId}")
     public ResponseEntity<TradeOfferDto> requestTradeOffer(
-            @PathVariable
+            @PathVariable("tradeItemId")
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeOfferService.requestTradeOffer(tradeItemId));
     }
 
 
-    // 구매 제안 조회 (제안을 등록한 사용자, 물품을 등록한 사용자만 조회 가능)
+    // 구매 제안 조회 (제안 등록자, 물품 등록자만 가능)
+    //
     @GetMapping("/{tradeItemId}/list")
-    public void getTadeOfferList() {
+    public ResponseEntity<List<TradeOfferDto>> getTadeOfferList(
+            @PathVariable("tradeItemId")
+            Long tradeItemId
+    ) {
+        return ResponseEntity.ok(tradeOfferService.getTradeOfferList(tradeItemId));
 
     }
 
