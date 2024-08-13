@@ -2,7 +2,10 @@ package com.example.market.auth.entity;
 
 
 
+import com.example.market.auth.constant.BusinessStatus;
+import com.example.market.auth.constant.Role;
 import com.example.market.common.BaseEntity;
+import com.example.market.shop.entity.Shop;
 import com.example.market.trade.entity.TradeItem;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
@@ -11,6 +14,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -58,32 +62,15 @@ public class User extends BaseEntity {
     @Setter
     @Enumerated(EnumType.STRING)
     private BusinessStatus businessStatus; // 사업자 전환 신청 상태
-    public enum BusinessStatus {
-        // 신청, 승인, 거절
-        APPLIED, APPROVED, REJECTED
-    }
 
     @Setter
     @Builder.Default
     // @Enumerated(EnumType.STRING)
     private String authorities = Role.INACTIVE_USER.getRoles();
 
-    @Getter
-
-    public enum Role {
-        INACTIVE_USER ("ROLE_INACTIVE"),
-        ACTIVE_USER ("ROLE_ACTIVE"),
-        BUSINESS_USER ("ROLE_ACTIVE,ROLE_OWNER"),
-        ADMIN ("ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN");
-
-        private final String roles;
-
-        // 생성자는 enum 클래스 내부에서 자동으로 관리됨
-        Role(String roles) {
-            this.roles = roles;
-        }
-
-    }
+    @Setter
+    @OneToOne(mappedBy = "user")
+    private Shop shop;
 
 }
 

@@ -47,7 +47,8 @@ public class Shop extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ShopStatus status = ShopStatus.PREPARING;
     @Setter
-    @OneToOne(mappedBy = "user")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Setter

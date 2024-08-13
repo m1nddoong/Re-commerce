@@ -1,9 +1,9 @@
 package com.example.market.auth.service;
 
+import com.example.market.auth.constant.Role;
 import com.example.market.auth.entity.CustomUserDetails;
 import com.example.market.auth.entity.RefreshToken;
 import com.example.market.auth.entity.User;
-import com.example.market.auth.entity.User.Role;
 import com.example.market.auth.jwt.TokenType;
 import com.example.market.auth.repo.RefreshTokenRepository;
 import com.example.market.common.util.AuthenticationFacade;

@@ -1,9 +1,9 @@
 package com.example.market.auth.service;
 
+import com.example.market.auth.constant.BusinessStatus;
+import com.example.market.auth.constant.Role;
 import com.example.market.auth.dto.UserDto;
 import com.example.market.auth.entity.User;
-import com.example.market.auth.entity.User.BusinessStatus;
-import com.example.market.auth.entity.User.Role;
 import com.example.market.auth.repo.UserRepository;
 import com.example.market.shop.entity.Shop;
 import com.example.market.shop.repo.ShopRepository;

@@ -20,8 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class ShopService {
-    private ShopRepository shopRepository;
-    private AuthenticationFacade authFacade;
+    private final ShopRepository shopRepository;
+    private final AuthenticationFacade authFacade;
 
     /**
      * 쇼핑몰 정보 업데이트

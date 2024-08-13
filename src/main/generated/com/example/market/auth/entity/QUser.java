@@ -18,6 +18,8 @@ public class QUser extends EntityPathBase<User> {
 
     private static final long serialVersionUID = -2082198959L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QUser user = new QUser("user");
 
     public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
@@ -28,7 +30,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath businessNum = createString("businessNum");
 
-    public final EnumPath<User.BusinessStatus> businessStatus = createEnum("businessStatus", User.BusinessStatus.class);
+    public final EnumPath<com.example.market.auth.constant.BusinessStatus> businessStatus = createEnum("businessStatus", com.example.market.auth.constant.BusinessStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -48,6 +50,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath profileImg = createString("profileImg");
 
+    public final com.example.market.shop.entity.QShop shop;
+
     public final ListPath<com.example.market.trade.entity.TradeItem, com.example.market.trade.entity.QTradeItem> tradeItem = this.<com.example.market.trade.entity.TradeItem, com.example.market.trade.entity.QTradeItem>createList("tradeItem", com.example.market.trade.entity.TradeItem.class, com.example.market.trade.entity.QTradeItem.class, PathInits.DIRECT2);
 
     //inherited
@@ -58,15 +62,24 @@ public class QUser extends EntityPathBase<User> {
     public final ComparablePath<java.util.UUID> uuid = createComparable("uuid", java.util.UUID.class);
 
     public QUser(String variable) {
-        super(User.class, forVariable(variable));
+        this(User.class, forVariable(variable), INITS);
     }
 
     public QUser(Path<? extends User> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUser(PathMetadata metadata, PathInits inits) {
+        this(User.class, metadata, inits);
+    }
+
+    public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.shop = inits.isInitialized("shop") ? new com.example.market.shop.entity.QShop(forProperty("shop"), inits.get("shop")) : null;
     }
 
 }

@@ -1,14 +1,17 @@
 package com.example.market.common.util;
 
 
+import com.example.market.auth.constant.BusinessStatus;
 import com.example.market.auth.entity.User;
-import com.example.market.auth.entity.User.BusinessStatus;
 import com.example.market.auth.repo.UserRepository;
+import com.example.market.shop.entity.Shop;
+import com.example.market.shop.repo.ShopRepository;
 import com.example.market.trade.entity.TradeItem;
 import com.example.market.trade.entity.TradeItem.ItemStatus;
 import com.example.market.trade.entity.TradeOffer;
 import com.example.market.trade.repo.TradeItemRepository;
 import com.example.market.trade.repo.TradeOfferRepository;
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.transaction.Transactional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     private final TradeItemRepository tradeItemRepository;
     private final TradeOfferRepository tradeOfferRepository;
+    private final ShopRepository shopRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -48,8 +52,9 @@ public class DataInitializer implements ApplicationRunner {
                 .build());
 
         // 사업자 사용자 1
+        UUID uuid = UUID.randomUUID();
         userRepository.save(User.builder()
-                .uuid(UUID.randomUUID())
+                .uuid(uuid)
                 .email("owner123@naver.com")
                 .password(passwordEncoder.encode("2222"))
                 .username("유재석")
@@ -61,6 +66,13 @@ public class DataInitializer implements ApplicationRunner {
                 .businessStatus(BusinessStatus.APPROVED)
                 .authorities("ROLE_ACTIVE,ROLE_OWNER")
                 .build());
+
+        User user = userRepository.findUserByUuid(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Shop newShop = new Shop();
+        newShop.setUser(user);
+        shopRepository.save(newShop);
+
 
         // 일반 사용자 1
         userRepository.save(User.builder()

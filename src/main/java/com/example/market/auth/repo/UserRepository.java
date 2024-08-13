@@ -1,7 +1,7 @@
 package com.example.market.auth.repo;
 
+import com.example.market.auth.constant.BusinessStatus;
 import com.example.market.auth.entity.User;
-import com.example.market.auth.entity.User.BusinessStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
