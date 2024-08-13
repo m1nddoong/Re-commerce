@@ -16,6 +16,8 @@ import com.example.market.auth.dto.JwtTokenDto;
 import com.example.market.auth.jwt.JwtTokenUtils;
 import com.example.market.auth.repo.UserRepository;
 import com.example.market.common.util.FileHandlerUtils;
+import com.example.market.shop.entity.Shop;
+import com.example.market.shop.repo.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -152,19 +154,11 @@ public class UserService implements UserDetailsService {
             UpdateUserDto dto
     ) {
         User currentUser = authenticationFacade.extractUser();
-
         currentUser.setUsername(dto.getUsername());
         currentUser.setNickname(dto.getNickname());
         currentUser.setAge(dto.getAge());
         currentUser.setPhone(dto.getPhone());
-
-        // 모든 필드가 null이 아닌지 확인
-        boolean allFieldsNotNull = Stream.of(dto.getUsername(), dto.getNickname(), dto.getAge(), dto.getPhone())
-                .allMatch(Objects::nonNull);
-
-        if (allFieldsNotNull) {
-            currentUser.setAuthorities(Role.ACTIVE_USER.getRoles());
-        }
+        currentUser.setAuthorities(Role.ACTIVE_USER.getRoles());
 
         return UserDto.fromEntity(userRepository.save(currentUser));
     }

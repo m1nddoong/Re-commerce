@@ -46,10 +46,19 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/users/business-application",
                                 "/trade-item/**",
-                                "/trade-offer/**"
+                                "/trade-offer/**",
+                                "/shop/update",
+                                "/shop/open-request"
                         )
                         .hasRole("ACTIVE")
-                        .requestMatchers("/admin/**")
+                        .requestMatchers(
+                                "/admin/**",
+                                "/shop/open-request-list",
+                                "/shop/open-request/{shopId}/approval",
+                                "/shop/open-request/{shopId}/rejection",
+                                "/shop/close-request-list",
+                                "/shop/close-request/{shopId}/approval"
+                        )
                         .hasRole("ADMIN")
 
                 )

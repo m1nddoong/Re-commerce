@@ -22,17 +22,28 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
 
     public static final QTradeItem tradeItem = new QTradeItem("tradeItem");
 
+    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final StringPath description = createString("description");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath image = createString("image");
 
+    //inherited
+    public final BooleanPath isDelete = _super.isDelete;
+
     public final EnumPath<TradeItem.ItemStatus> itemStatus = createEnum("itemStatus", TradeItem.ItemStatus.class);
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final StringPath title = createString("title");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final com.example.market.auth.entity.QUser user;
 

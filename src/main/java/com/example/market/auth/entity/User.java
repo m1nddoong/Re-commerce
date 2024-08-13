@@ -69,6 +69,7 @@ public class User extends BaseEntity {
     private String authorities = Role.INACTIVE_USER.getRoles();
 
     @Getter
+
     public enum Role {
         INACTIVE_USER ("ROLE_INACTIVE"),
         ACTIVE_USER ("ROLE_ACTIVE"),
