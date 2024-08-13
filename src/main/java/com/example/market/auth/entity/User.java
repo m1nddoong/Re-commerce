@@ -2,6 +2,7 @@ package com.example.market.auth.entity;
 
 
 
+import com.example.market.common.BaseEntity;
 import com.example.market.trade.entity.TradeItem;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
@@ -18,15 +19,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-// @SuperBuilder
+@SuperBuilder
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
     @Id
     @Tsid
     private Long id;

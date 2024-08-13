@@ -1,6 +1,7 @@
 package com.example.market.trade.entity;
 
 import com.example.market.auth.entity.User;
+import com.example.market.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,13 +16,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradeItem { // 물품 정보
+public class TradeItem extends BaseEntity { // 물품 정보
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

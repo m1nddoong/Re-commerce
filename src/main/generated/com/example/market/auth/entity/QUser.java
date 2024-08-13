@@ -20,6 +20,8 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
+    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+
     public final NumberPath<Integer> age = createNumber("age", Integer.class);
 
     public final StringPath authorities = createString("authorities");
@@ -28,9 +30,15 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<User.BusinessStatus> businessStatus = createEnum("businessStatus", User.BusinessStatus.class);
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final BooleanPath isDelete = _super.isDelete;
 
     public final StringPath nickname = createString("nickname");
 
@@ -41,6 +49,9 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath profileImg = createString("profileImg");
 
     public final ListPath<com.example.market.trade.entity.TradeItem, com.example.market.trade.entity.QTradeItem> tradeItem = this.<com.example.market.trade.entity.TradeItem, com.example.market.trade.entity.QTradeItem>createList("tradeItem", com.example.market.trade.entity.TradeItem.class, com.example.market.trade.entity.QTradeItem.class, PathInits.DIRECT2);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final StringPath username = createString("username");
 
