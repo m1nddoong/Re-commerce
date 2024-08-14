@@ -1,6 +1,8 @@
 package com.example.market.shop.service;
 
 import com.example.market.auth.entity.User;
+import com.example.market.common.exception.CustomGlobalErrorCode;
+import com.example.market.common.exception.GlobalExceptionHandler;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
@@ -34,7 +36,7 @@ public class ShopService {
         // 현재 사용자의 쇼핑몰 가져오기
         User currentUser = authFacade.extractUser();
         Shop targetShop = shopRepository.findShopByUserId(currentUser.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalExceptionHandler(CustomGlobalErrorCode.SHOP_NOT_EXISTS));
         // 쇼핑몰 수정
         targetShop.setName(dto.getName());
         targetShop.setIntroduction(dto.getIntroduction());

@@ -5,8 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorCode {
-    TOKEN_EXPIRED(401, "3001", "토큰이 만료되었습니다.");
+public enum CustomGlobalErrorCode {
+    // 쇼핑몰 관련 에러
+    SHOP_NOT_EXISTS(404, "3001", "존재하지 않는 쇼핑몰 입니다.");
+
 
     private final int status;
     private final String code;
@@ -43,13 +45,5 @@ public enum ErrorCode {
  *   - 502 Bad Gateway : 게이트웨이 또는 프록시 서버가 잘못된 응답을 받았다.
  *   - 503 Service Unavailable : 서버가 과부하 상태이거나 유지 관리중이다.
  *   - 504 Gateway Timeout : 게이트웨이 또는 프록시 서버가 응답을 기다리는 동안 시간 초과가 발생했다.
- *
- * <<<<<<<<<<<<<<<< 애플리케이션 고유 코드 >>>>>>>>>>>>>>>>
- * 1000 ~ 1999 : 사용자 입력 오류 및 클라이언트 오류
- * 2000 ~ 2999 : 인증 및 권한 오류
- * 3000 ~ 3999 : 데이터 관련 오류 및 비즈니스 로직 오류
- * 4000 ~ 4999 : 서버 및 시스템 오류
- *
- *
- *
+
  */
