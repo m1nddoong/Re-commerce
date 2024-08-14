@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.index.Indexed;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@RedisHash(value = "RefreshToken", timeToLive = 60 * 60 * 24) // 24시간 이후 자동 삭제
+@RedisHash(value = "RefreshToken", timeToLive = 60 * 3) // 3분 이후 자동 삭제
 public class RefreshToken {
     @Id
     private String uuid;

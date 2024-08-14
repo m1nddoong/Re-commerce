@@ -51,10 +51,10 @@ public class DataInitializer implements ApplicationRunner {
 
         Shop[] shops = {
                 createShop("유재석의 가게", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
-                createShop("박명수의 가게", "전자기기 쇼핑몰", ShopCategory.ELECTRONICS, ShopStatus.OPEN, users[2]),
-                createShop("정준하의 가게", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[3]),
-                createShop("정형돈의 가게", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN, users[4]),
-                createShop("길의 가게", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN, users[5])
+                createShop("박명수의 가게", "전자기기 쇼핑몰", ShopCategory.ELECTRONICS, ShopStatus.CLOSE_REQUEST, users[2]),
+                createShop("정준하의 가게", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.CLOSE_REQUEST, users[3]),
+                createShop("정형돈의 가게", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN_REQUEST, users[4]),
+                createShop("길의 가게", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN_REQUEST, users[5])
         };
         shopRepository.saveAll(Arrays.asList(shops));
     }

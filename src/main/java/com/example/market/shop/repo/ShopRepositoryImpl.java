@@ -19,6 +19,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom{
         QShop shop = QShop.shop;
         return jpaQueryFactory
                 .select(Projections.constructor(ShopDto.class,
+                        shop.id,
                         shop.name,
                         shop.introduction,
                         shop.category,
@@ -38,14 +39,14 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom{
         QShop shop = QShop.shop;
         return jpaQueryFactory
                 .select(Projections.constructor(ShopDto.class,
+                        shop.id,
                         shop.name,
                         shop.introduction,
                         shop.category,
                         shop.status,
                         shop.user.username,
                         shop.address,
-                        shop.coordinates,
-                        shop.items))
+                        shop.coordinates))
                 .from(shop)
                 .where(shop.status.eq(ShopStatus.CLOSE_REQUEST))
                 .fetch();

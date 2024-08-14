@@ -76,8 +76,8 @@ public class ShopService {
      * @return 쇼핑몰 정보
      */
     public ShopDto openRequestApproval(Long shopId) {
-        Shop targetShop = shopRepository.findShopByUserId(shopId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Shop targetShop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.OPEN);
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
@@ -88,8 +88,8 @@ public class ShopService {
      * @return 쇼핑몰 정보
      */
     public ShopDto openRequestReject(Long shopId) {
-        Shop targetShop = shopRepository.findShopByUserId(shopId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Shop targetShop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.OPEN_NOT_ALLOWED);
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
@@ -102,7 +102,7 @@ public class ShopService {
         // 현재 사용자의 쇼핑몰 가져오기
         User currentUser = authFacade.extractUser();
         Shop targetShop = shopRepository.findShopByUserId(currentUser.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.CLOSE_REQUEST);
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
@@ -121,8 +121,8 @@ public class ShopService {
      * @return 폐쇄된 쇼핑몰 정보
      */
     public ShopDto closeRequestApproval(Long shopId) {
-        Shop targetShop = shopRepository.findShopByUserId(shopId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Shop targetShop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.CLOSED);
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }

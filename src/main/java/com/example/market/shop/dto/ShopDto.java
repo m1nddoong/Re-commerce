@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShopDto {
+    private Long id;
     private String name;
     private String introduction;
     private ShopCategory category;
@@ -26,6 +27,7 @@ public class ShopDto {
 
     public static ShopDto fromEntity(Shop entity) {
         return ShopDto.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .introduction(entity.getIntroduction())
                 .category(entity.getCategory())
