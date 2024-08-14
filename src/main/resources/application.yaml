@@ -17,7 +17,7 @@ spring:
   jpa:
     hibernate:
       # 테이블 생성 시 create
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       show-sql: true
       format_sql: true # 보기좋게 줄바꿈
@@ -29,7 +29,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     # table create 후 data.sql 로 초기화할 때 사용
-    # defer-datasource-initialization: true
+    defer-datasource-initialization: true
   sql:
     init:
       mode: always

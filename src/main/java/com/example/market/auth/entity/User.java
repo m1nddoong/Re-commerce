@@ -33,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "users")
 public class User extends BaseEntity {
     @Id
-    @Tsid
+    // @Tsid
     private Long id;
 
     @Column(nullable = false, unique = true, updatable = false)

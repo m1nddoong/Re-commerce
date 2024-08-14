@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum CustomGlobalErrorCode {
+public enum GlobalErrorCode {
     // 쇼핑몰 관련 에러
-    SHOP_NOT_EXISTS(404, "3001", "존재하지 않는 쇼핑몰 입니다.");
+    SHOP_NOT_EXISTS(404, "3001", "존재하지 않는 쇼핑몰 입니다."),
+    SHOP_INCOMPLETE(400, "3002", "쇼핑몰의 이름, 소개, 분류가 모두 작성되지 않았습니다.");
 
 
     private final int status;
@@ -45,5 +46,4 @@ public enum CustomGlobalErrorCode {
  *   - 502 Bad Gateway : 게이트웨이 또는 프록시 서버가 잘못된 응답을 받았다.
  *   - 503 Service Unavailable : 서버가 과부하 상태이거나 유지 관리중이다.
  *   - 504 Gateway Timeout : 게이트웨이 또는 프록시 서버가 응답을 기다리는 동안 시간 초과가 발생했다.
-
  */

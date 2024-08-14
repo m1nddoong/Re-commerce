@@ -8,7 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 @Repository
 @RequiredArgsConstructor
 public class ShopRepositoryImpl implements ShopRepositoryCustom{
@@ -26,12 +25,13 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom{
                         shop.status,
                         shop.user.username,
                         shop.address,
-                        shop.coordinates,
-                        shop.items))
+                        shop.coordinates))
                 .from(shop)
                 .where(shop.status.eq(ShopStatus.OPEN_REQUEST))
                 .fetch();
     }
+
+
 
     @Override
     public List<ShopDto> getShopListWithCloseRequestStatus() {

@@ -1,10 +1,9 @@
 package com.example.market.shop.service;
 
 import com.example.market.auth.entity.User;
-import com.example.market.common.exception.CustomGlobalErrorCode;
-import com.example.market.common.exception.GlobalExceptionHandler;
+import com.example.market.common.exception.GlobalErrorCode;
+import com.example.market.common.exception.GlobalCustomException;
 import com.example.market.common.util.AuthenticationFacade;
-import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
 import com.example.market.shop.dto.ShopDto;
 import com.example.market.shop.dto.UpdateShopDto;
@@ -13,7 +12,6 @@ import com.example.market.shop.repo.ShopRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,7 +34,7 @@ public class ShopService {
         // 현재 사용자의 쇼핑몰 가져오기
         User currentUser = authFacade.extractUser();
         Shop targetShop = shopRepository.findShopByUserId(currentUser.getId())
-                .orElseThrow(() -> new GlobalExceptionHandler(CustomGlobalErrorCode.SHOP_NOT_EXISTS));
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         // 쇼핑몰 수정
         targetShop.setName(dto.getName());
         targetShop.setIntroduction(dto.getIntroduction());
@@ -53,13 +51,13 @@ public class ShopService {
         // 현재 사용자의 쇼핑몰 가져오기
         User currentUser = authFacade.extractUser();
         Shop targetShop = shopRepository.findShopByUserId(currentUser.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         // 쇼핑몰의 이름, 소개, 분류가 전부 작성된 상태라면
         if (targetShop.getName() != null && targetShop.getIntroduction() != null && targetShop.getCategory() != null) {
             targetShop.setStatus(ShopStatus.OPEN_REQUEST);
             return ShopDto.fromEntity(shopRepository.save(targetShop));
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new GlobalCustomException(GlobalErrorCode.SHOP_INCOMPLETE);
         }
     }
 

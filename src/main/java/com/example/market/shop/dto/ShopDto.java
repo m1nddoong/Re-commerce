@@ -23,7 +23,6 @@ public class ShopDto {
     private String username;
     private String address;
     private String coordinates;
-    private List<ShopItem> items;
 
     public static ShopDto fromEntity(Shop entity) {
         return ShopDto.builder()
@@ -34,7 +33,6 @@ public class ShopDto {
                 .username(entity.getUser().getUsername())
                 .address(entity.getAddress())
                 .coordinates(entity.getCoordinates())
-                .items(entity.getItems())
                 .build();
     }
 }
