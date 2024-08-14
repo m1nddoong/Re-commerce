@@ -59,6 +59,4 @@ public class Shop extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
     private final List<ShopItem> items = new ArrayList<>();
-
-
 }
