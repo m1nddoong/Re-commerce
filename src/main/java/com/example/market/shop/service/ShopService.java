@@ -126,4 +126,6 @@ public class ShopService {
         targetShop.setStatus(ShopStatus.CLOSED);
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
+
+
 }
