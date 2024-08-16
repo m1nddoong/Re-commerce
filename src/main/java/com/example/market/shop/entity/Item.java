@@ -1,10 +1,9 @@
 package com.example.market.shop.entity;
 
-import com.example.market.auth.entity.User;
 import com.example.market.common.BaseEntity;
 import com.example.market.shop.constant.ItemCategory;
 import com.example.market.shop.constant.ItemSubCategory;
-import com.example.market.trade.entity.TradeItem;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +27,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShopItem extends BaseEntity {
+public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +38,7 @@ public class ShopItem extends BaseEntity {
     @Setter
     private String description;
     @Setter
-    private String price;
+    private Integer price;
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -54,4 +54,8 @@ public class ShopItem extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")
     private Shop shop;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<OrderItem> orders = new ArrayList<>();
 }
+

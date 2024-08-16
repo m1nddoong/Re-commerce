@@ -80,6 +80,9 @@ public class ShopController {
         return ResponseEntity.ok(shopService.closeRequestApproval(shopId));
     }
 
+    // 쇼핑몰 조회
+    // 조건 없이 조회할 경우, 가장 최근에 거래가 있었던 쇼핑몰 순서로 조회
+
 
 
 }

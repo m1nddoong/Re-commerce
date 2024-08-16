@@ -8,9 +8,9 @@ import com.example.market.shop.constant.ItemCategory;
 import com.example.market.shop.constant.ItemSubCategory;
 import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
+import com.example.market.shop.entity.Item;
 import com.example.market.shop.entity.Shop;
-import com.example.market.shop.entity.ShopItem;
-import com.example.market.shop.repo.ShopItemRepository;
+import com.example.market.shop.repo.ItemRepository;
 import com.example.market.shop.repo.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     private final ShopRepository shopRepository;
-    private final ShopItemRepository shopItemRepository;
+    private final ItemRepository itemRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -63,15 +63,23 @@ public class DataInitializer implements ApplicationRunner {
         };
         shopRepository.saveAll(Arrays.asList(shops));
 
-        ShopItem[] shopItems = {
-                createShopItem("맨두맨", "신상 맨투맨 입니다.", "35000", ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("코트", "신상 코트 입니다.", "120000", ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
-                createShopItem("벤큐 모니터", "신상 모니터 입니다.", "280000", ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.MONITORS, 7, shops[1]),
-                createShopItem("해피해킹 키보드", "신상 키보드 입니다.", "350000", ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.KEYBOARDS, 20, shops[1]),
-                createShopItem("로션", "신상 로션 입니다.", "13000", ItemCategory.BEAUTY_SKINCARE, ItemSubCategory.SKINCARE_CREAM, 15, shops[2]),
-                createShopItem("샴푸", "신상 샴푸 입니다.", "15000", ItemCategory.BEAUTY_HAIRCARE, ItemSubCategory.HAIR_SHAMPOO, 15, shops[2])
+        Item[] items = {
+                createShopItem("맨두맨1", "신상 맨투맨1 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨2", "신상 맨투맨2 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨3", "신상 맨투맨3 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨4", "신상 맨투맨4 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨5", "신상 맨투맨5 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("코트1", "신상 코트1 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트2", "신상 코트2 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트3", "신상 코트3 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트4", "신상 코트4 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트5", "신상 코트5 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("벤큐 모니터", "신상 모니터 입니다.", 280000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.MONITORS, 7, shops[1]),
+                createShopItem("해피해킹 키보드", "신상 키보드 입니다.", 350000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.KEYBOARDS, 20, shops[1]),
+                createShopItem("로션", "신상 로션 입니다.", 13000, ItemCategory.BEAUTY_SKINCARE, ItemSubCategory.SKINCARE_CREAM, 15, shops[2]),
+                createShopItem("샴푸", "신상 샴푸 입니다.", 15000, ItemCategory.BEAUTY_HAIRCARE, ItemSubCategory.HAIR_SHAMPOO, 15, shops[2])
         };
-        shopItemRepository.saveAll(Arrays.asList(shopItems));
+        itemRepository.saveAll(Arrays.asList(items));
 
     }
 
@@ -102,9 +110,9 @@ public class DataInitializer implements ApplicationRunner {
                 .build();
     }
 
-    private ShopItem createShopItem(String name, String description, String price, ItemCategory category,
-                                    ItemSubCategory subCategory, Integer stock, Shop shop) {
-        return ShopItem.builder()
+    private Item createShopItem(String name, String description, Integer price, ItemCategory category,
+                                ItemSubCategory subCategory, Integer stock, Shop shop) {
+        return Item.builder()
                 .name(name)
                 .img("example-img.png")
                 .description(description)

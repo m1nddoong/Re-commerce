@@ -6,9 +6,9 @@ import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.shop.constant.ItemCategory;
 import com.example.market.shop.constant.ItemSubCategory;
-import com.example.market.shop.dto.ShopItemDto;
-import com.example.market.shop.entity.ShopItem;
-import com.example.market.shop.repo.ShopItemRepository;
+import com.example.market.shop.dto.ItemDto;
+import com.example.market.shop.entity.Item;
+import com.example.market.shop.repo.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ShopItemService {
-    private final ShopItemRepository shopItemRepository;
+public class ItemService {
+    private final ItemRepository itemRepository;
     private final AuthenticationFacade authFacade;
 
     // 쇼핑몰 상품 등록
-    public ShopItemDto createItem(ShopItemDto dto) {
+    public ItemDto createItem(ItemDto dto) {
         User user = authFacade.extractUser();
-        return ShopItemDto.fromEntity(shopItemRepository.save(ShopItem.builder()
+        return ItemDto.fromEntity(itemRepository.save(Item.builder()
                 .name(dto.getName())
                 .img(dto.getImg())
                 .description(dto.getDescription())
@@ -36,9 +36,9 @@ public class ShopItemService {
     }
 
     // 쇼핑몰 상품 업데이트
-    public ShopItemDto updateItem(ShopItemDto dto, Long shopItemId) {
+    public ItemDto updateItem(ItemDto dto, Long shopItemId) {
         // 상품 조회
-        ShopItem targetItem = shopItemRepository.findById(shopItemId)
+        Item targetItem = itemRepository.findById(shopItemId)
                 .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_NOT_EXISTS));
         // 상품의 주인이 맞는지
         User user = authFacade.extractUser();
@@ -53,19 +53,20 @@ public class ShopItemService {
         targetItem.setCategory(ItemCategory.valueOf(dto.getCategory()));
         targetItem.setSubCategory(ItemSubCategory.valueOf(dto.getSubCategory()));
         targetItem.setStock(dto.getStock());
-        return ShopItemDto.fromEntity(shopItemRepository.save(targetItem));
+        return ItemDto.fromEntity(itemRepository.save(targetItem));
     }
 
     // 쇼핑몰 상품 삭제
     public void deleteItem(Long shopItemId) {
         // 상품 조회
-        ShopItem targetItem = shopItemRepository.findById(shopItemId)
+        Item targetItem = itemRepository.findById(shopItemId)
                 .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_NOT_EXISTS));
         // 상품의 주인이 맞는지
         User user = authFacade.extractUser();
         if (!targetItem.getShop().getUser().getId().equals(user.getId())) {
             throw new GlobalCustomException(GlobalErrorCode.ITEM_NO_PERMISSION);
         }
-        shopItemRepository.deleteById(shopItemId);
+        itemRepository.deleteById(shopItemId);
     }
+
 }

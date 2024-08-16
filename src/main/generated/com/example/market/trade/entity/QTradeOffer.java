@@ -49,7 +49,7 @@ public class QTradeOffer extends EntityPathBase<TradeOffer> {
     public QTradeOffer(Class<? extends TradeOffer> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.items = inits.isInitialized("items") ? new QTradeItem(forProperty("items"), inits.get("items")) : null;
-        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.auth.entity.QUser(forProperty("offeringUser")) : null;
+        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.auth.entity.QUser(forProperty("offeringUser"), inits.get("offeringUser")) : null;
     }
 
 }

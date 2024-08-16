@@ -1,4 +1,4 @@
-package com.example.market.trade.entity;
+package com.example.market.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,59 +11,55 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QTradeItem is a Querydsl query type for TradeItem
+ * QOrder is a Querydsl query type for Order
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QTradeItem extends EntityPathBase<TradeItem> {
+public class QOrder extends EntityPathBase<Order> {
 
-    private static final long serialVersionUID = 217026359L;
+    private static final long serialVersionUID = 2105191162L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QTradeItem tradeItem = new QTradeItem("tradeItem");
+    public static final QOrder order = new QOrder("order1");
 
     public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final StringPath description = createString("description");
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final StringPath image = createString("image");
 
     //inherited
     public final BooleanPath isDelete = _super.isDelete;
 
-    public final EnumPath<TradeItem.ItemStatus> itemStatus = createEnum("itemStatus", TradeItem.ItemStatus.class);
+    public final ListPath<OrderItem, QOrderItem> items = this.<OrderItem, QOrderItem>createList("items", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
-    public final NumberPath<Long> price = createNumber("price", Long.class);
+    public final EnumPath<com.example.market.shop.constant.OrderStatus> status = createEnum("status", com.example.market.shop.constant.OrderStatus.class);
 
-    public final StringPath title = createString("title");
+    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final com.example.market.auth.entity.QUser user;
 
-    public QTradeItem(String variable) {
-        this(TradeItem.class, forVariable(variable), INITS);
+    public QOrder(String variable) {
+        this(Order.class, forVariable(variable), INITS);
     }
 
-    public QTradeItem(Path<? extends TradeItem> path) {
+    public QOrder(Path<? extends Order> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QTradeItem(PathMetadata metadata) {
+    public QOrder(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QTradeItem(PathMetadata metadata, PathInits inits) {
-        this(TradeItem.class, metadata, inits);
+    public QOrder(PathMetadata metadata, PathInits inits) {
+        this(Order.class, metadata, inits);
     }
 
-    public QTradeItem(Class<? extends TradeItem> type, PathMetadata metadata, PathInits inits) {
+    public QOrder(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }

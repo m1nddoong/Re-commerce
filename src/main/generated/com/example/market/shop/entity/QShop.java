@@ -40,7 +40,7 @@ public class QShop extends EntityPathBase<Shop> {
     //inherited
     public final BooleanPath isDelete = _super.isDelete;
 
-    public final ListPath<ShopItem, QShopItem> items = this.<ShopItem, QShopItem>createList("items", ShopItem.class, QShopItem.class, PathInits.DIRECT2);
+    public final ListPath<Item, QItem> items = this.<Item, QItem>createList("items", Item.class, QItem.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
 

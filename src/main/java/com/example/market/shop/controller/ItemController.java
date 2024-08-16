@@ -1,11 +1,9 @@
 package com.example.market.shop.controller;
 
 
-import com.example.market.shop.dto.ShopItemDto;
-import com.example.market.shop.service.ShopItemService;
-import com.example.market.shop.service.ShopService;
+import com.example.market.shop.dto.ItemDto;
+import com.example.market.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,34 +11,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping("/shop-item")
 @RequiredArgsConstructor
-public class ShopItemController {
-    private final ShopItemService shopItemService;
+public class ItemController {
+    private final ItemService itemService;
 
     // 상품 등록
     @PostMapping("/create")
-    private ResponseEntity<ShopItemDto> createItem(
+    private ResponseEntity<ItemDto> createItem(
             @RequestBody
-            ShopItemDto dto
+            ItemDto dto
     ) {
-        return ResponseEntity.ok(shopItemService.createItem(dto));
+        return ResponseEntity.ok(itemService.createItem(dto));
     }
 
     // 상품 수정
     @PutMapping("/update/{shopItemId}")
-    private ResponseEntity<ShopItemDto> updateItem(
+    private ResponseEntity<ItemDto> updateItem(
             @RequestBody
-            ShopItemDto dto,
+            ItemDto dto,
             @PathVariable
             Long shopItemId
     ) {
-        return ResponseEntity.ok(shopItemService.updateItem(dto, shopItemId));
+        return ResponseEntity.ok(itemService.updateItem(dto, shopItemId));
     }
 
     // 상품 삭제
@@ -49,11 +46,9 @@ public class ShopItemController {
             @PathVariable
             Long shopItemId
     ) {
-        shopItemService.deleteItem(shopItemId);
+        itemService.deleteItem(shopItemId);
         return ResponseEntity.ok().build();
     }
-
-    // 상품 조회
 
     // 상품 분류 목록(분류, 소분류) 추가
 
@@ -62,4 +57,11 @@ public class ShopItemController {
     // 상품 분류 목록 수정 - 관리자
 
     // 할인 적용
+
+    // 쇼핑몰 상품 검색
+
+
+
+
+
 }

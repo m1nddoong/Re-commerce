@@ -17,15 +17,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
-import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.stereotype.Repository;
 
 @Getter
 @Entity
@@ -56,7 +53,6 @@ public class Shop extends BaseEntity {
     @Setter
     private String coordinates; // 좌표
 
-    @Builder.Default
     @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
-    private final List<ShopItem> items = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 }

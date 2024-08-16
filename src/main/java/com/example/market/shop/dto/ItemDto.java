@@ -1,13 +1,11 @@
 package com.example.market.shop.dto;
 
 
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.entity.ShopItem;
+import com.example.market.shop.entity.Item;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 
 // 필수적인 정보는 상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류,
@@ -15,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ShopItemDto {
+public class ItemDto {
     @NotBlank
     private String name;
     @NotBlank
@@ -23,7 +21,7 @@ public class ShopItemDto {
     @NotBlank
     private String description;
     @NotBlank
-    private String price;
+    private Integer price;
     @NotBlank
     private String category;
     @NotBlank
@@ -31,8 +29,8 @@ public class ShopItemDto {
     @NotBlank
     private Integer stock;
 
-    public static ShopItemDto fromEntity(ShopItem entity) {
-        return ShopItemDto.builder()
+    public static ItemDto fromEntity(Item entity) {
+        return ItemDto.builder()
                 .name(entity.getName())
                 .img(entity.getImg())
                 .description(entity.getDescription())

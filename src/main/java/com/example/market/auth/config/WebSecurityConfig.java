@@ -49,7 +49,8 @@ public class WebSecurityConfig {
                                 "/trade-offer/**",
                                 "/shop/update",
                                 "/shop/open-request",
-                                "/shop/close-request"
+                                "/shop/close-request",
+                                "/order/**"
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers("/shop-item/**")
