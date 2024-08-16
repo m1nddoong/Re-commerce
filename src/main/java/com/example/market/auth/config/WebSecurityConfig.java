@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                                 "/order/**"
                         )
                         .hasRole("ACTIVE")
-                        .requestMatchers("/shop-item/**")
+                        .requestMatchers("/item/**")
                         .hasRole("OWNER")
                         .requestMatchers(
                                 "/admin/**",
