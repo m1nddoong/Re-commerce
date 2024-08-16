@@ -44,7 +44,7 @@ public class QShopItem extends EntityPathBase<ShopItem> {
 
     public final QShop shop;
 
-    public final StringPath stock = createString("stock");
+    public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
     public final EnumPath<com.example.market.shop.constant.ItemSubCategory> subCategory = createEnum("subCategory", com.example.market.shop.constant.ItemSubCategory.class);
 

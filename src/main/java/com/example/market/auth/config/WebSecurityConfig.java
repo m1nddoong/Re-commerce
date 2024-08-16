@@ -52,6 +52,8 @@ public class WebSecurityConfig {
                                 "/shop/close-request"
                         )
                         .hasRole("ACTIVE")
+                        .requestMatchers("/shop-item/**")
+                        .hasRole("OWNER")
                         .requestMatchers(
                                 "/admin/**",
                                 "/shop/open-request-list",

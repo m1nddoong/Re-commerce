@@ -20,8 +20,9 @@ public enum ItemSubCategory {
     KIDS_ACCESSORIES("아동 악세사리"),
 
     // 전자기기
+    MONITORS("모니터"),
     MOBILE_PHONES("휴대폰"),
-    SMARTWATCHES("스마트워치"),
+    KEYBOARDS("키보드"),
     LAPTOPS("노트북"),
     HEADPHONES("헤드폰"),
 
@@ -30,6 +31,7 @@ public enum ItemSubCategory {
     SERUMS("세럼"),
     FOUNDATION("파운데이션"),
     HAIR_SHAMPOO("샴푸"),
+
 
     // 가정용품
     SOFAS("소파"),

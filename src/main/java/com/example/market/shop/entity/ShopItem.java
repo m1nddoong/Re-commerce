@@ -49,7 +49,7 @@ public class ShopItem extends BaseEntity {
     private ItemSubCategory subCategory; // 추가 가능
 
     @Setter
-    private String stock;
+    private Integer stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")

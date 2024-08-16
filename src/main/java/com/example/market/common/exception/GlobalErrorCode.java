@@ -8,7 +8,11 @@ import lombok.Getter;
 public enum GlobalErrorCode {
     // 쇼핑몰 관련 에러
     SHOP_NOT_EXISTS(404, "3001", "존재하지 않는 쇼핑몰 입니다."),
-    SHOP_INCOMPLETE(400, "3002", "쇼핑몰의 이름, 소개, 분류가 모두 작성되지 않았습니다.");
+    SHOP_INCOMPLETE(400, "3002", "쇼핑몰의 이름, 소개, 분류가 모두 작성되지 않았습니다."),
+
+    // 쇼핑몰 상품 관련 에러
+    ITEM_NOT_EXISTS(404, "3003", "존재하지 않는 쇼핑몰 상품 입니다."),
+    ITEM_NO_PERMISSION(403, "3004", "해당 쇼핑물 상품에 대한 권한이 없습니다.");
 
 
     private final int status;
