@@ -5,6 +5,7 @@ import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.exception.GlobalCustomException;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.shop.constant.ShopStatus;
+import com.example.market.shop.dto.SearchShopDto;
 import com.example.market.shop.dto.ShopDto;
 import com.example.market.shop.dto.UpdateShopDto;
 import com.example.market.shop.entity.Shop;
@@ -38,7 +39,7 @@ public class ShopService {
         // 쇼핑몰 수정
         targetShop.setName(dto.getName());
         targetShop.setIntroduction(dto.getIntroduction());
-        targetShop.setCategory(dto.getCategory());
+        targetShop.setShopCategory(dto.getShopCategory());
         shopRepository.save(targetShop);
         return ShopDto.fromEntity(targetShop);
     }
@@ -53,7 +54,7 @@ public class ShopService {
         Shop targetShop = shopRepository.findShopByUserId(currentUser.getId())
                 .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.SHOP_NOT_EXISTS));
         // 쇼핑몰의 이름, 소개, 분류가 전부 작성된 상태라면
-        if (targetShop.getName() != null && targetShop.getIntroduction() != null && targetShop.getCategory() != null) {
+        if (targetShop.getName() != null && targetShop.getIntroduction() != null && targetShop.getShopCategory() != null) {
             targetShop.setStatus(ShopStatus.OPEN_REQUEST);
             return ShopDto.fromEntity(shopRepository.save(targetShop));
         } else {
@@ -127,5 +128,8 @@ public class ShopService {
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
 
-
+    // 쇼핑몰 검색
+    public List<ShopDto> getShopList(SearchShopDto dto) {
+        return shopRepository.getShopList(dto);
+    }
 }

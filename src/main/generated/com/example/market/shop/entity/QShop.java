@@ -26,8 +26,6 @@ public class QShop extends EntityPathBase<Shop> {
 
     public final StringPath address = createString("address");
 
-    public final EnumPath<com.example.market.shop.constant.ShopCategory> category = createEnum("category", com.example.market.shop.constant.ShopCategory.class);
-
     public final StringPath coordinates = createString("coordinates");
 
     //inherited
@@ -42,7 +40,11 @@ public class QShop extends EntityPathBase<Shop> {
 
     public final ListPath<Item, QItem> items = this.<Item, QItem>createList("items", Item.class, QItem.class, PathInits.DIRECT2);
 
+    public final DateTimePath<java.time.LocalDateTime> lastTransactionDate = createDateTime("lastTransactionDate", java.time.LocalDateTime.class);
+
     public final StringPath name = createString("name");
+
+    public final EnumPath<com.example.market.shop.constant.ShopCategory> shopCategory = createEnum("shopCategory", com.example.market.shop.constant.ShopCategory.class);
 
     public final EnumPath<com.example.market.shop.constant.ShopStatus> status = createEnum("status", com.example.market.shop.constant.ShopStatus.class);
 

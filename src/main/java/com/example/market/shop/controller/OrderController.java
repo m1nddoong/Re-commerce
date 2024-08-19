@@ -6,6 +6,7 @@ import com.example.market.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,9 +30,9 @@ public class OrderController {
     }
 
     // 상품 주문 전체 취소
-    @DeleteMapping("/cancel/{orderId}")
+    @PutMapping("/cancel/{orderId}")
     public ResponseEntity<Void> cancelOrder(
-            @PathVariable
+            @PathVariable(value = "orderId")
             Long orderId
     ) {
         orderService.cancelOrder(orderId);
@@ -42,7 +43,7 @@ public class OrderController {
     // 쇼핑몰 구매 요청 수락
     @PutMapping("/approval/{orderId}")
     public ResponseEntity<Void> approvalOrder(
-            @PathVariable
+            @PathVariable(value = "orderId")
             Long orderId
     ) {
         orderService.approvalOrder(orderId);

@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Entity
@@ -39,7 +41,7 @@ public class Shop extends BaseEntity {
     private String introduction;
     @Setter
     @Enumerated(EnumType.STRING)
-    private ShopCategory category;
+    private ShopCategory shopCategory;
     @Setter
     @Enumerated(EnumType.STRING)
     private ShopStatus status = ShopStatus.PREPARING;
@@ -52,6 +54,10 @@ public class Shop extends BaseEntity {
     private String address; // 주소
     @Setter
     private String coordinates; // 좌표
+
+    @LastModifiedDate
+    @Setter
+    private LocalDateTime lastTransactionDate;
 
     @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
     private final List<Item> items = new ArrayList<>();

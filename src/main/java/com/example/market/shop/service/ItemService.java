@@ -28,8 +28,8 @@ public class ItemService {
                 .img(dto.getImg())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
-                .category(ItemCategory.valueOf(dto.getCategory()))
-                .subCategory(ItemSubCategory.valueOf(dto.getSubCategory()))
+                .itemCategory(ItemCategory.valueOf(dto.getItemCategory()))
+                .itemSubCategory(ItemSubCategory.valueOf(dto.getItemSubCategory()))
                 .stock(dto.getStock())
                 .shop(user.getShop())
                 .build()));
@@ -50,8 +50,8 @@ public class ItemService {
         targetItem.setImg(dto.getImg());
         targetItem.setDescription(dto.getDescription());
         targetItem.setPrice(dto.getPrice());
-        targetItem.setCategory(ItemCategory.valueOf(dto.getCategory()));
-        targetItem.setSubCategory(ItemSubCategory.valueOf(dto.getSubCategory()));
+        targetItem.setItemCategory(ItemCategory.valueOf(dto.getItemCategory()));
+        targetItem.setItemSubCategory(ItemSubCategory.valueOf(dto.getItemSubCategory()));
         targetItem.setStock(dto.getStock());
         return ItemDto.fromEntity(itemRepository.save(targetItem));
     }

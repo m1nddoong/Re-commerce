@@ -42,11 +42,11 @@ public class Item extends BaseEntity {
 
     @Setter
     @Enumerated(EnumType.STRING)
-    private ItemCategory category; // 추가 가능
+    private ItemCategory itemCategory; // 추가 가능
 
     @Setter
     @Enumerated(EnumType.STRING)
-    private ItemSubCategory subCategory; // 추가 가능
+    private ItemSubCategory itemSubCategory; // 추가 가능
 
     @Setter
     private Integer stock;

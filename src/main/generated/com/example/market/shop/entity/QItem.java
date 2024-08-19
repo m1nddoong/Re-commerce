@@ -24,8 +24,6 @@ public class QItem extends EntityPathBase<Item> {
 
     public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
 
-    public final EnumPath<com.example.market.shop.constant.ItemCategory> category = createEnum("category", com.example.market.shop.constant.ItemCategory.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -38,6 +36,10 @@ public class QItem extends EntityPathBase<Item> {
     //inherited
     public final BooleanPath isDelete = _super.isDelete;
 
+    public final EnumPath<com.example.market.shop.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.market.shop.constant.ItemCategory.class);
+
+    public final EnumPath<com.example.market.shop.constant.ItemSubCategory> itemSubCategory = createEnum("itemSubCategory", com.example.market.shop.constant.ItemSubCategory.class);
+
     public final StringPath name = createString("name");
 
     public final ListPath<OrderItem, QOrderItem> orders = this.<OrderItem, QOrderItem>createList("orders", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
@@ -47,8 +49,6 @@ public class QItem extends EntityPathBase<Item> {
     public final QShop shop;
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
-
-    public final EnumPath<com.example.market.shop.constant.ItemSubCategory> subCategory = createEnum("subCategory", com.example.market.shop.constant.ItemSubCategory.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

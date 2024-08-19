@@ -16,7 +16,7 @@ public class ShopDto {
     private Long id;
     private String name;
     private String introduction;
-    private ShopCategory category;
+    private ShopCategory shopCategory;
     private ShopStatus status;
     private String username;
     private String address;
@@ -27,7 +27,7 @@ public class ShopDto {
                 .id(entity.getId())
                 .name(entity.getName())
                 .introduction(entity.getIntroduction())
-                .category(entity.getCategory())
+                .shopCategory(entity.getShopCategory())
                 .status(entity.getStatus())
                 .username(entity.getUser().getUsername())
                 .address(entity.getAddress())

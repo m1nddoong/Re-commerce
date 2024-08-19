@@ -83,6 +83,15 @@ public class OrderService {
     public void approvalOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ORDER_NOT_EXISTS));
+
+        // 주문 상태 확인
+        if (order.getStatus().equals(OrderStatus.ORDER_CANCEL)) {
+            throw new GlobalCustomException(GlobalErrorCode.ORDER_ALREADY_CANCEL);
+        }
+        if (order.getStatus().equals(OrderStatus.ORDER_APPROVAL)) {
+            throw new GlobalCustomException(GlobalErrorCode.ORDER_ALREADY_APPROVAL);
+        }
+
         // '주문' 내 '주문 상품' 정보를 가져온다.
         for (OrderItem orderItem : order.getItems()) {
             // 재고 업데이트 및 저장

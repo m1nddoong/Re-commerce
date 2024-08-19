@@ -47,10 +47,12 @@ public class WebSecurityConfig {
                                 "/users/business-application",
                                 "/trade-item/**",
                                 "/trade-offer/**",
+                                "/shop",
                                 "/shop/update",
                                 "/shop/open-request",
                                 "/shop/close-request",
-                                "/order/**"
+                                "/order/create",
+                                "/order/cancel/{orderId}"
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers("/item/**")
@@ -61,7 +63,8 @@ public class WebSecurityConfig {
                                 "/shop/open-request/{shopId}/approval",
                                 "/shop/open-request/{shopId}/rejection",
                                 "/shop/close-request-list",
-                                "/shop/close-request/{shopId}/approval"
+                                "/shop/close-request/{shopId}/approval",
+                                "/order/approval/{orderId}"
                         )
                         .hasRole("ADMIN")
 

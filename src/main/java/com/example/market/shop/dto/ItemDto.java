@@ -23,9 +23,9 @@ public class ItemDto {
     @NotBlank
     private Integer price;
     @NotBlank
-    private String category;
+    private String itemCategory;
     @NotBlank
-    private String subCategory;
+    private String itemSubCategory;
     @NotBlank
     private Integer stock;
 
@@ -35,8 +35,8 @@ public class ItemDto {
                 .img(entity.getImg())
                 .description(entity.getDescription())
                 .price(entity.getPrice())
-                .category(String.valueOf(entity.getCategory()))
-                .subCategory(String.valueOf(entity.getSubCategory()))
+                .itemCategory(String.valueOf(entity.getItemCategory()))
+                .itemSubCategory(String.valueOf(entity.getItemSubCategory()))
                 .stock(entity.getStock())
                 .build();
 

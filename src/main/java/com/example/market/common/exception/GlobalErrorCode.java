@@ -17,9 +17,9 @@ public enum GlobalErrorCode {
 
     // 주문 관련 에러
     ORDER_NOT_EXISTS(404, "3006", "주문 정보가 존재하지 않습니다."),
-    ORDER_NO_PERMISSION(403, "3007", "해당 주문에 대한 권한이 없습니다. "),
-    ORDER_ALREADY_APPROVAL(400, "3007", "수락된 주문은 취소할 수 없습니다."),
-    ORDER_ALREADY_CANCEL(400, "3008", "주문이 이미 삭제되었습니다.");
+    ORDER_NO_PERMISSION(403, "3007", "주문에 대한 권한이 없습니다."),
+    ORDER_ALREADY_APPROVAL(400, "3007", "이미 수락된 주문입니다."),
+    ORDER_ALREADY_CANCEL(400, "3008", "이미 취소된 주문입니다.");
 
 
 

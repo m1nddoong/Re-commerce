@@ -16,6 +16,6 @@ public class UpdateShopDto {
     @NotBlank
     private String name;
     private String introduction;
-    private ShopCategory category;
+    private ShopCategory shopCategory;
 
 }

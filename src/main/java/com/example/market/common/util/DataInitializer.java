@@ -100,25 +100,25 @@ public class DataInitializer implements ApplicationRunner {
                 .build();
     }
 
-    private Shop createShop(String name, String introduction, ShopCategory category, ShopStatus status, User user) {
+    private Shop createShop(String name, String introduction, ShopCategory shopCategory, ShopStatus status, User user) {
         return Shop.builder()
                 .name(name)
                 .introduction(introduction)
-                .category(category)
+                .shopCategory(shopCategory)
                 .status(status)
                 .user(user)
                 .build();
     }
 
-    private Item createShopItem(String name, String description, Integer price, ItemCategory category,
-                                ItemSubCategory subCategory, Integer stock, Shop shop) {
+    private Item createShopItem(String name, String description, Integer price, ItemCategory itemCategory,
+                                ItemSubCategory itemSubCategory, Integer stock, Shop shop) {
         return Item.builder()
                 .name(name)
                 .img("example-img.png")
                 .description(description)
                 .price(price)
-                .category(category)
-                .subCategory(subCategory)
+                .itemCategory(itemCategory)
+                .itemSubCategory(itemSubCategory)
                 .stock(stock)
                 .shop(shop)
                 .build();
