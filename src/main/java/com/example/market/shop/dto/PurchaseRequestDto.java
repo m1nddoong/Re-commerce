@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseRequestDto {
-    private Integer payAmount;
     private List<OrderItemDto> orderItems;
 }
