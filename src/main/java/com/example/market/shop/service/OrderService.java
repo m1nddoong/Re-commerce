@@ -59,6 +59,26 @@ public class OrderService {
         newOrder.setItems(orderItemList);
         return OrderDto.fromEntity(orderRepository.save(newOrder));
     }
+
+    // 상품 주문 전체 취소
+    @Transactional
+    public void deleteOrder(Long orderId) {
+        // 인증된 사용자가 주문자와 동일한지 체크
+        User currentUser = authFacade.extractUser();
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ORDER_NOT_EXISTS));
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+            throw new GlobalCustomException(GlobalErrorCode.ORDER_NO_PERMISSION);
+        }
+        if (order.getStatus().equals(OrderStatus.ORDER_APPROVAL)) {
+            throw new GlobalCustomException(GlobalErrorCode.ORDER_ALREADY_APPROVAL);
+        }
+        if (order.getStatus().equals(OrderStatus.ORDER_CANCEL)) {
+            throw new GlobalCustomException(GlobalErrorCode.ORDER_ALREADY_CANCEL);
+        }
+        order.setStatus(OrderStatus.ORDER_CANCEL);
+        orderRepository.save(order);
+    }
 }
 
 

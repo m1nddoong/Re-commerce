@@ -13,7 +13,13 @@ public enum GlobalErrorCode {
     // 쇼핑몰 상품 관련 에러
     ITEM_NOT_EXISTS(404, "3003", "존재하지 않는 쇼핑몰 상품 입니다."),
     ITEM_NO_PERMISSION(403, "3004", "해당 상품에 대한 권한이 없습니다."),
-    ITEM_OUT_OF_STOCK(404, "3005", "해당 상품의 재고가 없습니다.");
+    ITEM_OUT_OF_STOCK(404, "3005", "해당 상품의 재고가 없습니다."),
+
+    // 주문 관련 에러
+    ORDER_NOT_EXISTS(404, "3006", "주문 정보가 존재하지 않습니다."),
+    ORDER_NO_PERMISSION(403, "3007", "해당 주문에 대한 권한이 없습니다. "),
+    ORDER_ALREADY_APPROVAL(400, "3007", "수락된 주문은 취소할 수 없습니다."),
+    ORDER_ALREADY_CANCEL(400, "3008", "주문이 이미 삭제되었습니다.");
 
 
 
