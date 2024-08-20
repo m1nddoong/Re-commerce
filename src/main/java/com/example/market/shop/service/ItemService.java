@@ -6,11 +6,16 @@ import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.shop.constant.ItemCategory;
 import com.example.market.shop.constant.ItemSubCategory;
+import com.example.market.shop.dto.CreateItemDto;
 import com.example.market.shop.dto.ItemDto;
+import com.example.market.shop.dto.SearchItemDto;
 import com.example.market.shop.entity.Item;
 import com.example.market.shop.repo.ItemRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -21,7 +26,7 @@ public class ItemService {
     private final AuthenticationFacade authFacade;
 
     // 쇼핑몰 상품 등록
-    public ItemDto createItem(ItemDto dto) {
+    public ItemDto createItem(CreateItemDto dto) {
         User user = authFacade.extractUser();
         return ItemDto.fromEntity(itemRepository.save(Item.builder()
                 .name(dto.getName())
@@ -36,7 +41,7 @@ public class ItemService {
     }
 
     // 쇼핑몰 상품 업데이트
-    public ItemDto updateItem(ItemDto dto, Long shopItemId) {
+    public ItemDto updateItem(CreateItemDto dto, Long shopItemId) {
         // 상품 조회
         Item targetItem = itemRepository.findById(shopItemId)
                 .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_NOT_EXISTS));
@@ -69,4 +74,8 @@ public class ItemService {
         itemRepository.deleteById(shopItemId);
     }
 
+    // 쇼핑몰 상품 검섹
+    public Page<ItemDto> getItems(SearchItemDto dto, Pageable pageable) {
+        return itemRepository.getItemListWithPages(dto, pageable);
+    }
 }

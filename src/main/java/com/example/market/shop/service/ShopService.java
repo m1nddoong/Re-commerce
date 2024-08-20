@@ -128,7 +128,11 @@ public class ShopService {
         return ShopDto.fromEntity(shopRepository.save(targetShop));
     }
 
-    // 쇼핑몰 검색
+    /**
+     * 쇼핑몰 조회
+     * @param dto
+     * @return
+     */
     public List<ShopDto> getShopList(SearchShopDto dto) {
         return shopRepository.getShopList(dto);
     }

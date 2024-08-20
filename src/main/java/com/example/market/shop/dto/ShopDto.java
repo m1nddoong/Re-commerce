@@ -3,6 +3,7 @@ package com.example.market.shop.dto;
 import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
 import com.example.market.shop.entity.Shop;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

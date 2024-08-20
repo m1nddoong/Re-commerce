@@ -1,11 +1,18 @@
 package com.example.market.shop.controller;
 
 
+import com.example.market.shop.dto.CreateItemDto;
 import com.example.market.shop.dto.ItemDto;
+import com.example.market.shop.dto.SearchItemDto;
 import com.example.market.shop.service.ItemService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,7 +31,7 @@ public class ItemController {
     @PostMapping("/create")
     private ResponseEntity<ItemDto> createItem(
             @RequestBody
-            ItemDto dto
+            CreateItemDto dto
     ) {
         return ResponseEntity.ok(itemService.createItem(dto));
     }
@@ -33,7 +40,7 @@ public class ItemController {
     @PutMapping("/update/{shopItemId}")
     private ResponseEntity<ItemDto> updateItem(
             @RequestBody
-            ItemDto dto,
+            CreateItemDto dto,
             @PathVariable
             Long shopItemId
     ) {
@@ -50,6 +57,16 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
+    // 쇼핑몰 상품 검색
+    @GetMapping("/")
+    private ResponseEntity<Page<ItemDto>> getItems(
+            @RequestBody
+            SearchItemDto dto,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(itemService.getItems(dto, pageable));
+    }
+
     // 상품 분류 목록(분류, 소분류) 추가
 
     // 상품 분류 목록 확인 - 관리자
@@ -57,11 +74,4 @@ public class ItemController {
     // 상품 분류 목록 수정 - 관리자
 
     // 할인 적용
-
-    // 쇼핑몰 상품 검색
-
-
-
-
-
 }

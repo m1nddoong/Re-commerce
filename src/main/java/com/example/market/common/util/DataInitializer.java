@@ -57,8 +57,8 @@ public class DataInitializer implements ApplicationRunner {
         Shop[] shops = {
                 createShop("유재석의 가게", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
                 createShop("박명수의 가게", "전자기기 쇼핑몰", ShopCategory.ELECTRONICS, ShopStatus.OPEN, users[2]),
-                createShop("정준하의 가게", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[3]),
-                createShop("정형돈의 가게", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN_REQUEST, users[4]),
+                createShop("정준하 마켓", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[3]),
+                createShop("정형돈 마켓", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN_REQUEST, users[4]),
                 createShop("길의 가게", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.CLOSE_REQUEST, users[5])
         };
         shopRepository.saveAll(Arrays.asList(shops));
@@ -69,11 +69,21 @@ public class DataInitializer implements ApplicationRunner {
                 createShopItem("맨두맨3", "신상 맨투맨3 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
                 createShopItem("맨두맨4", "신상 맨투맨4 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
                 createShopItem("맨두맨5", "신상 맨투맨5 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨6", "신상 맨투맨6 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨7", "신상 맨투맨7 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨8", "신상 맨투맨8 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨9", "신상 맨투맨9 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
+                createShopItem("맨두맨10", "신상 맨투맨10 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
                 createShopItem("코트1", "신상 코트1 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
                 createShopItem("코트2", "신상 코트2 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
                 createShopItem("코트3", "신상 코트3 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
                 createShopItem("코트4", "신상 코트4 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
                 createShopItem("코트5", "신상 코트5 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트6", "신상 코트1 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트7", "신상 코트2 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트8", "신상 코트3 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트9", "신상 코트4 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
+                createShopItem("코트10", "신상 코트5 입니다.", 120000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 10, shops[0]),
                 createShopItem("벤큐 모니터", "신상 모니터 입니다.", 280000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.MONITORS, 7, shops[1]),
                 createShopItem("해피해킹 키보드", "신상 키보드 입니다.", 350000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.KEYBOARDS, 20, shops[1]),
                 createShopItem("로션", "신상 로션 입니다.", 13000, ItemCategory.BEAUTY_SKINCARE, ItemSubCategory.SKINCARE_CREAM, 15, shops[2]),

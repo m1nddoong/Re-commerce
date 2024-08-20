@@ -11,10 +11,13 @@ import com.example.market.shop.dto.PurchaseRequestDto;
 import com.example.market.shop.entity.Item;
 import com.example.market.shop.entity.Order;
 import com.example.market.shop.entity.OrderItem;
+import com.example.market.shop.entity.Shop;
 import com.example.market.shop.repo.ItemRepository;
 import com.example.market.shop.repo.OrderItemRepository;
 import com.example.market.shop.repo.OrderRepository;
+import com.example.market.shop.repo.ShopRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final OrderItemRepository orderItemRepository;
+    private final ShopRepository shopRepository;
     private final AuthenticationFacade authFacade;
 
     // 쇼핑몰 상품 구매 요청
@@ -107,5 +111,11 @@ public class OrderService {
         order.setStatus(OrderStatus.ORDER_APPROVAL);
         orderRepository.save(order);
 
+        // 주문과 관련된 쇼핑몰의 마지막 거래일 업데이트
+        Item item  = itemRepository.findById(order.getItems().get(0).getItem().getId())
+                .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_NOT_EXISTS));
+        Shop shop = item.getShop();
+        shop.setLastTransactionDate(LocalDateTime.now());
+        shopRepository.save(shop);
     }
 }

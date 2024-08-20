@@ -15,29 +15,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemDto {
+public class CreateItemDto {
+    @NotBlank
     private String name;
+    @NotBlank
     private String img;
+    @NotBlank
     private String description;
+    @NotBlank
     private Integer price;
+    @NotBlank
     private String itemCategory;
+    @NotBlank
     private String itemSubCategory;
+    @NotBlank
     private Integer stock;
-    private Long shopId;
-
-
-
-    public static ItemDto fromEntity(Item entity) {
-        return ItemDto.builder()
-                .name(entity.getName())
-                .img(entity.getImg())
-                .description(entity.getDescription())
-                .price(entity.getPrice())
-                .itemCategory(String.valueOf(entity.getItemCategory()))
-                .itemSubCategory(String.valueOf(entity.getItemSubCategory()))
-                .stock(entity.getStock())
-                .shopId(entity.getShop().getId())
-                .build();
-
-    }
 }
