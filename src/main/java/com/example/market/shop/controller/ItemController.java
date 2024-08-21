@@ -41,7 +41,7 @@ public class ItemController {
     private ResponseEntity<ItemDto> updateItem(
             @RequestBody
             CreateItemDto dto,
-            @PathVariable
+            @PathVariable(value = "shopItemId")
             Long shopItemId
     ) {
         return ResponseEntity.ok(itemService.updateItem(dto, shopItemId));
@@ -50,7 +50,7 @@ public class ItemController {
     // 상품 삭제
     @DeleteMapping("/delete/{shopItemId}")
     private ResponseEntity<Void> deleteItem(
-            @PathVariable
+            @PathVariable(value = "shopItemId")
             Long shopItemId
     ) {
         itemService.deleteItem(shopItemId);
@@ -58,7 +58,7 @@ public class ItemController {
     }
 
     // 쇼핑몰 상품 검색
-    @GetMapping("/")
+    @PostMapping("/search")
     private ResponseEntity<Page<ItemDto>> getItems(
             @RequestBody
             SearchItemDto dto,

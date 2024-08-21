@@ -51,11 +51,16 @@ public class WebSecurityConfig {
                                 "/shop/update",
                                 "/shop/open-request",
                                 "/shop/close-request",
+                                "/item/search/**",
                                 "/order/create",
                                 "/order/cancel/{orderId}"
                         )
                         .hasRole("ACTIVE")
-                        .requestMatchers("/item/**")
+                        .requestMatchers(
+                                "/item/create",
+                                "/item/update/{shopItemId}",
+                                "/item/delete/{shopItemId}"
+                        )
                         .hasRole("OWNER")
                         .requestMatchers(
                                 "/admin/**",
@@ -73,7 +78,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                 // JWT 필터를 권한 필터 앞에 삽입
+                // JWT 필터를 권한 필터 앞에 삽입
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,

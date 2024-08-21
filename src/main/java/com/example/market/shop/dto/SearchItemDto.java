@@ -15,6 +15,6 @@ public class SearchItemDto {
     private String name; // 상품 이름
     private ItemCategory itemCategory;
     private ItemSubCategory itemSubCategory;
-    private Long minPrice;
-    private Long maxPrice;
+    private Integer minPrice;
+    private Integer maxPrice;
 }
