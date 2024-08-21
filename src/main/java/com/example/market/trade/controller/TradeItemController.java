@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/trade-item")
+@RequestMapping("/api/v1/trade-item")
 @RequiredArgsConstructor
 public class TradeItemController {
     private final TradeItemService tradeItemService;

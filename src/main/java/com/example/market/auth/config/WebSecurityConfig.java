@@ -32,44 +32,50 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/users/my-profile",
-                                "/users/update-profile-info",
-                                "/users/update-profile-img",
-                                "/reissue-token"
+                                "/swagger-ui/**",
+                                "/v1/api-docs/*",
+                                "/v1/api-docs"
+                        )
+                        .permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/my-profile",
+                                "/api/v1/users/update-profile-info",
+                                "/api/v1/users/update-profile-img",
+                                "/api/v1/token/reissue-token"
                         )
                         .authenticated()
                         .requestMatchers(
-                                "/users/sign-up",
-                                "/users/sign-in"
+                                "/api/v1/users/sign-up",
+                                "/api/v1/users/sign-in"
                         )
                         .anonymous()
                         .requestMatchers(
-                                "/users/business-application",
-                                "/trade-item/**",
-                                "/trade-offer/**",
-                                "/shop/search",
-                                "/shop/update",
-                                "/shop/open-request",
-                                "/shop/close-request",
-                                "/item/search/**",
-                                "/order/create",
-                                "/order/cancel/{orderId}"
+                                "/api/v1/users/business-application",
+                                "/api/v1/trade-item/**",
+                                "/api/v1/trade-offer/**",
+                                "/api/v1/shop/search",
+                                "/api/v1/shop/update",
+                                "/api/v1/shop/open-request",
+                                "/api/v1/shop/close-request",
+                                "/api/v1/item/search/**",
+                                "/api/v1/order/create",
+                                "/api/v1/order/cancel/{orderId}"
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers(
-                                "/item/create",
-                                "/item/update/{shopItemId}",
-                                "/item/delete/{shopItemId}"
+                                "/api/v1/item/create",
+                                "/api/v1/item/update/{shopItemId}",
+                                "/api/v1/item/delete/{shopItemId}"
                         )
                         .hasRole("OWNER")
                         .requestMatchers(
-                                "/admin/**",
-                                "/shop/open-request-list",
-                                "/shop/open-request/{shopId}/approval",
-                                "/shop/open-request/{shopId}/rejection",
-                                "/shop/close-request-list",
-                                "/shop/close-request/{shopId}/approval",
-                                "/order/approval/{orderId}"
+                                "/api/v1/admin/**",
+                                "/api/v1/shop/open-request-list",
+                                "/api/v1/shop/open-request/{shopId}/approval",
+                                "/api/v1/shop/open-request/{shopId}/rejection",
+                                "/api/v1/shop/close-request-list",
+                                "/api/v1/shop/close-request/{shopId}/approval",
+                                "/api/v1/order/approval/{orderId}"
                         )
                         .hasRole("ADMIN")
 

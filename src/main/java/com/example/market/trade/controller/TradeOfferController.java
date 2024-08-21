@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/trade-offer")
+@RequestMapping("/api/v1/trade-offer")
 @RequiredArgsConstructor
 public class TradeOfferController {
     private final TradeOfferService tradeOfferService;
