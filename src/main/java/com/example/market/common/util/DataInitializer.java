@@ -37,29 +37,50 @@ public class DataInitializer implements ApplicationRunner {
         User[] users = {
                 createUser("admin@naver.com", "김태호", "PD", "605-46-5452",
                         "ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN"),
-                createUser("jaeseok@naver.com", "유재석", "MC", "603-46-2424",
+                createUser("jaeseok@naver.com", "유재석", "국민 MC", "603-46-2424",
                         "ROLE_ACTIVE,ROLE_OWNER"),
-                createUser("myeongsu@naver.com", "박명수", "명수옹", "623-46-2424",
+                createUser("myeongsu@naver.com", "박명수", "박거성", "623-46-2424",
                         "ROLE_ACTIVE,ROLE_OWNER"),
                 createUser("junha@naver.com", "정준하", "주나", "533-24-4699",
                         "ROLE_ACTIVE,ROLE_OWNER"),
                 createUser("hyeongdon@naver.com", "정형돈", "항돈", "537-22-3885",
                         "ROLE_ACTIVE,ROLE_OWNER"),
-                createUser("gil@naver.com", "길", "이간길", "237-12-2335",
+                createUser("gil@naver.com", "길", "빡빡이", "237-12-2335",
                         "ROLE_ACTIVE,ROLE_OWNER"),
                 createUser("hongchul@naver.com", "노홍철", "돌I", "787-90-3545",
                         "ROLE_ACTIVE,ROLE_OWNER"),
                 createUser("haha@naver.com", "하하", "꼬마", "545-05-4085",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("hodong@naver.com", "강호동", "천하장사", "603-46-2425",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("sugeun@naver.com", "이수근", "수그니", "623-46-2426",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("jiwon@naver.com", "은지원", "구미", "533-24-4679",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("gyuheon@naver.com", "조규현", "조정뱅이", "537-22-3285",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("jaehyeon@naver.com", "안재현", "신미", "237-12-2395",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("minho@naver.com", "송민호", "송가락", "787-90-1245",
+                        "ROLE_ACTIVE,ROLE_OWNER"),
+                createUser("pio@naver.com", "피오", "트럼프", "545-05-4225",
                         "ROLE_ACTIVE,ROLE_OWNER")
         };
         userRepository.saveAll(Arrays.asList(users));
 
         Shop[] shops = {
-                createShop("유재석의 가게", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
-                createShop("박명수의 가게", "전자기기 쇼핑몰", ShopCategory.ELECTRONICS, ShopStatus.OPEN, users[2]),
-                createShop("정준하 마켓", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[3]),
-                createShop("정형돈 마켓", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN_REQUEST, users[4]),
-                createShop("길의 가게", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.CLOSE_REQUEST, users[5])
+                createShop("유재석 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
+                createShop("박명수 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[2]),
+                createShop("정준하 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN_REQUEST, users[3]),
+                createShop("정형돈 마켓", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[4]),
+                createShop("길 마켓", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN, users[5]),
+                createShop("노홍철 마켓", "뷰티 쇼핑몰", ShopCategory.BEAUTY, ShopStatus.OPEN_REQUEST, users[6]),
+                createShop("하하 마켓", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN, users[7]),
+                createShop("강호동 마켓", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.OPEN, users[8]),
+                createShop("이수근 마켓", "가정용품 쇼핑몰", ShopCategory.HOME, ShopStatus.CLOSE_REQUEST, users[9]),
+                createShop("은지원 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN, users[10]),
+                createShop("조규현 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN, users[11]),
+                createShop("안재현 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.CLOSE_REQUEST, users[12]),
         };
         shopRepository.saveAll(Arrays.asList(shops));
 

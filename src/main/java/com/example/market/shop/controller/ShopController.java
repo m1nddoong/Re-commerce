@@ -8,6 +8,8 @@ import com.example.market.shop.service.ShopService;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,12 +82,13 @@ public class ShopController {
     // 조건 없이 검색할 경우, 가장 최근에 거래가 있었던 쇼핑몰 순서로 조회된다.
     // 쇼핑몰의 이름, 쇼핑몰 분류, 등록된 상품 분류, 등록된 상품 소분류를 조건으로 쇼핑몰을 검색할 수 있다.
     // 분류와 소분류는 하나만 선택이 가능하다.
-    @GetMapping
-    public ResponseEntity<List<ShopDto>> getShopList(
+    @PostMapping("/search")
+    public ResponseEntity<Page<ShopDto>> getShopList(
             @RequestBody
-            SearchShopDto dto
+            SearchShopDto dto,
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(shopService.getShopList(dto));
+        return ResponseEntity.ok(shopService.getShopList(dto, pageable));
     }
 
 

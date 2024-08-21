@@ -13,9 +13,9 @@ import com.example.market.shop.repo.ShopRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Service
@@ -130,10 +130,9 @@ public class ShopService {
 
     /**
      * 쇼핑몰 조회
-     * @param dto
-     * @return
+     * @param dto 쇼핑몰 검색 dto
      */
-    public List<ShopDto> getShopList(SearchShopDto dto) {
-        return shopRepository.getShopList(dto);
+    public Page<ShopDto> getShopList(SearchShopDto dto, Pageable pageable) {
+        return shopRepository.getShopListWithPages(dto, pageable);
     }
 }

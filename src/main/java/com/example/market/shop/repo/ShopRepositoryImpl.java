@@ -12,18 +12,22 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class ShopRepositoryImpl implements ShopRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
-    QShop shop = QShop.shop;
-    QItem item = QItem.item;
+    private final QShop shop = QShop.shop;
+    private final QItem item = QItem.item;
 
     @Override
-    public List<ShopDto> getShopList(SearchShopDto dto) {
+    public Page<ShopDto> getShopListWithPages(SearchShopDto dto, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         // 이름으로 필터링
@@ -47,7 +51,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
         }
 
         // 쿼리 생성
-        List<ShopDto> shops = jpaQueryFactory
+        List<ShopDto> results = jpaQueryFactory
                 .select(Projections.constructor(ShopDto.class,
                         shop.id,
                         shop.name,
@@ -61,14 +65,23 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
                 .from(shop)
                 .leftJoin(shop.items, item)
                 .where(builder)
-                // 결과를 그룹화
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(shop.lastTransactionDate.desc()) // 가장 최근 거래일 순서로 정렬
+                // 결과를 그룹화하여 중복 제거 - 집계함수와 사용되어 각 그룹의 단일 레코드 생성
                 .groupBy(shop.id, shop.name, shop.introduction, shop.shopCategory, shop.status, shop.user.username,
                         shop.address, shop.coordinates)
-                // 가장 최근 거래일 기준 내림차순 정렬
-                .orderBy(shop.lastTransactionDate.desc()) // 가장 최근 거래일 순서로 정렬
                 .fetch();
 
-        return shops;
+        long total = Optional.ofNullable(jpaQueryFactory
+                .select(shop.count())
+                .from(shop)
+                .leftJoin(shop.items, item)
+                .where(builder)
+                .fetchOne())
+                .orElse(0L);
+
+        return new PageImpl<>(results, pageable, total);
     }
 
 

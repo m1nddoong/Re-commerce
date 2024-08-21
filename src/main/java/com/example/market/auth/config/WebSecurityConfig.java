@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                                 "/users/business-application",
                                 "/trade-item/**",
                                 "/trade-offer/**",
-                                "/shop",
+                                "/shop/search",
                                 "/shop/update",
                                 "/shop/open-request",
                                 "/shop/close-request",
