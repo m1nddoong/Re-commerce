@@ -14,6 +14,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
 
+        //  JWT 인증을 사용하는 API에 대해 Swagger UI에서 자동으로 JWT 토큰을 입력할 수 있는 기능
         String jwtSchemeName = "jwtAuth";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
         Components components = new Components()

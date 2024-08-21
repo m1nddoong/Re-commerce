@@ -1,7 +1,9 @@
-# test profile
+# production profile
+
 jwt:
   header: Authorization
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
+
 spring:
   mvc:
     # 어떤 경로에 대한 요청의 응답으로 정적 파일을 응답으로 할지
@@ -11,14 +13,21 @@ spring:
       static-locations: file:/media/, classpath:/static
   datasource:
     # driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/market_test
+    url: jdbc:postgresql://localhost:5432/market
     username: seonik
     password:
   jpa:
     hibernate:
       # 테이블 생성 시 create
       ddl-auto: create
-    show-sql: true
+    properties:
+      show-sql: true
+      format_sql: true # 보기좋게 줄바꿈
+      highlight_sql: true # 하이라이트
+      use_sql_comments: true # 보다 쉬운 디버깅을 위해 SQL 내부에 /**/ 주석 추가
+    # 로그 레벨은 추후에 설정
+    # logging
+
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     # table create 후 data.sql 로 초기화할 때 사용
@@ -26,8 +35,16 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
-logging:
-  level:
-    root: info
-    com.example.article: trace
+springdoc:
+  swagger-ui:
+    display-request-duration: true
+  api-docs:
+    path: /v1/api-docs
+
+  paths-to-match:
+    - /api/v1/**

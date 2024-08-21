@@ -1,8 +1,12 @@
+# development profile
 jwt:
   header: Authorization
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
 
 spring:
+  main:
+    # 처음에 나오는 Spring Logo 제거
+    banner-mode: off
   mvc:
     # 어떤 경로에 대한 요청의 응답으로 정적 파일을 응답으로 할지
     static-path-pattern: /static/**
