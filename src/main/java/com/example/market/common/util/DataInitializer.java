@@ -80,7 +80,7 @@ public class DataInitializer implements ApplicationRunner {
                 createItemCategory("남성 의류"),
                 createItemCategory("여성 의류"),
                 createItemCategory("휴대폰"),
-                createItemCategory("컴픁터"),
+                createItemCategory("컴퓨터"),
                 createItemCategory("피부"),
                 createItemCategory("헤어"),
                 createItemCategory("주방"),
