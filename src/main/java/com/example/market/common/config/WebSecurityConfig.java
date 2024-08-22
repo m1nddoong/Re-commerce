@@ -1,4 +1,4 @@
-package com.example.market.auth.config;
+package com.example.market.common.config;
 
 import com.example.market.auth.jwt.JwtTokenFilter;
 import com.example.market.auth.jwt.JwtTokenUtils;

@@ -1,9 +1,9 @@
 package com.example.market.auth.service;
 
-import com.example.market.auth.dto.AccessTokenDto;
-import com.example.market.auth.dto.JwtTokenDto;
-import com.example.market.auth.entity.RefreshToken;
-import com.example.market.auth.entity.User;
+import com.example.market.auth.controller.dto.AccessTokenDto;
+import com.example.market.auth.controller.dto.JwtTokenDto;
+import com.example.market.auth.domain.RefreshToken;
+import com.example.market.auth.domain.User;
 import com.example.market.auth.jwt.JwtTokenUtils;
 import com.example.market.auth.jwt.TokenType;
 import com.example.market.auth.repo.RefreshTokenRepository;

@@ -1,7 +1,8 @@
-package com.example.market.auth.entity;
+package com.example.market.auth.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.auth.domain.constant.BusinessStatus;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -30,7 +31,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath businessNum = createString("businessNum");
 
-    public final EnumPath<com.example.market.auth.constant.BusinessStatus> businessStatus = createEnum("businessStatus", com.example.market.auth.constant.BusinessStatus.class);
+    public final EnumPath<BusinessStatus> businessStatus = createEnum("businessStatus", BusinessStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;

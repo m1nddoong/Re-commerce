@@ -1,6 +1,6 @@
 package com.example.market.shop.service;
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import com.example.market.common.exception.GlobalCustomException;
 import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.util.AuthenticationFacade;
@@ -13,7 +13,6 @@ import com.example.market.shop.entity.ItemSubCategory;
 import com.example.market.shop.repo.ItemCategoryRepository;
 import com.example.market.shop.repo.ItemRepository;
 import com.example.market.shop.repo.ItemSubCategoryRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

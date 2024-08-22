@@ -1,7 +1,7 @@
 package com.example.market.unittest;
 
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import com.example.market.auth.repo.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

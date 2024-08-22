@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.example.market.auth.dto.CreateUserDto;
-import com.example.market.auth.dto.UserDto;
-import com.example.market.auth.entity.User;
+import com.example.market.auth.controller.dto.CreateUserDto;
+import com.example.market.auth.controller.dto.UserDto;
+import com.example.market.auth.domain.User;
 import com.example.market.auth.repo.UserRepository;
 import com.example.market.auth.service.UserService;
 import org.junit.jupiter.api.BeforeEach;

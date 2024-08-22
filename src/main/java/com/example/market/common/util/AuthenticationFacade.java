@@ -1,7 +1,7 @@
 package com.example.market.common.util;
 
-import com.example.market.auth.entity.CustomUserDetails;
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.CustomUserDetails;
+import com.example.market.auth.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

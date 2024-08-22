@@ -1,18 +1,17 @@
 package com.example.market.auth.controller;
 
-import com.example.market.auth.dto.BusinessDto;
-import com.example.market.auth.dto.CreateUserDto;
-import com.example.market.auth.dto.UpdateUserDto;
-import com.example.market.auth.dto.UserDto;
-import com.example.market.auth.dto.LoginRequestDto;
-import com.example.market.auth.dto.JwtTokenDto;
+import com.example.market.auth.controller.dto.BusinessDto;
+import com.example.market.auth.controller.dto.CreateUserDto;
+import com.example.market.auth.controller.dto.UpdateUserDto;
+import com.example.market.auth.controller.dto.UserDto;
+import com.example.market.auth.controller.dto.LoginRequestDto;
+import com.example.market.auth.controller.dto.JwtTokenDto;
 import com.example.market.auth.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

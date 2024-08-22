@@ -1,6 +1,6 @@
 package com.example.market.shop.service;
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import com.example.market.common.exception.GlobalCustomException;
 import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.util.AuthenticationFacade;

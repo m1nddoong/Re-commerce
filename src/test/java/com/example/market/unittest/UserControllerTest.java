@@ -3,8 +3,8 @@ package com.example.market.unittest;
 
 
 import com.example.market.auth.controller.UserController;
-import com.example.market.auth.dto.CreateUserDto;
-import com.example.market.auth.dto.UserDto;
+import com.example.market.auth.controller.dto.CreateUserDto;
+import com.example.market.auth.controller.dto.UserDto;
 import com.example.market.auth.service.UserService;
 import com.example.market.util.JsonUtil;
 

@@ -1,4 +1,4 @@
-package com.example.market.auth.constant;
+package com.example.market.auth.domain.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

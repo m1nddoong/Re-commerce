@@ -1,8 +1,8 @@
 package com.example.market.common.util;
 
 
-import com.example.market.auth.constant.BusinessStatus;
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.constant.BusinessStatus;
+import com.example.market.auth.domain.User;
 import com.example.market.auth.repo.UserRepository;
 
 import com.example.market.shop.entity.ItemCategory;
@@ -17,7 +17,6 @@ import com.example.market.shop.repo.ItemSubCategoryRepository;
 import com.example.market.shop.repo.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;

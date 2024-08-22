@@ -1,9 +1,8 @@
 package com.example.market.shop.entity;
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import com.example.market.common.BaseEntity;
 import com.example.market.shop.constant.OrderStatus;
-import com.example.market.shop.entity.Item;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

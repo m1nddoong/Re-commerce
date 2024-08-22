@@ -1,4 +1,4 @@
-package com.example.market.auth.dto;
+package com.example.market.auth.controller.dto;
 
 import lombok.Data;
 

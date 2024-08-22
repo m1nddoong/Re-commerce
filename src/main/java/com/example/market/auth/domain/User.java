@@ -1,13 +1,12 @@
-package com.example.market.auth.entity;
+package com.example.market.auth.domain;
 
 
 
-import com.example.market.auth.constant.BusinessStatus;
-import com.example.market.auth.constant.Role;
+import com.example.market.auth.domain.constant.BusinessStatus;
+import com.example.market.auth.domain.constant.Role;
 import com.example.market.common.BaseEntity;
 import com.example.market.shop.entity.Shop;
 import com.example.market.trade.entity.TradeItem;
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -45,7 +45,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.entity.QUser user;
+    public final com.example.market.auth.domain.QUser user;
 
     public QTradeItem(String variable) {
         this(TradeItem.class, forVariable(variable), INITS);
@@ -65,7 +65,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
 
     public QTradeItem(Class<? extends TradeItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.auth.domain.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.market.trade.service;
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import com.example.market.common.util.AuthenticationFacade;
 import com.example.market.common.util.FileHandlerUtils;
 import com.example.market.trade.dto.TradeItemDto;

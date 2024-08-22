@@ -1,7 +1,6 @@
 package com.example.market.auth.repo;
 
-import com.example.market.auth.entity.RefreshToken;
-import java.util.Optional;
+import com.example.market.auth.domain.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {

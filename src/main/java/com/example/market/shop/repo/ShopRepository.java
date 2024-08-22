@@ -1,6 +1,5 @@
 package com.example.market.shop.repo;
 
-import com.example.market.auth.entity.User;
 import com.example.market.shop.entity.Shop;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

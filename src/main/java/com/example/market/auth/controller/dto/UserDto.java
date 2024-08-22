@@ -1,7 +1,7 @@
-package com.example.market.auth.dto;
+package com.example.market.auth.controller.dto;
 
 
-import com.example.market.auth.entity.User;
+import com.example.market.auth.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
