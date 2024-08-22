@@ -4,16 +4,20 @@ package com.example.market.common.util;
 import com.example.market.auth.constant.BusinessStatus;
 import com.example.market.auth.entity.User;
 import com.example.market.auth.repo.UserRepository;
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.constant.ItemSubCategory;
+
+import com.example.market.shop.entity.ItemCategory;
+import com.example.market.shop.entity.ItemSubCategory;
 import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
 import com.example.market.shop.entity.Item;
 import com.example.market.shop.entity.Shop;
+import com.example.market.shop.repo.ItemCategoryRepository;
 import com.example.market.shop.repo.ItemRepository;
+import com.example.market.shop.repo.ItemSubCategoryRepository;
 import com.example.market.shop.repo.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -29,6 +33,8 @@ public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     private final ShopRepository shopRepository;
     private final ItemRepository itemRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
+    private final ItemSubCategoryRepository itemSubCategoryRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -68,6 +74,46 @@ public class DataInitializer implements ApplicationRunner {
         };
         userRepository.saveAll(Arrays.asList(users));
 
+
+        // 상품 분류
+        ItemCategory[] itemCategories = {
+                createItemCategory("남성 의류"),
+                createItemCategory("여성 의류"),
+                createItemCategory("휴대폰"),
+                createItemCategory("컴픁터"),
+                createItemCategory("피부"),
+                createItemCategory("헤어"),
+                createItemCategory("주방"),
+                createItemCategory("가구"),
+                createItemCategory("스포츠 웨어"),
+                createItemCategory("스포츠 용품"),
+        };
+        itemCategoryRepository.saveAll(Arrays.asList(itemCategories));
+
+        // 상품 소분류
+        ItemSubCategory[] itemSubCategories = {
+                createItemSubCategory("상의", itemCategories[0]),
+                createItemSubCategory("하의", itemCategories[0]),
+                createItemSubCategory("악세사리", itemCategories[0]),
+                createItemSubCategory("상의", itemCategories[1]),
+                createItemSubCategory("하의", itemCategories[1]),
+                createItemSubCategory("악세사리", itemCategories[1]),
+                createItemSubCategory("삼성", itemCategories[2]),
+                createItemSubCategory("애플", itemCategories[2]),
+                createItemSubCategory("모니터", itemCategories[3]),
+                createItemSubCategory("키보드", itemCategories[3]),
+                createItemSubCategory("메이크업", itemCategories[4]),
+                createItemSubCategory("피부 보습", itemCategories[4]),
+                createItemSubCategory("스프레이", itemCategories[5]),
+                createItemSubCategory("헤어 보습", itemCategories[5]),
+                createItemSubCategory("주방 용품", itemCategories[6]),
+                createItemSubCategory("인테리어", itemCategories[7]),
+                createItemSubCategory("운동복", itemCategories[8]),
+                createItemSubCategory("운동기구", itemCategories[9]),
+                createItemSubCategory("보충제", itemCategories[9]),
+        };
+        itemSubCategoryRepository.saveAll(Arrays.asList(itemSubCategories));
+
         Shop[] shops = {
                 createShop("유재석 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
                 createShop("박명수 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[2]),
@@ -85,30 +131,26 @@ public class DataInitializer implements ApplicationRunner {
         shopRepository.saveAll(Arrays.asList(shops));
 
         Item[] items = {
-                createShopItem("무한도전 맨투맨1", "남성 맨투맨1 입니다.", 15000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨2", "남성 맨투맨2 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨3", "남성 맨투맨3 입니다.", 14000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨4", "남성 맨투맨4 입니다.", 34000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨5", "남성 맨투맨5 입니다.", 13000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨6", "여성 맨투맨6 입니다.", 33000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨7", "여성 맨투맨7 입니다.", 12000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨8", "여성 맨투맨8 입니다.", 32000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨9", "여성 맨투맨9 입니다.", 11000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 맨투맨10", "여성 맨투맨10 입니다.", 31000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_TOPS, 15, shops[0]),
-                createShopItem("무한도전 와이드팬츠1", "남성 와이드팬츠1 입니다.", 15000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠2", "남성 와이드팬츠2 입니다.", 35000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠3", "남성 와이드팬츠3 입니다.", 14000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠4", "남성 와이드팬츠4 입니다.", 34000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠5", "남성 와이드팬츠5 입니다.", 13000, ItemCategory.MENS_CLOTHING, ItemSubCategory.MENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠6", "여성 와이드팬츠6 입니다.", 33000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠7", "여성 와이드팬츠7 입니다.", 12000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠8", "여성 와이드팬츠8 입니다.", 32000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠9", "여성 와이드팬츠9 입니다.", 11000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_BOTTOMS, 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠10", "여성 와이드팬츠10 입니다.", 31000, ItemCategory.WOMENS_CLOTHING, ItemSubCategory.WOMENS_BOTTOMS, 10, shops[0]),
-                createShopItem("벤큐 모니터", "신상 모니터 입니다.", 280000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.MONITORS, 7, shops[1]),
-                createShopItem("해피해킹 키보드", "신상 키보드 입니다.", 350000, ItemCategory.ELECTRONIC_COMPUTERS, ItemSubCategory.KEYBOARDS, 20, shops[1]),
-                createShopItem("로션", "신상 로션 입니다.", 13000, ItemCategory.BEAUTY_SKINCARE, ItemSubCategory.SKINCARE_CREAM, 15, shops[2]),
-                createShopItem("샴푸", "신상 샴푸 입니다.", 15000, ItemCategory.BEAUTY_HAIRCARE, ItemSubCategory.HAIR_SHAMPOO, 15, shops[2])
+                createShopItem("무한도전 맨투맨1", "남성 맨투맨1 입니다.", 15000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨2", "남성 맨투맨2 입니다.", 35000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨3", "남성 맨투맨3 입니다.", 14000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨4", "남성 맨투맨4 입니다.", 34000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨5", "남성 맨투맨5 입니다.", 13000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨6", "여성 맨투맨6 입니다.", 33000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨7", "여성 맨투맨7 입니다.", 12000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨8", "여성 맨투맨8 입니다.", 32000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨9", "여성 맨투맨9 입니다.", 11000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 맨투맨10", "여성 맨투맨10 입니다.", 31000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
+                createShopItem("무한도전 와이드팬츠1", "남성 와이드팬츠1 입니다.", 15000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠2", "남성 와이드팬츠2 입니다.", 35000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠3", "남성 와이드팬츠3 입니다.", 14000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠4", "남성 와이드팬츠4 입니다.", 34000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠5", "남성 와이드팬츠5 입니다.", 13000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠6", "여성 와이드팬츠6 입니다.", 33000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠7", "여성 와이드팬츠7 입니다.", 12000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠8", "여성 와이드팬츠8 입니다.", 32000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠9", "여성 와이드팬츠9 입니다.", 11000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 와이드팬츠10", "여성 와이드팬츠10 입니다.", 31000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
         };
         itemRepository.saveAll(Arrays.asList(items));
 
@@ -140,6 +182,20 @@ public class DataInitializer implements ApplicationRunner {
                 .user(user)
                 .build();
     }
+
+    private ItemCategory createItemCategory(String name) {
+        return ItemCategory.builder()
+                .name(name)
+                .build();
+    }
+
+    private ItemSubCategory createItemSubCategory(String name, ItemCategory itemCategory) {
+        return ItemSubCategory.builder()
+                .name(name)
+                .itemCategory(itemCategory)
+                .build();
+    }
+
 
     private Item createShopItem(String name, String description, Integer price, ItemCategory itemCategory,
                                 ItemSubCategory itemSubCategory, Integer stock, Shop shop) {

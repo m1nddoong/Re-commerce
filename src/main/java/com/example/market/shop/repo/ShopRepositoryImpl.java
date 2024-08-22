@@ -1,11 +1,13 @@
 package com.example.market.shop.repo;
 
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.constant.ItemSubCategory;
+import com.example.market.common.exception.GlobalCustomException;
+import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.shop.constant.ShopCategory;
 import com.example.market.shop.constant.ShopStatus;
 import com.example.market.shop.dto.SearchShopDto;
 import com.example.market.shop.dto.ShopDto;
+import com.example.market.shop.entity.ItemCategory;
+import com.example.market.shop.entity.ItemSubCategory;
 import com.example.market.shop.entity.QItem;
 import com.example.market.shop.entity.QShop;
 import com.querydsl.core.BooleanBuilder;
@@ -23,8 +25,11 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ShopRepositoryImpl implements ShopRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+    private final ItemCategoryRepository itemCategoryRepository;
+    private final ItemSubCategoryRepository itemSubCategoryRepository;
     private final QShop shop = QShop.shop;
     private final QItem item = QItem.item;
+
 
     @Override
     public Page<ShopDto> getShopListWithPages(SearchShopDto dto, Pageable pageable) {
@@ -40,14 +45,18 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
             builder.and(shop.shopCategory.eq(ShopCategory.valueOf(dto.getShopCategory())));
         }
 
-        // 상품 분류로 필터링
+        // 상품 카테고리로 필터링
         if (dto.getItemCategory() != null && !dto.getItemCategory().isEmpty()) {
-            builder.and(item.itemCategory.eq(ItemCategory.valueOf(dto.getItemCategory())));
+            ItemCategory itemCategory = itemCategoryRepository.findByName(dto.getItemCategory())
+                    .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_CATEGORY_NOT_FOUND));
+            builder.and(item.itemCategory.eq(itemCategory));
         }
 
-        // 상품 소분류로 필터링
+        // 상품 서브 카테고리로 필터링
         if (dto.getItemSubCategory() != null && !dto.getItemSubCategory().isEmpty()) {
-            builder.and(item.itemSubCategory.eq(ItemSubCategory.valueOf(dto.getItemSubCategory())));
+            ItemSubCategory itemSubCategory = itemSubCategoryRepository.findByName(dto.getItemSubCategory())
+                    .orElseThrow(() -> new GlobalCustomException(GlobalErrorCode.ITEM_SUBCATEGORY_NOT_FOUND));
+            builder.and(item.itemSubCategory.eq(itemSubCategory));
         }
 
         // 쿼리 생성

@@ -4,14 +4,16 @@ import com.example.market.auth.entity.User;
 import com.example.market.common.exception.GlobalCustomException;
 import com.example.market.common.exception.GlobalErrorCode;
 import com.example.market.common.util.AuthenticationFacade;
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.constant.ItemSubCategory;
 import com.example.market.shop.dto.CreateItemDto;
 import com.example.market.shop.dto.ItemDto;
 import com.example.market.shop.dto.SearchItemDto;
 import com.example.market.shop.entity.Item;
+import com.example.market.shop.entity.ItemCategory;
+import com.example.market.shop.entity.ItemSubCategory;
+import com.example.market.shop.repo.ItemCategoryRepository;
 import com.example.market.shop.repo.ItemRepository;
-import java.util.List;
+import com.example.market.shop.repo.ItemSubCategoryRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,18 +25,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
+    private final ItemSubCategoryRepository itemSubCategoryRepository;
     private final AuthenticationFacade authFacade;
 
     // 쇼핑몰 상품 등록
     public ItemDto createItem(CreateItemDto dto) {
         User user = authFacade.extractUser();
+        ItemCategory targetCategory = getOrCreateCategory(dto.getItemCategory());
+        ItemSubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
         return ItemDto.fromEntity(itemRepository.save(Item.builder()
                 .name(dto.getName())
                 .img(dto.getImg())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
-                .itemCategory(ItemCategory.valueOf(dto.getItemCategory()))
-                .itemSubCategory(ItemSubCategory.valueOf(dto.getItemSubCategory()))
+                .itemCategory(targetCategory)
+                .itemSubCategory(targetSubCategory)
                 .stock(dto.getStock())
                 .shop(user.getShop())
                 .build()));
@@ -50,13 +56,16 @@ public class ItemService {
         if (!targetItem.getShop().getUser().getId().equals(user.getId())) {
             throw new GlobalCustomException(GlobalErrorCode.ITEM_NO_PERMISSION);
         }
+        // 카테고리와 서브 카테고리 조회
+        ItemCategory targetCategory = getOrCreateCategory(dto.getItemCategory());
+        ItemSubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
 
         targetItem.setName(dto.getName());
         targetItem.setImg(dto.getImg());
         targetItem.setDescription(dto.getDescription());
         targetItem.setPrice(dto.getPrice());
-        targetItem.setItemCategory(ItemCategory.valueOf(dto.getItemCategory()));
-        targetItem.setItemSubCategory(ItemSubCategory.valueOf(dto.getItemSubCategory()));
+        targetItem.setItemCategory(targetCategory);
+        targetItem.setItemSubCategory(targetSubCategory);
         targetItem.setStock(dto.getStock());
         return ItemDto.fromEntity(itemRepository.save(targetItem));
     }
@@ -77,5 +86,29 @@ public class ItemService {
     // 쇼핑몰 상품 검섹
     public Page<ItemDto> getItems(SearchItemDto dto, Pageable pageable) {
         return itemRepository.getItemListWithPages(dto, pageable);
+    }
+
+
+    // 카테고리 찾기, 없을 경우 생성
+    private ItemCategory getOrCreateCategory(String categoryName) {
+        return itemCategoryRepository.findByName(categoryName)
+                .orElseGet(() -> {
+                    ItemCategory newCategory = ItemCategory.builder()
+                            .name(categoryName)
+                            .build();
+                    return itemCategoryRepository.save(newCategory);
+                });
+    }
+
+    // 서브 카테고리 찾기, 없을 경우 생성
+    private ItemSubCategory getOrCreateSubCategory(String subCategoryName, ItemCategory parentCategory) {
+        return itemSubCategoryRepository.findByName(subCategoryName)
+                .orElseGet(() -> {
+                    ItemSubCategory newSubCategory = ItemSubCategory.builder()
+                            .name(subCategoryName)
+                            .itemCategory(parentCategory)
+                            .build();
+                    return itemSubCategoryRepository.save(newSubCategory);
+                });
     }
 }

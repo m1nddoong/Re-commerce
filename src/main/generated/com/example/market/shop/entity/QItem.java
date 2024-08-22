@@ -36,9 +36,9 @@ public class QItem extends EntityPathBase<Item> {
     //inherited
     public final BooleanPath isDelete = _super.isDelete;
 
-    public final EnumPath<com.example.market.shop.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.market.shop.constant.ItemCategory.class);
+    public final QItemCategory itemCategory;
 
-    public final EnumPath<com.example.market.shop.constant.ItemSubCategory> itemSubCategory = createEnum("itemSubCategory", com.example.market.shop.constant.ItemSubCategory.class);
+    public final QItemSubCategory itemSubCategory;
 
     public final StringPath name = createString("name");
 
@@ -71,6 +71,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public QItem(Class<? extends Item> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.itemCategory = inits.isInitialized("itemCategory") ? new QItemCategory(forProperty("itemCategory")) : null;
+        this.itemSubCategory = inits.isInitialized("itemSubCategory") ? new QItemSubCategory(forProperty("itemSubCategory"), inits.get("itemSubCategory")) : null;
         this.shop = inits.isInitialized("shop") ? new QShop(forProperty("shop"), inits.get("shop")) : null;
     }
 

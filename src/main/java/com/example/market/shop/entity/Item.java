@@ -1,8 +1,6 @@
 package com.example.market.shop.entity;
 
 import com.example.market.common.BaseEntity;
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.constant.ItemSubCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,12 +38,15 @@ public class Item extends BaseEntity {
     @Setter
     private Integer price;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_category_id")
     @Setter
-    @Enumerated(EnumType.STRING)
     private ItemCategory itemCategory; // 추가 가능
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_sub_category_id")
     @Setter
-    @Enumerated(EnumType.STRING)
     private ItemSubCategory itemSubCategory; // 추가 가능
 
     @Setter

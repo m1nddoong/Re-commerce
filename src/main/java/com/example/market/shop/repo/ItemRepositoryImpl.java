@@ -1,7 +1,5 @@
 package com.example.market.shop.repo;
 
-import com.example.market.shop.constant.ItemCategory;
-import com.example.market.shop.constant.ItemSubCategory;
 import com.example.market.shop.dto.ItemDto;
 import com.example.market.shop.dto.SearchItemDto;
 import com.example.market.shop.entity.QItem;
@@ -32,7 +30,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         // 필터 조건 추가
         builder.and(nameContains(dto.getName()));
         builder.and(priceBetween(dto.getMinPrice(), dto.getMaxPrice()));
-        builder.and(categoryContains(dto.getItemCategory(), dto.getItemSubCategory()));
+        // builder.and(categoryContains(dto.getItemCategory(), dto.getItemSubCategory()));
         // 쇼핑몰과 상품을 조인
         List<ItemDto> results = jpaQueryFactory
                 .select(Projections.constructor(ItemDto.class,
@@ -40,8 +38,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.img,
                         item.description,
                         item.price,
-                        item.itemCategory.stringValue(),
-                        item.itemSubCategory.stringValue(),
+                        item.itemCategory,
+                        item.itemSubCategory,
                         item.stock,
                         shop.id.as("shopId")
                 ))
@@ -71,13 +69,13 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     // 상품 카테고리 조건
-    private BooleanExpression categoryContains(ItemCategory itemCategory, ItemSubCategory itemSubCategory) {
-        if (itemCategory == null)
-            return item.itemSubCategory.eq(itemSubCategory);
-        else {
-            return item.itemCategory.eq(itemCategory);
-        }
-    }
+//    private BooleanExpression categoryContains(String itemCategory, String itemSubCategory) {
+//        if (itemCategory == null)
+//            return item.itemSubCategory.eq(itemSubCategory);
+//        else {
+//            return item.itemCategory.eq(itemCategory);
+//        }
+//    }
     // 가격 범위 조건
     private BooleanExpression priceBetween(Integer minPrice, Integer maxPrice) {
         if (minPrice == null && maxPrice == null) return null;

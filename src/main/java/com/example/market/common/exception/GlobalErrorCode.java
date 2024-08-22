@@ -19,7 +19,11 @@ public enum GlobalErrorCode {
     ORDER_NOT_EXISTS(404, "3006", "주문 정보가 존재하지 않습니다."),
     ORDER_NO_PERMISSION(403, "3007", "주문에 대한 권한이 없습니다."),
     ORDER_ALREADY_APPROVAL(400, "3007", "이미 수락된 주문입니다."),
-    ORDER_ALREADY_CANCEL(400, "3008", "이미 취소된 주문입니다.");
+    ORDER_ALREADY_CANCEL(400, "3008", "이미 취소된 주문입니다."),
+
+    // 쇼핑몰 상품 카테고리 관련 에러
+    ITEM_CATEGORY_NOT_FOUND(404, "3009", "상품 뷴류가 존재하지 않습니다."),
+    ITEM_SUBCATEGORY_NOT_FOUND(404, "3010", "상품 소분류가 존재하지 않습니다.");
 
 
 
