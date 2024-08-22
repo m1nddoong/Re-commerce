@@ -13,7 +13,7 @@ import com.example.market.shop.entity.ItemSubCategory;
 import com.example.market.shop.repo.ItemCategoryRepository;
 import com.example.market.shop.repo.ItemRepository;
 import com.example.market.shop.repo.ItemSubCategoryRepository;
-import java.util.Optional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -111,4 +111,10 @@ public class ItemService {
                     return itemSubCategoryRepository.save(newSubCategory);
                 });
     }
+
+    // 인자가 없으면 전체 카테고리 조회
+    // 인자가 있으면, 특정 카테고리와, 그 하위 서브 카테고리들 조
+//    public List<CategoryDto> getItemCategoryList(Long categoryId) {
+//        return null;
+//    }
 }

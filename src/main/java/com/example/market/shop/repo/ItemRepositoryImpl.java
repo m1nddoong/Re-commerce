@@ -2,7 +2,10 @@ package com.example.market.shop.repo;
 
 import com.example.market.shop.dto.ItemDto;
 import com.example.market.shop.dto.SearchItemDto;
+import com.example.market.shop.entity.ItemSubCategory;
 import com.example.market.shop.entity.QItem;
+import com.example.market.shop.entity.QItemCategory;
+import com.example.market.shop.entity.QItemSubCategory;
 import com.example.market.shop.entity.QShop;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -30,7 +33,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         // 필터 조건 추가
         builder.and(nameContains(dto.getName()));
         builder.and(priceBetween(dto.getMinPrice(), dto.getMaxPrice()));
-        // builder.and(categoryContains(dto.getItemCategory(), dto.getItemSubCategory()));
+        builder.and(categoryContains(dto.getItemCategory(), dto.getItemSubCategory()));
         // 쇼핑몰과 상품을 조인
         List<ItemDto> results = jpaQueryFactory
                 .select(Projections.constructor(ItemDto.class,
@@ -38,8 +41,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.img,
                         item.description,
                         item.price,
-                        item.itemCategory,
-                        item.itemSubCategory,
+                        item.itemCategory.name,
+                        item.itemSubCategory.name,
                         item.stock,
                         shop.id.as("shopId")
                 ))
@@ -69,13 +72,19 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     // 상품 카테고리 조건
-//    private BooleanExpression categoryContains(String itemCategory, String itemSubCategory) {
-//        if (itemCategory == null)
-//            return item.itemSubCategory.eq(itemSubCategory);
-//        else {
-//            return item.itemCategory.eq(itemCategory);
-//        }
-//    }
+    private BooleanExpression categoryContains(String itemCategoryName, String itemSubCategoryName) {
+        // 카테고리 이름이 제공된 경우, 카테고리 조건 추가
+        if (itemCategoryName != null && !itemCategoryName.isEmpty()) {
+            return item.itemCategory.name.eq(itemCategoryName);
+        }
+
+        // 서브 카테고리 이름이 제공된 경우, 서브 카테고리 조건 추가
+        else {
+            return item.itemSubCategory.name.eq(itemSubCategoryName);
+        }
+        // 둘다 제공된 경우는 없음
+    }
+
     // 가격 범위 조건
     private BooleanExpression priceBetween(Integer minPrice, Integer maxPrice) {
         if (minPrice == null && maxPrice == null) return null;
