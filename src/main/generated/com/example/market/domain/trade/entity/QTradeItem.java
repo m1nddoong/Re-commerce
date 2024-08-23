@@ -1,8 +1,7 @@
-package com.example.market.trade.entity;
+package com.example.market.domain.trade.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.trade.entity.TradeItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -17,13 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QTradeItem extends EntityPathBase<TradeItem> {
 
-    private static final long serialVersionUID = 217026359L;
+    private static final long serialVersionUID = -340862721L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QTradeItem tradeItem = new QTradeItem("tradeItem");
 
-    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+    public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -46,7 +45,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.entity.QUser user;
+    public final com.example.market.domain.user.entity.QUser user;
 
     public QTradeItem(String variable) {
         this(TradeItem.class, forVariable(variable), INITS);
@@ -66,7 +65,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
 
     public QTradeItem(Class<? extends TradeItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

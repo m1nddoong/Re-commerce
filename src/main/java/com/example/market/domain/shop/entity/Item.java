@@ -40,12 +40,12 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_category_id")
     @Setter
-    private ItemCategory itemCategory; // 추가 가능
+    private Category category; // 추가 가능
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_sub_category_id")
     @Setter
-    private ItemSubCategory itemSubCategory; // 추가 가능
+    private SubCategory subCategory; // 추가 가능
 
     @Setter
     private Integer stock;

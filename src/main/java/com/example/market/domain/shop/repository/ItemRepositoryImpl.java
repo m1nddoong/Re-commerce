@@ -2,8 +2,8 @@ package com.example.market.domain.shop.repository;
 
 import com.example.market.domain.shop.dto.SearchItemDto;
 import com.example.market.domain.shop.dto.ItemDto;
-import com.example.market.shop.entity.QItem;
-import com.example.market.shop.entity.QShop;
+import com.example.market.domain.shop.entity.QItem;
+import com.example.market.domain.shop.entity.QShop;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -38,8 +38,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.img,
                         item.description,
                         item.price,
-                        item.itemCategory.name,
-                        item.itemSubCategory.name,
+                        item.category.name,
+                        item.subCategory.name,
                         item.stock,
                         shop.id.as("shopId")
                 ))
@@ -72,12 +72,12 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     private BooleanExpression categoryContains(String itemCategoryName, String itemSubCategoryName) {
         // 카테고리 이름이 제공된 경우, 카테고리 조건 추가
         if (itemCategoryName != null && !itemCategoryName.isEmpty()) {
-            return item.itemCategory.name.eq(itemCategoryName);
+            return item.category.name.eq(itemCategoryName);
         }
 
         // 서브 카테고리 이름이 제공된 경우, 서브 카테고리 조건 추가
         else {
-            return item.itemSubCategory.name.eq(itemSubCategoryName);
+            return item.subCategory.name.eq(itemSubCategoryName);
         }
         // 둘다 제공된 경우는 없음
     }

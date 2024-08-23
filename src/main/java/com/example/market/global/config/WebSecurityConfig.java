@@ -58,8 +58,11 @@ public class WebSecurityConfig {
                                 "/api/v1/shop/open-request",
                                 "/api/v1/shop/close-request",
                                 "/api/v1/item/search/**",
+                                "/api/v1/item/categories",
+                                "/api/v1/item/categories/{categoryId}",
                                 "/api/v1/order/create",
                                 "/api/v1/order/cancel/{orderId}"
+
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers(

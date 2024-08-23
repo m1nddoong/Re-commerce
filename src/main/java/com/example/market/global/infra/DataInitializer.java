@@ -1,19 +1,19 @@
 package com.example.market.global.infra;
 
 
+import com.example.market.domain.shop.entity.Category;
 import com.example.market.domain.user.constant.BusinessStatus;
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
 
-import com.example.market.domain.shop.entity.ItemCategory;
-import com.example.market.domain.shop.entity.ItemSubCategory;
+import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.shop.constant.ShopCategory;
 import com.example.market.domain.shop.constant.ShopStatus;
 import com.example.market.domain.shop.entity.Item;
 import com.example.market.domain.shop.entity.Shop;
-import com.example.market.domain.shop.repository.ItemCategoryRepository;
+import com.example.market.domain.shop.repository.CategoryRepository;
 import com.example.market.domain.shop.repository.ItemRepository;
-import com.example.market.domain.shop.repository.ItemSubCategoryRepository;
+import com.example.market.domain.shop.repository.SubCategoryRepository;
 import com.example.market.domain.shop.repository.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.util.Arrays;
@@ -32,8 +32,8 @@ public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
     private final ShopRepository shopRepository;
     private final ItemRepository itemRepository;
-    private final ItemCategoryRepository itemCategoryRepository;
-    private final ItemSubCategoryRepository itemSubCategoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -75,7 +75,7 @@ public class DataInitializer implements ApplicationRunner {
 
 
         // 상품 분류
-        ItemCategory[] itemCategories = {
+        Category[] itemCategories = {
                 createItemCategory("남성 의류"),
                 createItemCategory("여성 의류"),
                 createItemCategory("휴대폰"),
@@ -87,10 +87,10 @@ public class DataInitializer implements ApplicationRunner {
                 createItemCategory("스포츠 웨어"),
                 createItemCategory("스포츠 용품"),
         };
-        itemCategoryRepository.saveAll(Arrays.asList(itemCategories));
+        categoryRepository.saveAll(Arrays.asList(itemCategories));
 
         // 상품 소분류
-        ItemSubCategory[] itemSubCategories = {
+        SubCategory[] itemSubCategories = {
                 createItemSubCategory("상의", itemCategories[0]),
                 createItemSubCategory("하의", itemCategories[0]),
                 createItemSubCategory("악세사리", itemCategories[0]),
@@ -111,7 +111,7 @@ public class DataInitializer implements ApplicationRunner {
                 createItemSubCategory("운동기구", itemCategories[9]),
                 createItemSubCategory("보충제", itemCategories[9]),
         };
-        itemSubCategoryRepository.saveAll(Arrays.asList(itemSubCategories));
+        subCategoryRepository.saveAll(Arrays.asList(itemSubCategories));
 
         Shop[] shops = {
                 createShop("유재석 마켓", "패션 쇼핑몰", ShopCategory.FASHION, ShopStatus.OPEN, users[1]),
@@ -182,29 +182,29 @@ public class DataInitializer implements ApplicationRunner {
                 .build();
     }
 
-    private ItemCategory createItemCategory(String name) {
-        return ItemCategory.builder()
+    private Category createItemCategory(String name) {
+        return Category.builder()
                 .name(name)
                 .build();
     }
 
-    private ItemSubCategory createItemSubCategory(String name, ItemCategory itemCategory) {
-        return ItemSubCategory.builder()
+    private SubCategory createItemSubCategory(String name, Category category) {
+        return SubCategory.builder()
                 .name(name)
-                .itemCategory(itemCategory)
+                .category(category)
                 .build();
     }
 
 
-    private Item createShopItem(String name, String description, Integer price, ItemCategory itemCategory,
-                                ItemSubCategory itemSubCategory, Integer stock, Shop shop) {
+    private Item createShopItem(String name, String description, Integer price, Category category,
+                                SubCategory subCategory, Integer stock, Shop shop) {
         return Item.builder()
                 .name(name)
                 .img("example-img.png")
                 .description(description)
                 .price(price)
-                .itemCategory(itemCategory)
-                .itemSubCategory(itemSubCategory)
+                .category(category)
+                .subCategory(subCategory)
                 .stock(stock)
                 .shop(shop)
                 .build();

@@ -1,10 +1,7 @@
-package com.example.market.shop.entity;
+package com.example.market.domain.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.shop.constant.OrderStatus;
-import com.example.market.domain.shop.entity.Order;
-import com.example.market.domain.shop.entity.OrderItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -19,13 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QOrder extends EntityPathBase<Order> {
 
-    private static final long serialVersionUID = 2105191162L;
+    private static final long serialVersionUID = 1538679858L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QOrder order = new QOrder("order1");
 
-    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+    public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -37,14 +34,14 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final ListPath<OrderItem, QOrderItem> items = this.<OrderItem, QOrderItem>createList("items", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
-    public final EnumPath<OrderStatus> status = createEnum("status", OrderStatus.class);
+    public final EnumPath<com.example.market.domain.shop.constant.OrderStatus> status = createEnum("status", com.example.market.domain.shop.constant.OrderStatus.class);
 
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.entity.QUser user;
+    public final com.example.market.domain.user.entity.QUser user;
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
@@ -64,7 +61,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public QOrder(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

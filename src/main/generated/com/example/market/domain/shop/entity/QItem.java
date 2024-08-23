@@ -1,9 +1,7 @@
-package com.example.market.shop.entity;
+package com.example.market.domain.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.shop.entity.Item;
-import com.example.market.domain.shop.entity.OrderItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -18,13 +16,15 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QItem extends EntityPathBase<Item> {
 
-    private static final long serialVersionUID = -625004057L;
+    private static final long serialVersionUID = 1712026031L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QItem item = new QItem("item");
 
-    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+    public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
+
+    public final QCategory category;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -38,10 +38,6 @@ public class QItem extends EntityPathBase<Item> {
     //inherited
     public final BooleanPath isDelete = _super.isDelete;
 
-    public final QItemCategory itemCategory;
-
-    public final QItemSubCategory itemSubCategory;
-
     public final StringPath name = createString("name");
 
     public final ListPath<OrderItem, QOrderItem> orders = this.<OrderItem, QOrderItem>createList("orders", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
@@ -51,6 +47,8 @@ public class QItem extends EntityPathBase<Item> {
     public final QShop shop;
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
+
+    public final QSubCategory subCategory;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
@@ -73,9 +71,9 @@ public class QItem extends EntityPathBase<Item> {
 
     public QItem(Class<? extends Item> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.itemCategory = inits.isInitialized("itemCategory") ? new QItemCategory(forProperty("itemCategory")) : null;
-        this.itemSubCategory = inits.isInitialized("itemSubCategory") ? new QItemSubCategory(forProperty("itemSubCategory"), inits.get("itemSubCategory")) : null;
+        this.category = inits.isInitialized("category") ? new QCategory(forProperty("category")) : null;
         this.shop = inits.isInitialized("shop") ? new QShop(forProperty("shop"), inits.get("shop")) : null;
+        this.subCategory = inits.isInitialized("subCategory") ? new QSubCategory(forProperty("subCategory"), inits.get("subCategory")) : null;
     }
 
 }

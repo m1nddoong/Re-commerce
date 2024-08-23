@@ -1,12 +1,12 @@
 package com.example.market.domain.trade.service;
 
+import com.example.market.domain.trade.entity.QTradeOffer;
 import com.example.market.domain.user.entity.User;
 import com.example.market.global.auth.AuthenticationFacade;
 import com.example.market.domain.trade.dto.TradeOfferDto;
 import com.example.market.domain.trade.entity.TradeOffer;
 import com.example.market.domain.trade.entity.TradeOffer.OfferStatus;
 import com.example.market.domain.trade.repository.TradeOfferRepository;
-import com.example.market.trade.entity.QTradeOffer;
 import com.example.market.domain.trade.entity.TradeItem;
 import com.example.market.domain.trade.entity.TradeItem.ItemStatus;
 import com.example.market.domain.trade.repository.TradeItemRepository;

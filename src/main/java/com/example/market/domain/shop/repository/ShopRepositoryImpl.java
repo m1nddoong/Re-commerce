@@ -1,15 +1,15 @@
 package com.example.market.domain.shop.repository;
 
+import com.example.market.domain.shop.entity.QItem;
+import com.example.market.domain.shop.entity.QShop;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.domain.shop.dto.ShopDto;
 import com.example.market.domain.shop.constant.ShopCategory;
 import com.example.market.domain.shop.constant.ShopStatus;
 import com.example.market.domain.shop.dto.SearchShopDto;
-import com.example.market.domain.shop.entity.ItemCategory;
-import com.example.market.domain.shop.entity.ItemSubCategory;
-import com.example.market.shop.entity.QItem;
-import com.example.market.shop.entity.QShop;
+import com.example.market.domain.shop.entity.Category;
+import com.example.market.domain.shop.entity.SubCategory;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,8 +25,8 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class ShopRepositoryImpl implements ShopRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
-    private final ItemCategoryRepository itemCategoryRepository;
-    private final ItemSubCategoryRepository itemSubCategoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final QShop shop = QShop.shop;
     private final QItem item = QItem.item;
 
@@ -47,16 +47,16 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 
         // 상품 카테고리로 필터링
         if (dto.getItemCategory() != null && !dto.getItemCategory().isEmpty()) {
-            ItemCategory itemCategory = itemCategoryRepository.findByName(dto.getItemCategory())
+            Category category = categoryRepository.findByName(dto.getItemCategory())
                     .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
-            builder.and(item.itemCategory.eq(itemCategory));
+            builder.and(item.category.eq(category));
         }
 
         // 상품 서브 카테고리로 필터링
         if (dto.getItemSubCategory() != null && !dto.getItemSubCategory().isEmpty()) {
-            ItemSubCategory itemSubCategory = itemSubCategoryRepository.findByName(dto.getItemSubCategory())
+            SubCategory subCategory = subCategoryRepository.findByName(dto.getItemSubCategory())
                     .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_SUBCATEGORY_NOT_FOUND));
-            builder.and(item.itemSubCategory.eq(itemSubCategory));
+            builder.and(item.subCategory.eq(subCategory));
         }
 
         // 쿼리 생성

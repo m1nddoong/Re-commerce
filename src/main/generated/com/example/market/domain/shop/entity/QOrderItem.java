@@ -1,8 +1,7 @@
-package com.example.market.shop.entity;
+package com.example.market.domain.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.shop.entity.OrderItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -17,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QOrderItem extends EntityPathBase<OrderItem> {
 
-    private static final long serialVersionUID = -1711567571L;
+    private static final long serialVersionUID = 348645989L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

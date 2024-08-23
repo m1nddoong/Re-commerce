@@ -1,10 +1,7 @@
-package com.example.market.auth.entity;
+package com.example.market.domain.user.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.user.entity.User;
-import com.example.market.domain.user.constant.BusinessStatus;
-import com.example.market.domain.trade.entity.TradeItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -19,13 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = -2082198959L;
+    private static final long serialVersionUID = 268327868L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QUser user = new QUser("user");
 
-    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+    public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
 
     public final NumberPath<Integer> age = createNumber("age", Integer.class);
 
@@ -33,7 +30,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath businessNum = createString("businessNum");
 
-    public final EnumPath<BusinessStatus> businessStatus = createEnum("businessStatus", BusinessStatus.class);
+    public final EnumPath<com.example.market.domain.user.constant.BusinessStatus> businessStatus = createEnum("businessStatus", com.example.market.domain.user.constant.BusinessStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -53,9 +50,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath profileImg = createString("profileImg");
 
-    public final com.example.market.shop.entity.QShop shop;
+    public final com.example.market.domain.shop.entity.QShop shop;
 
-    public final ListPath<TradeItem, com.example.market.trade.entity.QTradeItem> tradeItem = this.<TradeItem, com.example.market.trade.entity.QTradeItem>createList("tradeItem", TradeItem.class, com.example.market.trade.entity.QTradeItem.class, PathInits.DIRECT2);
+    public final ListPath<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem> tradeItem = this.<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem>createList("tradeItem", com.example.market.domain.trade.entity.TradeItem.class, com.example.market.domain.trade.entity.QTradeItem.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
@@ -82,7 +79,7 @@ public class QUser extends EntityPathBase<User> {
 
     public QUser(Class<? extends User> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.shop = inits.isInitialized("shop") ? new com.example.market.shop.entity.QShop(forProperty("shop"), inits.get("shop")) : null;
+        this.shop = inits.isInitialized("shop") ? new com.example.market.domain.shop.entity.QShop(forProperty("shop"), inits.get("shop")) : null;
     }
 
 }

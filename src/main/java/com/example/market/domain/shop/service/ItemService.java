@@ -1,5 +1,8 @@
 package com.example.market.domain.shop.service;
 
+import com.example.market.domain.shop.dto.CategoryDto;
+import com.example.market.domain.shop.dto.SubCategoryDto;
+import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.user.entity.User;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.error.exception.ErrorCode;
@@ -9,10 +12,11 @@ import com.example.market.domain.shop.repository.ItemRepository;
 import com.example.market.domain.shop.dto.CreateItemDto;
 import com.example.market.domain.shop.dto.ItemDto;
 import com.example.market.domain.shop.entity.Item;
-import com.example.market.domain.shop.entity.ItemCategory;
-import com.example.market.domain.shop.entity.ItemSubCategory;
-import com.example.market.domain.shop.repository.ItemCategoryRepository;
-import com.example.market.domain.shop.repository.ItemSubCategoryRepository;
+import com.example.market.domain.shop.entity.Category;
+import com.example.market.domain.shop.repository.CategoryRepository;
+import com.example.market.domain.shop.repository.SubCategoryRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,22 +28,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final ItemCategoryRepository itemCategoryRepository;
-    private final ItemSubCategoryRepository itemSubCategoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final AuthenticationFacade authFacade;
 
     // 쇼핑몰 상품 등록
     public ItemDto createItem(CreateItemDto dto) {
         User user = authFacade.extractUser();
-        ItemCategory targetCategory = getOrCreateCategory(dto.getItemCategory());
-        ItemSubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
+        Category targetCategory = getOrCreateCategory(dto.getItemCategory());
+        SubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
         return ItemDto.fromEntity(itemRepository.save(Item.builder()
                 .name(dto.getName())
                 .img(dto.getImg())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
-                .itemCategory(targetCategory)
-                .itemSubCategory(targetSubCategory)
+                .category(targetCategory)
+                .subCategory(targetSubCategory)
                 .stock(dto.getStock())
                 .shop(user.getShop())
                 .build()));
@@ -56,15 +60,15 @@ public class ItemService {
             throw new GlobalCustomException(ErrorCode.ITEM_NO_PERMISSION);
         }
         // 카테고리와 서브 카테고리 조회
-        ItemCategory targetCategory = getOrCreateCategory(dto.getItemCategory());
-        ItemSubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
+        Category targetCategory = getOrCreateCategory(dto.getItemCategory());
+        SubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
 
         targetItem.setName(dto.getName());
         targetItem.setImg(dto.getImg());
         targetItem.setDescription(dto.getDescription());
         targetItem.setPrice(dto.getPrice());
-        targetItem.setItemCategory(targetCategory);
-        targetItem.setItemSubCategory(targetSubCategory);
+        targetItem.setCategory(targetCategory);
+        targetItem.setSubCategory(targetSubCategory);
         targetItem.setStock(dto.getStock());
         return ItemDto.fromEntity(itemRepository.save(targetItem));
     }
@@ -89,31 +93,58 @@ public class ItemService {
 
 
     // 카테고리 찾기, 없을 경우 생성
-    private ItemCategory getOrCreateCategory(String categoryName) {
-        return itemCategoryRepository.findByName(categoryName)
+    private Category getOrCreateCategory(String categoryName) {
+        return categoryRepository.findByName(categoryName)
                 .orElseGet(() -> {
-                    ItemCategory newCategory = ItemCategory.builder()
+                    Category newCategory = Category.builder()
                             .name(categoryName)
                             .build();
-                    return itemCategoryRepository.save(newCategory);
+                    return categoryRepository.save(newCategory);
                 });
     }
 
     // 서브 카테고리 찾기, 없을 경우 생성
-    private ItemSubCategory getOrCreateSubCategory(String subCategoryName, ItemCategory parentCategory) {
-        return itemSubCategoryRepository.findByName(subCategoryName)
+    private SubCategory getOrCreateSubCategory(String subCategoryName, Category parentCategory) {
+        return subCategoryRepository.findByName(subCategoryName)
                 .orElseGet(() -> {
-                    ItemSubCategory newSubCategory = ItemSubCategory.builder()
+                    SubCategory newSubCategory = SubCategory.builder()
                             .name(subCategoryName)
-                            .itemCategory(parentCategory)
+                            .category(parentCategory)
                             .build();
-                    return itemSubCategoryRepository.save(newSubCategory);
+                    return subCategoryRepository.save(newSubCategory);
                 });
     }
 
+
+    // 전체 카테고리 조회
+    public List<CategoryDto> getCategoryList() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(CategoryDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // 특정 카테고리의 서브 카테고리 조회
+    public SubCategoryDto getSubCategoryList(Long categoryId) {
+        // 특정 카테고리 찾기
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
+        // 특정 카테고리 하위 서브 카테고리 리스트 조회
+        List<SubCategory> subCategories = subCategoryRepository.findByCategoryId(categoryId);
+
+        // DTO 생성
+        List<String> subCategoryNames = subCategories.stream()
+                .map(SubCategory::getName)
+                .collect(Collectors.toList());
+
+        return SubCategoryDto.builder()
+                .categoryName(category.getName())
+                .subCategoryName(subCategoryNames)
+                .build();
+    }
+
     // 인자가 없으면 전체 카테고리 조회
+
     // 인자가 있으면, 특정 카테고리와, 그 하위 서브 카테고리들 조
-//    public List<CategoryDto> getItemCategoryList(Long categoryId) {
-//        return null;
-//    }
+
 }

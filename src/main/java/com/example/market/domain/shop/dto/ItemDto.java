@@ -32,8 +32,8 @@ public class ItemDto {
                 .img(entity.getImg())
                 .description(entity.getDescription())
                 .price(entity.getPrice())
-                .itemCategory(entity.getItemCategory().getName())
-                .itemSubCategory(entity.getItemSubCategory().getName())
+                .itemCategory(entity.getCategory().getName())
+                .itemSubCategory(entity.getSubCategory().getName())
                 .stock(entity.getStock())
                 .shopId(entity.getShop().getId())
                 .build();

@@ -1,11 +1,7 @@
-package com.example.market.shop.entity;
+package com.example.market.domain.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.market.domain.shop.constant.ShopCategory;
-import com.example.market.domain.shop.constant.ShopStatus;
-import com.example.market.domain.shop.entity.Item;
-import com.example.market.domain.shop.entity.Shop;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -20,13 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QShop extends EntityPathBase<Shop> {
 
-    private static final long serialVersionUID = -624717366L;
+    private static final long serialVersionUID = 1712312722L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QShop shop = new QShop("shop");
 
-    public final com.example.market.common.QBaseEntity _super = new com.example.market.common.QBaseEntity(this);
+    public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
 
     public final StringPath address = createString("address");
 
@@ -48,14 +44,14 @@ public class QShop extends EntityPathBase<Shop> {
 
     public final StringPath name = createString("name");
 
-    public final EnumPath<ShopCategory> shopCategory = createEnum("shopCategory", ShopCategory.class);
+    public final EnumPath<com.example.market.domain.shop.constant.ShopCategory> shopCategory = createEnum("shopCategory", com.example.market.domain.shop.constant.ShopCategory.class);
 
-    public final EnumPath<ShopStatus> status = createEnum("status", ShopStatus.class);
+    public final EnumPath<com.example.market.domain.shop.constant.ShopStatus> status = createEnum("status", com.example.market.domain.shop.constant.ShopStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.entity.QUser user;
+    public final com.example.market.domain.user.entity.QUser user;
 
     public QShop(String variable) {
         this(Shop.class, forVariable(variable), INITS);
@@ -75,7 +71,7 @@ public class QShop extends EntityPathBase<Shop> {
 
     public QShop(Class<? extends Shop> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }
