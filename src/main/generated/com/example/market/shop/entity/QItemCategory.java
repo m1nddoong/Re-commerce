@@ -2,6 +2,8 @@ package com.example.market.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.domain.shop.entity.ItemCategory;
+import com.example.market.domain.shop.entity.ItemSubCategory;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;

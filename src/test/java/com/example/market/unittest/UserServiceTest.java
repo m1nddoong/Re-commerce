@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.example.market.auth.controller.dto.CreateUserDto;
-import com.example.market.auth.controller.dto.UserDto;
-import com.example.market.auth.domain.User;
-import com.example.market.auth.repo.UserRepository;
-import com.example.market.auth.service.UserService;
+import com.example.market.domain.user.dto.CreateUserDto;
+import com.example.market.domain.user.dto.UserDto;
+import com.example.market.domain.user.entity.User;
+import com.example.market.domain.user.repository.UserRepository;
+import com.example.market.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

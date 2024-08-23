@@ -7,10 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.market.auth.repo.UserRepository;
-import com.example.market.trade.dto.TradeItemDto;
-import com.example.market.trade.entity.TradeItem.ItemStatus;
-import com.example.market.trade.service.TradeItemService;
+import com.example.market.domain.trade.dto.TradeItemDto;
+import com.example.market.domain.trade.entity.TradeItem.ItemStatus;
+import com.example.market.domain.trade.service.TradeItemService;
 import com.example.market.util.JsonUtil;
 import com.example.market.util.WithCustomUser;
 import org.junit.jupiter.api.DisplayName;

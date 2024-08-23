@@ -2,6 +2,7 @@ package com.example.market.trade.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.domain.trade.entity.TradeItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -45,7 +46,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.domain.QUser user;
+    public final com.example.market.auth.entity.QUser user;
 
     public QTradeItem(String variable) {
         this(TradeItem.class, forVariable(variable), INITS);
@@ -65,7 +66,7 @@ public class QTradeItem extends EntityPathBase<TradeItem> {
 
     public QTradeItem(Class<? extends TradeItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.domain.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

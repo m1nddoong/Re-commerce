@@ -2,6 +2,10 @@ package com.example.market.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.domain.shop.constant.ShopCategory;
+import com.example.market.domain.shop.constant.ShopStatus;
+import com.example.market.domain.shop.entity.Item;
+import com.example.market.domain.shop.entity.Shop;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -44,14 +48,14 @@ public class QShop extends EntityPathBase<Shop> {
 
     public final StringPath name = createString("name");
 
-    public final EnumPath<com.example.market.shop.constant.ShopCategory> shopCategory = createEnum("shopCategory", com.example.market.shop.constant.ShopCategory.class);
+    public final EnumPath<ShopCategory> shopCategory = createEnum("shopCategory", ShopCategory.class);
 
-    public final EnumPath<com.example.market.shop.constant.ShopStatus> status = createEnum("status", com.example.market.shop.constant.ShopStatus.class);
+    public final EnumPath<ShopStatus> status = createEnum("status", ShopStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.domain.QUser user;
+    public final com.example.market.auth.entity.QUser user;
 
     public QShop(String variable) {
         this(Shop.class, forVariable(variable), INITS);
@@ -71,7 +75,7 @@ public class QShop extends EntityPathBase<Shop> {
 
     public QShop(Class<? extends Shop> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.domain.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

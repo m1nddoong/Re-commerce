@@ -2,6 +2,9 @@ package com.example.market.shop.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.domain.shop.constant.OrderStatus;
+import com.example.market.domain.shop.entity.Order;
+import com.example.market.domain.shop.entity.OrderItem;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -34,14 +37,14 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final ListPath<OrderItem, QOrderItem> items = this.<OrderItem, QOrderItem>createList("items", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
-    public final EnumPath<com.example.market.shop.constant.OrderStatus> status = createEnum("status", com.example.market.shop.constant.OrderStatus.class);
+    public final EnumPath<OrderStatus> status = createEnum("status", OrderStatus.class);
 
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.auth.domain.QUser user;
+    public final com.example.market.auth.entity.QUser user;
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
@@ -61,7 +64,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public QOrder(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.auth.domain.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

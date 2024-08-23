@@ -2,6 +2,7 @@ package com.example.market.trade.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.market.domain.trade.entity.TradeOffer;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -26,7 +27,7 @@ public class QTradeOffer extends EntityPathBase<TradeOffer> {
 
     public final QTradeItem items;
 
-    public final com.example.market.auth.domain.QUser offeringUser;
+    public final com.example.market.auth.entity.QUser offeringUser;
 
     public final EnumPath<TradeOffer.OfferStatus> offerStatus = createEnum("offerStatus", TradeOffer.OfferStatus.class);
 
@@ -49,7 +50,7 @@ public class QTradeOffer extends EntityPathBase<TradeOffer> {
     public QTradeOffer(Class<? extends TradeOffer> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.items = inits.isInitialized("items") ? new QTradeItem(forProperty("items"), inits.get("items")) : null;
-        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.auth.domain.QUser(forProperty("offeringUser"), inits.get("offeringUser")) : null;
+        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.auth.entity.QUser(forProperty("offeringUser"), inits.get("offeringUser")) : null;
     }
 
 }
