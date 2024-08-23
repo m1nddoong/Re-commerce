@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "item", description = "쇼핑몰 상품에 관한 API")
@@ -93,6 +94,10 @@ public class ItemController {
 
     // 쇼핑몰 상품 카테고리 전체 조회
     @GetMapping("/categories")
+    @Operation(
+            summary = "상품 분류 목록 조회",
+            description = "<p>사용자는 상품 분류 목록을 보고 상품 등록 시 카테고리를 선택할 수 있다.</p>"
+    )
     public ResponseEntity<List<CategoryDto>> getCategoryList() {
         return ResponseEntity.ok(itemService.getCategoryList());
     }
@@ -100,6 +105,11 @@ public class ItemController {
 
     // 특정 카테고리에 따른 서브 카테고리 조회
     @GetMapping("/categories/{categoryId}")
+    @Operation(
+            summary = "상품 소분류 목록 조회",
+            description = "<p>사용자는 상품 소분류 목록을 보고 상품 등록 시 서브 카테고리를 선택할 수 있다.</p>"
+
+    )
     public ResponseEntity<SubCategoryDto> getSubCategoryList(
             @PathVariable("categoryId")
             Long categoryId
@@ -108,6 +118,18 @@ public class ItemController {
     }
 
     // 상품 분류 목록 수정 - 관리자
+    // 유사한 분류를 같은 분류가 될 수 있도록 분류를 수정 ("피부", "스킨" -> "스킨" 통합)
+    @PutMapping("/categories/merge/{categoryId1}/{categoryId2}")
+    public ResponseEntity<Void> mergeCategories(
+            @PathVariable("categoryId1")
+            Long categoryId1,
+            @PathVariable("categoryId2")
+            Long categoryId2
+    ) {
+        itemService.mergeCategories(categoryId1, categoryId2);
+        return ResponseEntity.ok().build();
+    }
+
 
     // 할인 적용
 }

@@ -38,12 +38,12 @@ public class Item extends BaseEntity {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_category_id")
+    @JoinColumn(name = "category_id")
     @Setter
     private Category category; // 추가 가능
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_sub_category_id")
+    @JoinColumn(name = "sub_category_id")
     @Setter
     private SubCategory subCategory; // 추가 가능
 

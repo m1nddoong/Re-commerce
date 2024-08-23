@@ -86,6 +86,8 @@ public class DataInitializer implements ApplicationRunner {
                 createItemCategory("가구"),
                 createItemCategory("스포츠 웨어"),
                 createItemCategory("스포츠 용품"),
+                // 추가
+                createItemCategory("스킨")
         };
         categoryRepository.saveAll(Arrays.asList(itemCategories));
 
@@ -102,7 +104,7 @@ public class DataInitializer implements ApplicationRunner {
                 createItemSubCategory("모니터", itemCategories[3]),
                 createItemSubCategory("키보드", itemCategories[3]),
                 createItemSubCategory("메이크업", itemCategories[4]),
-                createItemSubCategory("피부 보습", itemCategories[4]),
+                createItemSubCategory("보습", itemCategories[4]),
                 createItemSubCategory("스프레이", itemCategories[5]),
                 createItemSubCategory("헤어 보습", itemCategories[5]),
                 createItemSubCategory("주방 용품", itemCategories[6]),
@@ -110,6 +112,11 @@ public class DataInitializer implements ApplicationRunner {
                 createItemSubCategory("운동복", itemCategories[8]),
                 createItemSubCategory("운동기구", itemCategories[9]),
                 createItemSubCategory("보충제", itemCategories[9]),
+
+                // 추가
+                createItemSubCategory("보습", itemCategories[10]),
+                createItemSubCategory("메이크업", itemCategories[10]),
+                createItemSubCategory("마스크팩", itemCategories[10])
         };
         subCategoryRepository.saveAll(Arrays.asList(itemSubCategories));
 

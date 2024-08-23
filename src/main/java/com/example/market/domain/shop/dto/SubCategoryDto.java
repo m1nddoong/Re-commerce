@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SubCategoryDto {
+    private String categoryId;
     private String categoryName;
     private List<String> subCategoryName;
 }

@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CategoryDto {
+    private Long categoryId;
     private String name;
     public static CategoryDto fromEntity(Category entity) {
         return CategoryDto.builder()
+                .categoryId(entity.getId())
                 .name(entity.getName())
                 .build();
     }
