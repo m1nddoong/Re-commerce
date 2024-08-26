@@ -144,50 +144,66 @@ public class ItemService {
                 .build();
     }
 
-    // 카테고리 수정
+    // 카테고리 수정(통합)
+    // 상위 카테고리가 바뀜에 따라 자동으로 하위 카테고리가 통합
     public void mergeCategories(Long categoryId1, Long categoryId2) {
         Category category1 = categoryRepository.findById(categoryId1)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
         Category category2 = categoryRepository.findById(categoryId2)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
 
+        // 카테고리 2 를 가진 상품의 카테고리를 카테고리1 로 변경
         List<Item> items = itemRepository.findByCategoryId(categoryId2);
         for (Item item : items) {
             item.setCategory(category1);
         }
         itemRepository.saveAll(items);
 
-        mergeSubCategories(category1, category2);
-
-        // 병합할 카테고리 삭제
-        categoryRepository.delete(category2);
-    }
-
-    private void mergeSubCategories(Category category1, Category category2) {
-        List<SubCategory> subCategories = subCategoryRepository.findByCategoryId(category2.getId());
-
+        // category2를 참조하는 모든 서브카테고리들을 category1로 업데이트
+        List<SubCategory> subCategories = subCategoryRepository.findByCategoryId(categoryId2);
+        List<SubCategory> category1SubCategories = subCategoryRepository.findByCategoryId(categoryId1);
         for (SubCategory subCategory : subCategories) {
-            Optional<SubCategory> existingSubCategoryOpt = subCategoryRepository.findByCategoryIdAndName(category1.getId(), category2.getName());
+            // category1에 같은 이름을 가진 서브카테고리가 있는지 찾기
+            Optional<SubCategory> existingSubCategoryOpt = category1SubCategories.stream()
+                    .filter(c1SubCat -> c1SubCat.getName().equals(subCategory.getName()))
+                    .findFirst();
 
             if (existingSubCategoryOpt.isPresent()) {
-                // 동일한 이름의 서브 카테고리가 이미 존재하는 경우, 해당 서브 카테고리와 중복된 항목을 제거하거나 병합
                 SubCategory existingSubCategory = existingSubCategoryOpt.get();
-
-                // 서브 카테고리의 아이템들을 기존 서브 카테고리로 이동
-                List<Item> items = itemRepository.findBySubCategoryId(subCategory.getId());
-                for (Item item : items) {
+                List<Item> subCategoryItems = itemRepository.findBySubCategoryId(subCategory.getId());
+                for (Item item : subCategoryItems) {
                     item.setSubCategory(existingSubCategory);
                 }
-                itemRepository.saveAll(items);
-
-                // 중복된 서브 카테고리 삭제
+                itemRepository.saveAll(subCategoryItems);
                 subCategoryRepository.delete(subCategory);
             } else {
-                // 새로운 서브 카테고리 추가
+                // 같은 이름의 서브 카테고리가 없을 경우, 카테고리1로 이동
                 subCategory.setCategory(category1);
                 subCategoryRepository.save(subCategory);
             }
         }
+        // 병합할 카테고리 삭제
+        categoryRepository.delete(category2);
+
     }
 
+    // 서브 카테고리 수정(통합)
+    public void mergeSubCategories(Long subCategoryId1, Long subCategoryId2) {
+        // 일단 같은 카테고리여야함
+        SubCategory subCategory1 = subCategoryRepository.findById(subCategoryId1).
+                orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_SUBCATEGORY_NOT_FOUND));
+        SubCategory subCategory2 = subCategoryRepository.findById(subCategoryId2).
+                orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_SUBCATEGORY_NOT_FOUND));
+        if (!subCategory1.getCategory().equals(subCategory2.getCategory())) {
+            throw new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_EQUAL);
+        }
+        List<Item> items = itemRepository.findBySubCategoryId(subCategoryId2);
+        for (Item item : items) {
+            item.setSubCategory(subCategory1);
+        }
+        itemRepository.saveAll(items);
+        subCategoryRepository.delete(subCategory2);
+    }
 }
+
+

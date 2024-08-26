@@ -9,6 +9,7 @@ import com.example.market.domain.shop.dto.SubCategoryDto;
 import com.example.market.domain.shop.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -121,12 +122,24 @@ public class ItemController {
     // 유사한 분류를 같은 분류가 될 수 있도록 분류를 수정 ("피부", "스킨" -> "스킨" 통합)
     @PutMapping("/categories/merge/{categoryId1}/{categoryId2}")
     public ResponseEntity<Void> mergeCategories(
-            @PathVariable("categoryId1")
+            @PathVariable("categoryId1") // 통합될 카테고리
             Long categoryId1,
-            @PathVariable("categoryId2")
+            @PathVariable("categoryId2") // 통합할 카테고리
             Long categoryId2
     ) {
         itemService.mergeCategories(categoryId1, categoryId2);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 소분류 목록 통합
+    @PutMapping("/categories/merge/sub/{subCategoryId1}/{subCategoryId2}")
+    public ResponseEntity<Void> mergeSubCategories(
+            @PathVariable("subCategoryId1")
+            Long subCategoryId1,
+            @PathVariable("subCategoryId2")
+            Long subCategoryId2
+    ) {
+        itemService.mergeSubCategories(subCategoryId1, subCategoryId2);
         return ResponseEntity.ok().build();
     }
 

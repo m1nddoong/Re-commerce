@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!test")
 @RequiredArgsConstructor
 public class DataInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
@@ -81,13 +80,13 @@ public class DataInitializer implements ApplicationRunner {
                 createItemCategory("휴대폰"),
                 createItemCategory("컴퓨터"),
                 createItemCategory("피부"),
+                createItemCategory("스킨"),
                 createItemCategory("헤어"),
                 createItemCategory("주방"),
                 createItemCategory("가구"),
                 createItemCategory("스포츠 웨어"),
                 createItemCategory("스포츠 용품"),
-                // 추가
-                createItemCategory("스킨")
+
         };
         categoryRepository.saveAll(Arrays.asList(itemCategories));
 
@@ -105,18 +104,17 @@ public class DataInitializer implements ApplicationRunner {
                 createItemSubCategory("키보드", itemCategories[3]),
                 createItemSubCategory("메이크업", itemCategories[4]),
                 createItemSubCategory("보습", itemCategories[4]),
-                createItemSubCategory("스프레이", itemCategories[5]),
-                createItemSubCategory("헤어 보습", itemCategories[5]),
-                createItemSubCategory("주방 용품", itemCategories[6]),
-                createItemSubCategory("인테리어", itemCategories[7]),
-                createItemSubCategory("운동복", itemCategories[8]),
-                createItemSubCategory("운동기구", itemCategories[9]),
-                createItemSubCategory("보충제", itemCategories[9]),
+                createItemSubCategory("화장", itemCategories[5]),
+                createItemSubCategory("보습", itemCategories[5]),
+                createItemSubCategory("헤어 스프레이", itemCategories[6]),
+                createItemSubCategory("헤어 보습", itemCategories[6]),
+                createItemSubCategory("주방 용품", itemCategories[7]),
+                createItemSubCategory("인테리어", itemCategories[8]),
+                createItemSubCategory("운동복", itemCategories[9]),
+                createItemSubCategory("운동기구", itemCategories[10]),
+                createItemSubCategory("보충제", itemCategories[10]),
 
-                // 추가
-                createItemSubCategory("보습", itemCategories[10]),
-                createItemSubCategory("메이크업", itemCategories[10]),
-                createItemSubCategory("마스크팩", itemCategories[10])
+
         };
         subCategoryRepository.saveAll(Arrays.asList(itemSubCategories));
 
@@ -157,6 +155,14 @@ public class DataInitializer implements ApplicationRunner {
                 createShopItem("무한도전 와이드팬츠8", "여성 와이드팬츠8 입니다.", 32000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
                 createShopItem("무한도전 와이드팬츠9", "여성 와이드팬츠9 입니다.", 11000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
                 createShopItem("무한도전 와이드팬츠10", "여성 와이드팬츠10 입니다.", 31000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                // 통합할 두 카테고리와 서브카테고리
+                createShopItem("피부 메이크업 용품1", "피부 메이크업 용품1 입니다.", 10000, itemCategories[4], itemSubCategories[10], 10, shops[4]),
+                createShopItem("피부 보습 용품1", "피부 보습 용품1 입니다.", 12000, itemCategories[4], itemSubCategories[11], 10, shops[4]),
+                createShopItem("스킨 화장 용품1", "스킨 화장 용품1 입니다.", 10000, itemCategories[5], itemSubCategories[12], 10, shops[5]),
+                createShopItem("스킨 보습 용품1", "스킨 보습 용품1 입니다.", 12000, itemCategories[5], itemSubCategories[13], 10, shops[5])
+
+
+
         };
         itemRepository.saveAll(Arrays.asList(items));
 

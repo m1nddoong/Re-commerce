@@ -81,6 +81,7 @@ public class WebSecurityConfig {
                                 "/api/v1/shop/close-request-list",
                                 "/api/v1/shop/close-request/{shopId}/approval",
                                 "/api/v1/item/categories/merge/**",
+                                "/api/v1/item/categories/merge/sub/**",
                                 "/api/v1/order/approval/{orderId}"
                         )
                         .hasRole("ADMIN")
