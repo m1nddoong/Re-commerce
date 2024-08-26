@@ -33,7 +33,11 @@ public class ItemService {
     private final SubCategoryRepository subCategoryRepository;
     private final AuthenticationFacade authFacade;
 
-    // 쇼핑몰 상품 등록
+    /**
+     * 쇼핑몰 상품 등록
+     * @param dto 상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류, 상품 소분류, 상품 재고
+     * @return 상품
+     */
     public ItemDto createItem(CreateItemDto dto) {
         User user = authFacade.extractUser();
         Category targetCategory = getOrCreateCategory(dto.getItemCategory());
@@ -50,7 +54,12 @@ public class ItemService {
                 .build()));
     }
 
-    // 쇼핑몰 상품 업데이트
+    /**
+     * 쇼핑몰 상품 업데이트
+     * @param dto 상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류, 상품 소분류, 상품 재고
+     * @param shopItemId 쇼핑몰 상품 ID
+     * @return 상품
+     */
     public ItemDto updateItem(CreateItemDto dto, Long shopItemId) {
         // 상품 조회
         Item targetItem = itemRepository.findById(shopItemId)
@@ -74,7 +83,10 @@ public class ItemService {
         return ItemDto.fromEntity(itemRepository.save(targetItem));
     }
 
-    // 쇼핑몰 상품 삭제
+    /**
+     * 쇼핑몰 상품 삭제
+     * @param shopItemId 쇼핑몰 ID
+     */
     public void deleteItem(Long shopItemId) {
         // 상품 조회
         Item targetItem = itemRepository.findById(shopItemId)
@@ -87,13 +99,20 @@ public class ItemService {
         itemRepository.deleteById(shopItemId);
     }
 
-    // 쇼핑몰 상품 검섹
+    /**
+     * 쇼핑몰 상품 검섹
+     * @param dto 상품 이름, 상품 분류, 소분류, 최대 가격, 최소가격
+     * @param pageable 페이지 번호, 변위
+     * @return 상품
+     */
     public Page<ItemDto> getItems(SearchItemDto dto, Pageable pageable) {
         return itemRepository.getItemListWithPages(dto, pageable);
     }
 
 
-    // 카테고리 찾기, 없을 경우 생성
+    /**
+     * 카테고리 찾기, 없을 경우 생성
+     */
     private Category getOrCreateCategory(String categoryName) {
         return categoryRepository.findByName(categoryName)
                 .orElseGet(() -> {
@@ -104,7 +123,9 @@ public class ItemService {
                 });
     }
 
-    // 서브 카테고리 찾기, 없을 경우 생성
+    /**
+     * 서브 카테고리 조회 및 생성
+     */
     private SubCategory getOrCreateSubCategory(String subCategoryName, Category parentCategory) {
         return subCategoryRepository.findByName(subCategoryName)
                 .orElseGet(() -> {
@@ -117,7 +138,10 @@ public class ItemService {
     }
 
 
-    // 전체 카테고리 조회
+    /**
+     * 전체 카테고리 조회
+     * @return 전체 카테고리 리스트
+     */
     public List<CategoryDto> getCategoryList() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
@@ -125,7 +149,11 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    // 특정 카테고리의 서브 카테고리 조회
+    /**
+     * 특정 카테고리의 서브 카테고리 조회
+     * @param categoryId 카테고리 ID
+     * @return 서브 카테고리
+     */
     public SubCategoryDto getSubCategoryList(Long categoryId) {
         // 특정 카테고리 찾기
         Category category = categoryRepository.findById(categoryId)
@@ -144,8 +172,11 @@ public class ItemService {
                 .build();
     }
 
-    // 카테고리 수정(통합)
-    // 상위 카테고리가 바뀜에 따라 자동으로 하위 카테고리가 통합
+    /**
+     * 카테고리 통합
+     * @param categoryId1 통합될 카테고리
+     * @param categoryId2 통합할 카테고리
+     */
     public void mergeCategories(Long categoryId1, Long categoryId2) {
         Category category1 = categoryRepository.findById(categoryId1)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
@@ -187,7 +218,11 @@ public class ItemService {
 
     }
 
-    // 서브 카테고리 수정(통합)
+    /**
+     * 서브 카테고리 통합
+     * @param subCategoryId1 통합될 서브 카테고리
+     * @param subCategoryId2 통합할 서브 카테고리
+     */
     public void mergeSubCategories(Long subCategoryId1, Long subCategoryId2) {
         // 일단 같은 카테고리여야함
         SubCategory subCategory1 = subCategoryRepository.findById(subCategoryId1).

@@ -118,9 +118,13 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getSubCategoryList(categoryId));
     }
 
-    // 상품 분류 목록 수정 - 관리자
-    // 유사한 분류를 같은 분류가 될 수 있도록 분류를 수정 ("피부", "스킨" -> "스킨" 통합)
     @PutMapping("/categories/merge/{categoryId1}/{categoryId2}")
+    @Operation(
+            summary = "상품 분류 통합",
+            description = "<p>관리자는 상품 분류 목록을 보고, 유사한 분류를 같은 분류가 될 수 있도록 분류를 수정할 수 있다.</p>"
+            + "<p>'categoryId2' PK를 가진 카테고리가 'categoryId1' PK를 가진 카테고리로 통합된다 (ex. \"피부\", \"스킨\" -> \"스킨\" 통합)</p>"
+            + "<p>이떄, 각 카테고리에 있던 서브 카테고리들 간 이름이 같은 것들은 서로 통합되고. 그렇지 않다면 서브 카테고리가 추가된다.</p>"
+    )
     public ResponseEntity<Void> mergeCategories(
             @PathVariable("categoryId1") // 통합될 카테고리
             Long categoryId1,
@@ -131,8 +135,12 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-    // 상품 소분류 목록 통합
     @PutMapping("/categories/merge/sub/{subCategoryId1}/{subCategoryId2}")
+    @Operation(
+            summary = "상품 소분류 통합",
+            description = "<p>관리자는 상품 소분류 목록을 보고, 유사한 소분류를 같은 소분류가 될 수 있도록 소분류를 수정할 수 있다.</p>"
+                    + "<p>'subCategoryId2' PK를 가진 서브 카테고리가 'subCategoryId1' PK를 가진 서브 카테고리로 통합된다</p>"
+    )
     public ResponseEntity<Void> mergeSubCategories(
             @PathVariable("subCategoryId1")
             Long subCategoryId1,
