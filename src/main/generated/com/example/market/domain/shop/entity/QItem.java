@@ -31,6 +31,10 @@ public class QItem extends EntityPathBase<Item> {
 
     public final StringPath description = createString("description");
 
+    public final NumberPath<java.math.BigDecimal> discountedPrice = createNumber("discountedPrice", java.math.BigDecimal.class);
+
+    public final DateTimePath<java.time.LocalDateTime> discountExpirationDate = createDateTime("discountExpirationDate", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath img = createString("img");
@@ -42,7 +46,7 @@ public class QItem extends EntityPathBase<Item> {
 
     public final ListPath<OrderItem, QOrderItem> orders = this.<OrderItem, QOrderItem>createList("orders", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+    public final NumberPath<java.math.BigDecimal> price = createNumber("price", java.math.BigDecimal.class);
 
     public final QShop shop;
 

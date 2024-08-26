@@ -16,12 +16,12 @@ import com.example.market.domain.shop.repository.ItemRepository;
 import com.example.market.domain.shop.repository.SubCategoryRepository;
 import com.example.market.domain.shop.repository.ShopRepository;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -165,7 +165,6 @@ public class DataInitializer implements ApplicationRunner {
 
         };
         itemRepository.saveAll(Arrays.asList(items));
-
     }
 
     private User createUser(String email, String username, String nickname, String businessNum,
@@ -215,11 +214,13 @@ public class DataInitializer implements ApplicationRunner {
                 .name(name)
                 .img("example-img.png")
                 .description(description)
-                .price(price)
+                .price(new BigDecimal(price))
                 .category(category)
                 .subCategory(subCategory)
                 .stock(stock)
                 .shop(shop)
                 .build();
     }
+
 }
+

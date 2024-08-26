@@ -68,7 +68,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/item/create",
                                 "/api/v1/item/update/{shopItemId}",
-                                "/api/v1/item/delete/{shopItemId}"
+                                "/api/v1/item/delete/{shopItemId}",
+                                "/api/v1/item/sale"
                         )
                         .hasRole("OWNER")
                         .requestMatchers(

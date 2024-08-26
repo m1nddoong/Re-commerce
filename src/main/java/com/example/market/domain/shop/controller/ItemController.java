@@ -1,6 +1,7 @@
 package com.example.market.domain.shop.controller;
 
 
+import com.example.market.domain.shop.dto.DiscountDto;
 import com.example.market.domain.shop.dto.SearchItemDto;
 import com.example.market.domain.shop.dto.CreateItemDto;
 import com.example.market.domain.shop.dto.ItemDto;
@@ -9,7 +10,6 @@ import com.example.market.domain.shop.dto.SubCategoryDto;
 import com.example.market.domain.shop.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "item", description = "쇼핑몰 상품에 관한 API")
@@ -122,8 +121,8 @@ public class ItemController {
     @Operation(
             summary = "상품 분류 통합",
             description = "<p>관리자는 상품 분류 목록을 보고, 유사한 분류를 같은 분류가 될 수 있도록 분류를 수정할 수 있다.</p>"
-            + "<p>'categoryId2' PK를 가진 카테고리가 'categoryId1' PK를 가진 카테고리로 통합된다 (ex. \"피부\", \"스킨\" -> \"스킨\" 통합)</p>"
-            + "<p>이떄, 각 카테고리에 있던 서브 카테고리들 간 이름이 같은 것들은 서로 통합되고. 그렇지 않다면 서브 카테고리가 추가된다.</p>"
+                    + "<p>'categoryId2' PK를 가진 카테고리가 'categoryId1' PK를 가진 카테고리로 통합된다 (ex. \"피부\", \"스킨\" -> \"스킨\" 통합)</p>"
+                    + "<p>이떄, 각 카테고리에 있던 서브 카테고리들 간 이름이 같은 것들은 서로 통합되고. 그렇지 않다면 서브 카테고리가 추가된다.</p>"
     )
     public ResponseEntity<Void> mergeCategories(
             @PathVariable("categoryId1") // 통합될 카테고리
@@ -152,5 +151,17 @@ public class ItemController {
     }
 
 
-    // 할인 적용
+    @PutMapping("/sale")
+    @Operation(
+            summary = "상품 할인 적용",
+            description = "<p>쇼핑몰 주인은 등록한 상품의 할인을 진행할 수 있다.</p>"
+                    + "<p>기한과 할인율을 바탕으로, 할인 가격이 자동으로 적용되도록 한다.</p>"
+    )
+    public ResponseEntity<ItemDto> itemSale(
+        @RequestBody
+        DiscountDto dto
+    ) {
+        return ResponseEntity.ok(itemService.itemSale(dto));
+    }
+
 }

@@ -24,7 +24,10 @@ public enum ErrorCode {
     // 쇼핑몰 상품 카테고리 관련 에러
     ITEM_CATEGORY_NOT_FOUND(404, "3009", "상품 뷴류가 존재하지 않습니다."),
     ITEM_SUBCATEGORY_NOT_FOUND(404, "3010", "상품 소분류가 존재하지 않습니다."),
-    ITEM_CATEGORY_NOT_EQUAL(400, "3011", "분류가 서로 일치하지 않습니다.");
+    ITEM_CATEGORY_NOT_EQUAL(400, "3011", "분류가 서로 일치하지 않습니다."),
+
+    // 할인 관련 에러
+    DISCOUNT_NOT_EXISTS(404, "3012", "존재하지 않은 할인율입니다.");
 
 
 

@@ -2,6 +2,8 @@ package com.example.market.domain.shop.dto;
 
 
 import com.example.market.domain.shop.entity.Item;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +20,13 @@ public class ItemDto {
     private String name;
     private String img;
     private String description;
-    private Integer price;
+    private BigDecimal price;
+    private BigDecimal discountedPrice;
+    private LocalDateTime discountExpirationDate;
     private String itemCategory;
     private String itemSubCategory;
     private Integer stock;
     private Long shopId;
-
 
 
     public static ItemDto fromEntity(Item entity) {
@@ -32,6 +35,8 @@ public class ItemDto {
                 .img(entity.getImg())
                 .description(entity.getDescription())
                 .price(entity.getPrice())
+                .discountedPrice(entity.getDiscountedPrice())
+                .discountExpirationDate(entity.getDiscountExpirationDate())
                 .itemCategory(entity.getCategory().getName())
                 .itemSubCategory(entity.getSubCategory().getName())
                 .stock(entity.getStock())

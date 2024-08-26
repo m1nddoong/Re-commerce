@@ -1,6 +1,8 @@
 package com.example.market.domain.shop.service;
 
+import com.example.market.domain.shop.constant.DiscountRate;
 import com.example.market.domain.shop.dto.CategoryDto;
+import com.example.market.domain.shop.dto.DiscountDto;
 import com.example.market.domain.shop.dto.SubCategoryDto;
 import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.user.entity.User;
@@ -15,6 +17,8 @@ import com.example.market.domain.shop.entity.Item;
 import com.example.market.domain.shop.entity.Category;
 import com.example.market.domain.shop.repository.CategoryRepository;
 import com.example.market.domain.shop.repository.SubCategoryRepository;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -35,6 +40,7 @@ public class ItemService {
 
     /**
      * 쇼핑몰 상품 등록
+     *
      * @param dto 상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류, 상품 소분류, 상품 재고
      * @return 상품
      */
@@ -56,7 +62,8 @@ public class ItemService {
 
     /**
      * 쇼핑몰 상품 업데이트
-     * @param dto 상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류, 상품 소분류, 상품 재고
+     *
+     * @param dto        상품 이름, 상품 이미지, 상품 설명, 상품 가격, 상품 분류, 상품 소분류, 상품 재고
      * @param shopItemId 쇼핑몰 상품 ID
      * @return 상품
      */
@@ -85,6 +92,7 @@ public class ItemService {
 
     /**
      * 쇼핑몰 상품 삭제
+     *
      * @param shopItemId 쇼핑몰 ID
      */
     public void deleteItem(Long shopItemId) {
@@ -101,7 +109,8 @@ public class ItemService {
 
     /**
      * 쇼핑몰 상품 검섹
-     * @param dto 상품 이름, 상품 분류, 소분류, 최대 가격, 최소가격
+     *
+     * @param dto      상품 이름, 상품 분류, 소분류, 최대 가격, 최소가격
      * @param pageable 페이지 번호, 변위
      * @return 상품
      */
@@ -140,6 +149,7 @@ public class ItemService {
 
     /**
      * 전체 카테고리 조회
+     *
      * @return 전체 카테고리 리스트
      */
     public List<CategoryDto> getCategoryList() {
@@ -151,6 +161,7 @@ public class ItemService {
 
     /**
      * 특정 카테고리의 서브 카테고리 조회
+     *
      * @param categoryId 카테고리 ID
      * @return 서브 카테고리
      */
@@ -174,6 +185,7 @@ public class ItemService {
 
     /**
      * 카테고리 통합
+     *
      * @param categoryId1 통합될 카테고리
      * @param categoryId2 통합할 카테고리
      */
@@ -220,6 +232,7 @@ public class ItemService {
 
     /**
      * 서브 카테고리 통합
+     *
      * @param subCategoryId1 통합될 서브 카테고리
      * @param subCategoryId2 통합할 서브 카테고리
      */
@@ -239,6 +252,45 @@ public class ItemService {
         itemRepository.saveAll(items);
         subCategoryRepository.delete(subCategory2);
     }
+
+    /**
+     * 상품 할인
+     *
+     * @param dto itemId, expiredDate, discountRate
+     */
+    public ItemDto itemSale(DiscountDto dto) {
+        User currentUser = authFacade.extractUser();
+        Item item = itemRepository.findById(dto.getItemId())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_NOT_EXISTS));
+        // 사용자 확인
+        if (!currentUser.getUsername().equals(item.getShop().getUser().getUsername())) {
+            throw new GlobalCustomException(ErrorCode.ITEM_NO_PERMISSION);
+        }
+        DiscountRate discountRate = DiscountRate.of(dto.getDiscountRete());
+        BigDecimal discountedPrice = discountRate.applyDiscount(item.getPrice());
+        item.setDiscountedPrice(discountedPrice);
+        item.setDiscountExpirationDate(dto.getExpirationDate());
+        return ItemDto.fromEntity(itemRepository.save(item));
+    }
+
+    /**
+     * 만료일이 지난 할인 적용 상품 가격 복원
+     */
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정마다 실행
+    public void restoreExpiredDiscounts() {
+        List<Item> items = itemRepository.findAll();
+
+        for (Item item : items) {
+            if (item.getDiscountExpirationDate() != null && item.getDiscountExpirationDate()
+                    .isBefore(LocalDateTime.now())) {
+                item.setDiscountedPrice(null); // 할인된 가격 제거
+                item.setDiscountExpirationDate(null); // 만료일 제거
+                itemRepository.save(item);
+            }
+        }
+    }
+
+
 }
 
 
