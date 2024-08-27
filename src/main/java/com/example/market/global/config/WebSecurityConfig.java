@@ -8,6 +8,7 @@ import com.example.market.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,8 +21,6 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserService userService;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -30,11 +29,15 @@ public class WebSecurityConfig {
     ) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .oauth2Login(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v1/api-docs/*",
-                                "/v1/api-docs"
+                                "/v1/api-docs",
+                                "/"
                         )
                         .permitAll()
                         .requestMatchers(
