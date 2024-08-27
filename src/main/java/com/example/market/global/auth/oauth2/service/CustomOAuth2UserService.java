@@ -1,5 +1,7 @@
 package com.example.market.global.auth.oauth2.service;
 
+import com.example.market.domain.user.dto.UserDto;
+import com.example.market.global.auth.oauth2.dto.CustomOAuth2User;
 import com.example.market.global.auth.oauth2.dto.GoogleResponse;
 import com.example.market.global.auth.oauth2.dto.NaverResponse;
 import com.example.market.global.auth.oauth2.dto.OAuth2Response;
@@ -35,6 +37,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
-        // 로그인을 완료하였을 때
+        // 로그인을 진행
+        // 1. 사용자를 특정 지을 username 값 만들기
+        // String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
+        // 2. DTO 에 담기
+        UserDto userDto = new UserDto();
+        userDto.setEmail(oAuth2Response.getEmail());
+        userDto.setUsername(oAuth2Response.getName());
+        userDto.setRoles("ROLE_INACTIVE");
+
+
+        return new CustomOAuth2User(userDto);
     }
 }

@@ -15,6 +15,7 @@ import lombok.Setter;
 public class UserDto {
     private Long id;
     private String uuid;
+    @Setter
     private String email;
     private String password;
     @Setter
@@ -28,7 +29,8 @@ public class UserDto {
     private String profileImg;
     private String businessNum;
     private String businessStatus;
-    private String authorities;
+    @Setter
+    private String roles;
 
     // static factory method
     public static UserDto fromEntity(User entity) {
@@ -44,7 +46,7 @@ public class UserDto {
                 .profileImg(entity.getProfileImg())
                 .businessNum(entity.getBusinessNum())
                 .businessStatus(String.valueOf(entity.getBusinessStatus()))
-                .authorities(entity.getAuthorities())
+                .roles(entity.getRoles())
                 .build();
     }
 

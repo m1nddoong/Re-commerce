@@ -68,7 +68,7 @@ public class User extends BaseEntity {
     @Setter
     @Builder.Default
     // @Enumerated(EnumType.STRING)
-    private String authorities = Role.INACTIVE_USER.getRoles();
+    private String roles = Role.INACTIVE_USER.getRoles();
 
     @Setter
     @OneToOne(mappedBy = "user")
