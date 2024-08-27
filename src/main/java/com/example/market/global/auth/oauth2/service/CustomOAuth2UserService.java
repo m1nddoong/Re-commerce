@@ -1,10 +1,16 @@
 package com.example.market.global.auth.oauth2.service;
 
 import com.example.market.domain.user.dto.UserDto;
+import com.example.market.domain.user.entity.User;
+import com.example.market.domain.user.repository.UserRepository;
 import com.example.market.global.auth.oauth2.dto.CustomOAuth2User;
 import com.example.market.global.auth.oauth2.dto.GoogleResponse;
 import com.example.market.global.auth.oauth2.dto.NaverResponse;
 import com.example.market.global.auth.oauth2.dto.OAuth2Response;
+import com.example.market.global.error.exception.ErrorCode;
+import com.example.market.global.error.exception.GlobalCustomException;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+    private final UserRepository userRepository;
 
     // userRequest : 리소스 서버에서 받은 유저 정보
     @Override
@@ -29,24 +37,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (registrationId.equals("naver")) {
             // 받은 oauth2User 변수에서 getAttribute 로 꺼내서 응답으로 넣어주기
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-        }
-        else if (registrationId.equals("google")) {
+        } else if (registrationId.equals("google")) {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
-        }
-        else {
+        } else {
             return null;
         }
 
         // 로그인을 진행
-        // 1. 사용자를 특정 지을 username 값 만들기
-        // String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        // 2. DTO 에 담기
-        UserDto userDto = new UserDto();
-        userDto.setEmail(oAuth2Response.getEmail());
-        userDto.setUsername(oAuth2Response.getName());
-        userDto.setRoles("ROLE_INACTIVE");
-
-
-        return new CustomOAuth2User(userDto);
+        Optional<User> existUser = userRepository.findByEmail(oAuth2Response.getEmail());
+        if (existUser.isEmpty()) {
+           return new CustomOAuth2User(UserDto.fromEntity(userRepository.save(User.builder()
+                    .email(oAuth2Response.getEmail())
+                    .username(oAuth2Response.getName())
+                    .roles("ROLE_INACTIVE")
+                    .build())));
+        }
+        else {
+            throw new GlobalCustomException(ErrorCode.USER_ALREADY_EXIST);
+        }
     }
 }

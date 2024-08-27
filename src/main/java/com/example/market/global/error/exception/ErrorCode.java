@@ -27,7 +27,10 @@ public enum ErrorCode {
     ITEM_CATEGORY_NOT_EQUAL(400, "3011", "분류가 서로 일치하지 않습니다."),
 
     // 할인 관련 에러
-    DISCOUNT_NOT_EXISTS(404, "3012", "존재하지 않은 할인율입니다.");
+    DISCOUNT_NOT_EXISTS(404, "3012", "존재하지 않은 할인율입니다."),
+
+    // 사용자 관련 에러
+    USER_ALREADY_EXIST(400, "3013", "이미 존재하는 회원입니다.");
 
 
 
