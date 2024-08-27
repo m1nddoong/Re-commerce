@@ -5,6 +5,7 @@ import com.example.market.global.auth.jwt.JwtTokenUtils;
 import com.example.market.domain.user.repository.RefreshTokenRepository;
 import com.example.market.domain.user.repository.UserRepository;
 import com.example.market.domain.user.service.UserService;
+import com.example.market.global.auth.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserService userService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -31,7 +33,9 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService))))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",
