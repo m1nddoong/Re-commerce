@@ -4,11 +4,15 @@ import com.example.market.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Jwts.SIG;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.sql.Date;
 import java.time.Instant;
+import java.util.Date;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,62 +22,100 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class JwtTokenUtils {
+    private SecretKey secretKey;
     // JWT를 만드는 용도의 암호키
-    private final Key signingKey;
+    // private final Key signingKey;
+
     // JWT를 해석하는 용도의 객체
-    private final JwtParser jwtParser;
+    // private final JwtParser jwtParser;
 
     public JwtTokenUtils(
             @Value("${jwt.secret}")
-            String jwtSecret
+            String secret
     ) {
-        this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
-        this.jwtParser = Jwts
-                .parserBuilder()
-                .setSigningKey(this.signingKey)
-                .build();
-
+        secretKey = new SecretKeySpec(
+                secret.getBytes(StandardCharsets.UTF_8),
+                SIG.HS256.key().build().getAlgorithm()
+        );
     }
 
-    // User를 받아서 담고싶은 정보를 Claims로 만들어 JWT으로 변환 후 발급
-    public String generateToken(User user, TokenType tokenType) {
-        Instant now = Instant.now();
-        Claims jwtClaims = Jwts.claims()
-                .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())));
+//    public JwtTokenUtils(
+//            @Value("${jwt.secret}")
+//            String jwtSecret
+//    ) {
+//        this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+//        this.jwtParser = Jwts
+//                .parserBuilder()
+//                .setSigningKey(this.signingKey)
+//                .build();
+//
+//    }
 
-        // accessToken의 경우 사용자 정보 포함
-        if (tokenType == TokenType.ACCESS) {
-            jwtClaims.setSubject(String.valueOf(user.getUuid()));
-        }
-        // refreshToken의 경우 사용자 정보 포함X
-        else {
-            jwtClaims.setSubject("refreshToken");
-        }
+    public String getUsername(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("username", String.class);
+    }
+
+    public String getRole(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+                .get("role", String.class);
+    }
+
+    public Boolean isExpired(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration()
+                .before(new Date());
+    }
+
+    public String createJwt(String email, String role, TokenType tokenType) {
+        Instant now = Instant.now();
         return Jwts.builder()
-                .setClaims(jwtClaims)
-                .signWith(this.signingKey)
+                .claim("email", email)
+                .claim("role", role)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())))
+                .signWith(secretKey)
                 .compact();
     }
 
-
-    // 정상적인 JWT인지를 판단하는 메서드
-    public boolean validate(String token) {
-        try {
-            // 정상적이지 않은 JWT라면 예외(Exception)가 발생한다.
-            jwtParser.parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            log.warn("invalid jwt");
-        }
-        return false;
-    }
-
-    // 실제 데이터(Payload)를 반환하는 메서드
-    public Claims parseClaims(String token) {
-        return jwtParser
-                .parseClaimsJws(token)
-                .getBody();
-    }
+//    // User를 받아서 담고싶은 정보를 Claims로 만들어 JWT으로 변환 후 발급
+//    public String generateToken(User user, TokenType tokenType) {
+//        Instant now = Instant.now();
+//        Claims jwtClaims = Jwts.claims()
+//                .setIssuedAt(Date.from(now))
+//                .setExpiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())));
+//
+//        // accessToken의 경우 사용자 정보 포함
+//        if (tokenType == TokenType.ACCESS) {
+//            jwtClaims.setSubject(String.valueOf(user.getUuid()));
+//        }
+//        // refreshToken의 경우 사용자 정보 포함X
+//        else {
+//            jwtClaims.setSubject("refreshToken");
+//        }
+//        return Jwts.builder()
+//                .setClaims(jwtClaims)
+//                .signWith(this.signingKey)
+//                .compact();
+//    }
+//    // 정상적인 JWT인지를 판단하는 메서드
+//    public boolean validate(String token) {
+//        try {
+//            // 정상적이지 않은 JWT라면 예외(Exception)가 발생한다.
+//            jwtParser.parseClaimsJws(token);
+//            return true;
+//        } catch (Exception e) {
+//            log.warn("invalid jwt");
+//        }
+//        return false;
+//    }
+//
+//    // 실제 데이터(Payload)를 반환하는 메서드
+//    public Claims parseClaims(String token) {
+//        return jwtParser
+//                .parseClaimsJws(token)
+//                .getBody();
+//    }
 
 }
