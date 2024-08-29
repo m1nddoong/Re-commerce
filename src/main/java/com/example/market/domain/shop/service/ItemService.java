@@ -8,7 +8,7 @@ import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.user.entity.User;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.error.exception.ErrorCode;
-import com.example.market.global.auth.AuthenticationFacade;
+import com.example.market.domain.user.service.AuthenticationFacade;
 import com.example.market.domain.shop.dto.SearchItemDto;
 import com.example.market.domain.shop.repository.ItemRepository;
 import com.example.market.domain.shop.dto.CreateItemDto;

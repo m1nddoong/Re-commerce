@@ -22,14 +22,11 @@ public class RefreshTokenController {
     @PostMapping("/reissue-token")
     @Operation(
             summary = "accessToken 재발급",
-            description = "<p>uuid 로 부터 redis 에 저장된 accessToken 을 찾고,</p>"
+            description = "<p>현재 인증된 사용자의 uuid 부터 redis 에 저장된 accessToken 을 찾고,</p>"
                     + "<p>accessToken, refreshToken 재발급</p>"
     )
-    public ResponseEntity<JwtTokenDto> reIssueAccessToken(
-            @RequestBody
-            AccessTokenDto dto
-    ) {
-        return ResponseEntity.ok(refreshTokenService.reIssueAccessToken(dto));
+    public ResponseEntity<JwtTokenDto> reIssueJwtToken() {
+        return ResponseEntity.ok(refreshTokenService.reIssueJwtToken());
     }
 
 }

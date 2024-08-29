@@ -1,7 +1,7 @@
 package com.example.market.domain.trade.service;
 
 import com.example.market.domain.user.entity.User;
-import com.example.market.global.auth.AuthenticationFacade;
+import com.example.market.domain.user.service.AuthenticationFacade;
 import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.trade.dto.TradeItemDto;
 import com.example.market.domain.trade.entity.TradeItem;

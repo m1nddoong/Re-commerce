@@ -1,23 +1,19 @@
 package com.example.market.global.config;
 
-import com.example.market.global.auth.jwt.JwtTokenFilter;
-import com.example.market.global.auth.jwt.JwtTokenUtils;
-import com.example.market.domain.user.repository.RefreshTokenRepository;
-import com.example.market.domain.user.repository.UserRepository;
+import com.example.market.domain.user.jwt.JwtTokenFilter;
+import com.example.market.domain.user.jwt.JwtTokenUtils;
 import com.example.market.domain.user.service.UserService;
-import com.example.market.global.auth.oauth2.CustomSuccessHandler;
-import com.example.market.global.auth.oauth2.service.CustomOAuth2UserService;
+import com.example.market.domain.user.service.CustomSuccessHandler;
+import com.example.market.domain.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;

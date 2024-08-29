@@ -1,4 +1,4 @@
-package com.example.market.global.auth.oauth2.dto;
+package com.example.market.domain.user.dto.oauth2;
 
 public interface OAuth2Response {
     //제공자 (Ex. naver, google, ...)

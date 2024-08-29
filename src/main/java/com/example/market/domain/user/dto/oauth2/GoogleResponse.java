@@ -1,4 +1,4 @@
-package com.example.market.global.auth.oauth2.dto;
+package com.example.market.domain.user.dto.oauth2;
 
 import java.util.Map;
 

@@ -4,18 +4,19 @@ import com.example.market.domain.user.constant.BusinessStatus;
 import com.example.market.domain.user.constant.Role;
 import com.example.market.domain.user.entity.RefreshToken;
 import com.example.market.domain.user.entity.User;
-import com.example.market.global.auth.jwt.TokenType;
+import com.example.market.domain.user.jwt.TokenType;
 import com.example.market.domain.user.repository.RefreshTokenRepository;
-import com.example.market.global.auth.AuthenticationFacade;
 import com.example.market.domain.user.dto.BusinessDto;
 import com.example.market.domain.user.dto.CreateUserDto;
 import com.example.market.domain.user.dto.UpdateUserDto;
 import com.example.market.domain.user.dto.UserDto;
 import com.example.market.domain.user.dto.LoginRequestDto;
 import com.example.market.domain.user.dto.JwtTokenDto;
-import com.example.market.global.auth.jwt.JwtTokenUtils;
+import com.example.market.domain.user.jwt.JwtTokenUtils;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
+import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
+import com.example.market.global.error.exception.ErrorCode;
+import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.shop.entity.Shop;
 import com.example.market.domain.shop.repository.ShopRepository;
@@ -29,7 +30,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,10 +54,8 @@ public class UserService implements UserDetailsService {
     // 원래는 username 을 이용해 사용자 정보를 조회하지만 -> uuid 를 사용 -> email
     public PrincipalDetails loadUserByUsername(String email) {
         try {
-            // UUID userUuid = UUID.fromString(uuid);
-            // User user = userRepository.findUserByUuid(userUuid)
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                    .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
             // 조회된 사용자 정보를 바탕으로 CustomUserDetails 로 만들기
             return PrincipalDetails.builder()
                     .user(user)
@@ -133,7 +131,6 @@ public class UserService implements UserDetailsService {
         return JwtTokenDto.builder()
                 .uuid(String.valueOf(user.getUuid()))
                 .accessToken(newAccessToken)
-                .refreshToken(newRefreshToken)
                 .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
                 .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
                 .build();

@@ -30,7 +30,8 @@ public enum ErrorCode {
     DISCOUNT_NOT_EXISTS(404, "3012", "존재하지 않은 할인율입니다."),
 
     // 사용자 관련 에러
-    USER_ALREADY_EXIST(400, "3013", "이미 존재하는 회원입니다.");
+    USER_ALREADY_EXIST(400, "3013", "이미 존재하는 회원입니다."),
+    USER_NOT_FOUND(404, "3014", "존재하지 않는 회원입니다.");
 
 
 

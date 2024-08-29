@@ -3,7 +3,7 @@ package com.example.market.domain.shop.service;
 import com.example.market.domain.user.entity.User;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
-import com.example.market.global.auth.AuthenticationFacade;
+import com.example.market.domain.user.service.AuthenticationFacade;
 import com.example.market.domain.shop.dto.ShopDto;
 import com.example.market.domain.shop.dto.UpdateShopDto;
 import com.example.market.domain.shop.constant.ShopStatus;

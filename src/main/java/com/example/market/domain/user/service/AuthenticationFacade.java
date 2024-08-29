@@ -1,7 +1,7 @@
-package com.example.market.global.auth;
+package com.example.market.domain.user.service;
 
 import com.example.market.domain.user.entity.User;
-import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
+import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
