@@ -180,7 +180,7 @@ public class DataInitializer implements ApplicationRunner {
                 .profileImg(null)
                 .businessNum(businessNum)
                 .businessStatus(BusinessStatus.APPROVED)
-                .authorities(authorities)
+                .roles(authorities)
                 .build();
     }
 

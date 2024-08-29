@@ -51,9 +51,13 @@ public class JwtTokenUtils {
 //
 //    }
 
-    public String getUsername(String token) {
+//    public String getUsername(String token) {
+//        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
+//                .get("username", String.class);
+//    }
+        public String getEmail(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
-                .get("username", String.class);
+                .get("email", String.class);
     }
 
     public String getRole(String token) {
@@ -68,11 +72,10 @@ public class JwtTokenUtils {
                 .before(new Date());
     }
 
-    public String createJwt(String email, String role, TokenType tokenType) {
+    public String createJwt(String email, TokenType tokenType) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .claim("email", email)
-                .claim("role", role)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())))
                 .signWith(secretKey)

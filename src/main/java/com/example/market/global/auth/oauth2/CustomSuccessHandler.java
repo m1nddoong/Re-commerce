@@ -2,7 +2,7 @@ package com.example.market.global.auth.oauth2;
 
 import com.example.market.global.auth.jwt.JwtTokenUtils;
 import com.example.market.global.auth.jwt.TokenType;
-import com.example.market.global.auth.oauth2.dto.CustomOAuth2User;
+import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,18 +28,18 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             Authentication authentication
     ) throws IOException, ServletException {
         // principal 뽑기
-        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
+        PrincipalDetails customUserDetails = (PrincipalDetails) authentication.getPrincipal();
         String email = customUserDetails.getEmail();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
 
-        String token = jwtTokenUtils.createJwt(email, role, TokenType.ACCESS);
+        String token = jwtTokenUtils.createJwt(email, TokenType.ACCESS);
 
-        response.addCookie(createCookie("Authentication", token));
-        // 프론트 측 특정 URL 로 리다이렉팅 되도록
+        response.addCookie(createCookie("Authorization", token));
+
+        // 로그인 성공 후 프론트 측 특정 URL 로 리다이렉팅 되도록
         response.sendRedirect("http://localhost:3000/");
     }
 

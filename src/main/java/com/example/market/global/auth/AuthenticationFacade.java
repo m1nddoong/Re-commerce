@@ -1,7 +1,7 @@
 package com.example.market.global.auth;
 
-import com.example.market.domain.user.entity.CustomUserDetails;
 import com.example.market.domain.user.entity.User;
+import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ public class AuthenticationFacade {
     }
 
     public User extractUser() {
-        CustomUserDetails userDetails
-                = (CustomUserDetails) getAuth().getPrincipal();
+        PrincipalDetails userDetails
+                = (PrincipalDetails) getAuth().getPrincipal();
         return userDetails.getUser();
     }
 }

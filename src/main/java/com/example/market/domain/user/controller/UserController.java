@@ -9,6 +9,8 @@ import com.example.market.domain.user.dto.JwtTokenDto;
 import com.example.market.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -56,9 +58,10 @@ public class UserController {
     )
     public ResponseEntity<JwtTokenDto> signIn(
             @RequestBody
-            LoginRequestDto dto
+            LoginRequestDto dto,
+            HttpServletResponse response
     ) {
-        return ResponseEntity.ok(userService.signIn(dto));
+        return ResponseEntity.ok(userService.signIn(dto, response));
     }
 
 

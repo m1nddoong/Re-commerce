@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(unique = true, updatable = false) // nullable = false 잠시 삭제
     private UUID uuid;
 
     @Setter

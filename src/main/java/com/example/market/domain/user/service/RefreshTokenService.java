@@ -35,8 +35,10 @@ public class RefreshTokenService {
         User user = userRepository.findUserByUuid(UUID.fromString(dto.getUuid()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         // 사용자 정보를 바탕으로 새로운 AccessToken 생성
-        String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
-        String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
+        // String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
+        // String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
+         String newAccessToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.ACCESS);
+         String newRefreshToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.REFRESH);
         // 기존 리프레시 토큰 삭제 후 새로운 토큰 redis 에 저장
         refreshTokenRepository.delete(storedRefreshToken);
         refreshTokenRepository.save(RefreshToken.builder()

@@ -2,7 +2,6 @@ package com.example.market.domain.user.service;
 
 import com.example.market.domain.user.constant.BusinessStatus;
 import com.example.market.domain.user.constant.Role;
-import com.example.market.domain.user.entity.CustomUserDetails;
 import com.example.market.domain.user.entity.RefreshToken;
 import com.example.market.domain.user.entity.User;
 import com.example.market.global.auth.jwt.TokenType;
@@ -16,9 +15,12 @@ import com.example.market.domain.user.dto.LoginRequestDto;
 import com.example.market.domain.user.dto.JwtTokenDto;
 import com.example.market.global.auth.jwt.JwtTokenUtils;
 import com.example.market.domain.user.repository.UserRepository;
+import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
 import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.shop.entity.Shop;
 import com.example.market.domain.shop.repository.ShopRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,14 +51,15 @@ public class UserService implements UserDetailsService {
 
 
     @Override
-    // 원래는 username 을 이용해 사용자 정보를 조회하지만 -> uuid 를 사용
-    public UserDetails loadUserByUsername(String uuid) {
+    // 원래는 username 을 이용해 사용자 정보를 조회하지만 -> uuid 를 사용 -> email
+    public PrincipalDetails loadUserByUsername(String email) {
         try {
-            UUID userUuid = UUID.fromString(uuid);
-            User user = userRepository.findUserByUuid(userUuid)
+            // UUID userUuid = UUID.fromString(uuid);
+            // User user = userRepository.findUserByUuid(userUuid)
+            User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             // 조회된 사용자 정보를 바탕으로 CustomUserDetails 로 만들기
-            return CustomUserDetails.builder()
+            return PrincipalDetails.builder()
                     .user(user)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -88,7 +91,7 @@ public class UserService implements UserDetailsService {
                 .uuid(UUID.fromString(uuid))
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .authorities(Role.INACTIVE_USER.getRoles())
+                .roles(Role.INACTIVE_USER.getRoles())
                 .build()));
     }
 
@@ -99,7 +102,8 @@ public class UserService implements UserDetailsService {
      * @return accessToken
      */
     public JwtTokenDto signIn(
-            LoginRequestDto dto
+            LoginRequestDto dto,
+            HttpServletResponse response
     ) {
         // 사용자 존재 확인
         User user = userRepository.findByEmail(dto.getEmail())
@@ -108,23 +112,22 @@ public class UserService implements UserDetailsService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        // accessToken, refreshToken 생성 후 redis에 uuid, accessToken, refreshToken 저장
-        String newAccessToken = jwtTokenUtils.generateToken(user, TokenType.ACCESS);
-        String newRefreshToken = jwtTokenUtils.generateToken(user, TokenType.REFRESH);
+        // accessToken, refreshToken 생성
+        String newAccessToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.ACCESS);
+        String newRefreshToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.REFRESH);
 
+        // redis에 uuid, accessToken, refreshToken 저장
         refreshTokenRepository.save(RefreshToken.builder()
                 .uuid(String.valueOf(user.getUuid()))
                 .refreshToken(newRefreshToken)
                 .build());
 
-        RefreshToken test = refreshTokenRepository.findById(String.valueOf(user.getUuid()))
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "refreshToken 조회 실패"));
-
-        log.info("저장된 RefreshToken 정보: {}", test.toString());
-        log.info("uuid: {}", test.getUuid());
-        log.info("refreshToken: {}", test.getRefreshToken());
-
-
+        // 쿠키 생성
+        Cookie accessTokenCookie = new Cookie("Authorization", newAccessToken);
+        accessTokenCookie.setMaxAge((int) TokenType.ACCESS.getTokenValidMillis());
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setHttpOnly(true); // 자바스크립트에서 쿠키를 접근하지 못하게 설정
+        response.addCookie(accessTokenCookie);
 
         // JWT 토큰 발급 -> 이후 JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
@@ -160,7 +163,7 @@ public class UserService implements UserDetailsService {
         currentUser.setNickname(dto.getNickname());
         currentUser.setAge(dto.getAge());
         currentUser.setPhone(dto.getPhone());
-        currentUser.setAuthorities(Role.ACTIVE_USER.getRoles());
+        currentUser.setRoles(Role.ACTIVE_USER.getRoles());
 
         return UserDto.fromEntity(userRepository.save(currentUser));
     }
@@ -225,7 +228,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setBusinessStatus(BusinessStatus.APPROVED);
-        user.setAuthorities(Role.BUSINESS_USER.getRoles());
+        user.setRoles(Role.BUSINESS_USER.getRoles());
 
         Shop newShop = new Shop();
         newShop.setUser(user);

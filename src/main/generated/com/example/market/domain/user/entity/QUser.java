@@ -26,8 +26,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> age = createNumber("age", Integer.class);
 
-    public final StringPath authorities = createString("authorities");
-
     public final StringPath businessNum = createString("businessNum");
 
     public final EnumPath<com.example.market.domain.user.constant.BusinessStatus> businessStatus = createEnum("businessStatus", com.example.market.domain.user.constant.BusinessStatus.class);
@@ -49,6 +47,8 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath phone = createString("phone");
 
     public final StringPath profileImg = createString("profileImg");
+
+    public final StringPath roles = createString("roles");
 
     public final com.example.market.domain.shop.entity.QShop shop;
 

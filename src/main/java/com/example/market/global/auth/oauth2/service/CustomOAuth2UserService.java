@@ -1,15 +1,15 @@
 package com.example.market.global.auth.oauth2.service;
 
-import com.example.market.domain.user.dto.UserDto;
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.global.auth.oauth2.dto.CustomOAuth2User;
+import com.example.market.global.auth.oauth2.dto.PrincipalDetails;
 import com.example.market.global.auth.oauth2.dto.GoogleResponse;
 import com.example.market.global.auth.oauth2.dto.NaverResponse;
 import com.example.market.global.auth.oauth2.dto.OAuth2Response;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -46,13 +46,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 로그인을 진행
         Optional<User> existUser = userRepository.findByEmail(oAuth2Response.getEmail());
         if (existUser.isEmpty()) {
-           return new CustomOAuth2User(UserDto.fromEntity(userRepository.save(User.builder()
+            // log.info("{}", oAuth2Response.getEmail());
+            // log.info("{}", oAuth2Response.getName());
+            return new PrincipalDetails(userRepository.save(User.builder()
+                    .uuid(UUID.randomUUID())
                     .email(oAuth2Response.getEmail())
                     .username(oAuth2Response.getName())
                     .roles("ROLE_INACTIVE")
-                    .build())));
-        }
-        else {
+                    .build()));
+        } else {
             throw new GlobalCustomException(ErrorCode.USER_ALREADY_EXIST);
         }
     }

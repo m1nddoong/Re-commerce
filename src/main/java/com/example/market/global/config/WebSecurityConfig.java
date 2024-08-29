@@ -7,6 +7,8 @@ import com.example.market.domain.user.repository.UserRepository;
 import com.example.market.domain.user.service.UserService;
 import com.example.market.global.auth.oauth2.CustomSuccessHandler;
 import com.example.market.global.auth.oauth2.service.CustomOAuth2UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 // Bean을 비롯해서 여러 설정을 하기 위한 Bean 객체
 @Configuration
@@ -32,6 +37,25 @@ public class WebSecurityConfig {
             HttpSecurity http
     ) throws Exception {
         http
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                        CorsConfiguration configuration = new CorsConfiguration();
+
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedMethods(Collections.singletonList("*"));
+                        configuration.setAllowCredentials(true);
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+                        configuration.setMaxAge(3600L);
+
+                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+                        return configuration;
+                    }
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -44,7 +68,11 @@ public class WebSecurityConfig {
                                 "/swagger-ui/**",
                                 "/v1/api-docs/*",
                                 "/v1/api-docs",
-                                "/"
+                                "/",
+                                "/login/success",
+                                "/jwt/verify",
+                                "/api/v1/users/sign-up",
+                                "/api/v1/users/sign-in"
                         )
                         .permitAll()
                         .requestMatchers(
@@ -54,11 +82,6 @@ public class WebSecurityConfig {
                                 "/api/v1/token/reissue-token"
                         )
                         .authenticated()
-                        .requestMatchers(
-                                "/api/v1/users/sign-up",
-                                "/api/v1/users/sign-in"
-                        )
-                        .anonymous()
                         .requestMatchers(
                                 "/api/v1/users/business-application",
                                 "/api/v1/trade-item/**",
@@ -108,7 +131,8 @@ public class WebSecurityConfig {
                                 jwtTokenUtils,
                                 userService
                         ),
-                        AuthorizationFilter.class
+                        UsernamePasswordAuthenticationFilter.class
+                        // AuthorizationFilter.class
                 )
         ;
         return http.build();
