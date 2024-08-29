@@ -2,7 +2,7 @@ package com.example.market.domain.user.service;
 
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
+import com.example.market.domain.user.dto.PrincipalDetails;
 import com.example.market.domain.user.dto.oauth2.GoogleResponse;
 import com.example.market.domain.user.dto.oauth2.NaverResponse;
 import com.example.market.domain.user.dto.oauth2.OAuth2Response;

@@ -1,7 +1,7 @@
 package com.example.market.domain.user.jwt;
 
-import com.example.market.domain.user.service.UserService;
-import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
+import com.example.market.domain.user.dto.PrincipalDetails;
+import com.example.market.domain.user.service.CustomUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
-    private final UserService userService;
+    private final CustomUserService customUserService;
 
     @Override
     protected void doFilterInternal(
@@ -46,25 +46,31 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private String getTokenFromCookie(HttpServletRequest request) {
+        String authorization = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Authorization")) {
-                    String authorization = cookie.getValue();
+                    authorization = cookie.getValue();
                     log.info("authorization : {} ", authorization);
-                    return authorization;
                 }
             }
         } else {
             log.info("No cookies found");
         }
-        return null;
+        return authorization;
+
     }
 
     private void setAuthentication(String accessToken) {
-        Authentication authentication = jwtTokenUtils.getAuthentication(accessToken);
+        String email = jwtTokenUtils.getEmail(accessToken);
+        PrincipalDetails principalDetails = customUserService.loadUserByUsername(email);
+        Authentication authentication = jwtTokenUtils.getAuthentication(principalDetails);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         log.info("현재 사용자 : {}", SecurityContextHolder.getContext().getAuthentication().getName());
+        log.info("이메일 : {}", email);
         log.info("권한 : {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
     }
 }

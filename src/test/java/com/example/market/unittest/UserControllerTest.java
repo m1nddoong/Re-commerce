@@ -5,7 +5,7 @@ package com.example.market.unittest;
 import com.example.market.domain.user.controller.UserController;
 import com.example.market.domain.user.dto.CreateUserDto;
 import com.example.market.domain.user.dto.UserDto;
-import com.example.market.domain.user.service.UserService;
+import com.example.market.domain.user.service.CustomUserService;
 import com.example.market.util.JsonUtil;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * [단위 테스트]
  * : 단위 테스트는 애플리케이션의 가장 작은 단위인 메서드나 클래스를 독립적으로 테스트 (개별 메서드 테스트용)
  * - Mock 객체 사용
- *   - UserService 는 Mock 객체로 되어 있으며,
+ *   - CustomUserService 는 Mock 객체로 되어 있으며,
  *   - UserController 의 동작만 테스트한다.
  *   - 실제 데이터 베이스나, 전체 Spring Context 를 로드하지 않는다.
  */
@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
     @Mock
-    private UserService userService;
+    private CustomUserService customUserService;
 
     @InjectMocks
     private UserController userController;
@@ -68,7 +68,7 @@ public class UserControllerTest {
                 .id(1L)
                 .email(email)
                 .build();
-        when(userService.signUp(any()))
+        when(customUserService.signUp(any()))
                 .thenReturn(responseDto);
 
         // when

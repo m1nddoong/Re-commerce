@@ -1,4 +1,4 @@
-package com.example.market.domain.user.dto.oauth2;
+package com.example.market.domain.user.dto;
 
 import com.example.market.domain.user.entity.User;
 import java.util.Arrays;

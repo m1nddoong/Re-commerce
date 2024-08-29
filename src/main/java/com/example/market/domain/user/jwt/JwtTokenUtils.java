@@ -1,8 +1,6 @@
 package com.example.market.domain.user.jwt;
 
-import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
-import com.example.market.domain.user.service.UserService;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.example.market.domain.user.dto.PrincipalDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
 import java.nio.charset.StandardCharsets;
@@ -14,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Component;
 
 
@@ -23,14 +19,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class JwtTokenUtils {
-    private SecretKey secretKey;
-    private UserService userService;
+    private final SecretKey secretKey;
 
     public JwtTokenUtils(
             @Value("${jwt.secret}")
             String secret
     ) {
-        secretKey = new SecretKeySpec(
+        this.secretKey = new SecretKeySpec(
                 secret.getBytes(StandardCharsets.UTF_8),
                 SIG.HS256.key().build().getAlgorithm()
         );
@@ -57,10 +52,7 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public Authentication getAuthentication(String accessToken) {
-        String email = getEmail(accessToken);
-        PrincipalDetails principalDetails = userService.loadUserByUsername(email);
-
+    public Authentication getAuthentication(PrincipalDetails principalDetails) {
         // Authentication 객체를 생성 후 리턴
         return new UsernamePasswordAuthenticationToken(
                 principalDetails, null, principalDetails.getAuthorities()

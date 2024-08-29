@@ -4,7 +4,7 @@ import com.example.market.domain.user.entity.RefreshToken;
 import com.example.market.domain.user.repository.RefreshTokenRepository;
 import com.example.market.domain.user.jwt.JwtTokenUtils;
 import com.example.market.domain.user.jwt.TokenType;
-import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
+import com.example.market.domain.user.dto.PrincipalDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

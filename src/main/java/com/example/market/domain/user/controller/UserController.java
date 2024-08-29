@@ -6,10 +6,9 @@ import com.example.market.domain.user.dto.UpdateUserDto;
 import com.example.market.domain.user.dto.UserDto;
 import com.example.market.domain.user.dto.LoginRequestDto;
 import com.example.market.domain.user.dto.JwtTokenDto;
-import com.example.market.domain.user.service.UserService;
+import com.example.market.domain.user.service.CustomUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final CustomUserService customUserService;
 
     @PostMapping("/sign-up")
     @Operation(
@@ -46,7 +45,7 @@ public class UserController {
             @RequestBody
             CreateUserDto dto
     ) {
-        return ResponseEntity.ok(userService.signUp(dto));
+        return ResponseEntity.ok(customUserService.signUp(dto));
     }
 
 
@@ -61,7 +60,7 @@ public class UserController {
             LoginRequestDto dto,
             HttpServletResponse response
     ) {
-        return ResponseEntity.ok(userService.signIn(dto, response));
+        return ResponseEntity.ok(customUserService.signIn(dto, response));
     }
 
 
@@ -74,7 +73,7 @@ public class UserController {
             @RequestHeader("Authentication")
             String accessToken
     ) {
-        userService.signOut(accessToken);
+        customUserService.signOut(accessToken);
         return ResponseEntity.ok("{}");
     }
 
@@ -88,7 +87,7 @@ public class UserController {
             @RequestBody
             UpdateUserDto dto
     ) {
-        return ResponseEntity.ok(userService.updateProfile(dto));
+        return ResponseEntity.ok(customUserService.updateProfile(dto));
     }
 
     @PutMapping(
@@ -104,7 +103,7 @@ public class UserController {
             @RequestParam("file")
             MultipartFile profileImg
     ) {
-        return ResponseEntity.ok(userService.uploadProfileImage(profileImg));
+        return ResponseEntity.ok(customUserService.uploadProfileImage(profileImg));
     }
 
     @GetMapping("/my-profile")
@@ -113,7 +112,7 @@ public class UserController {
             description = "<p>현재 인증된 사용자는 자신의 프로필을 확인할 수 있습니다.</p>"
     )
     public ResponseEntity<UserDto> myProfile() {
-        return ResponseEntity.ok(userService.myProfile());
+        return ResponseEntity.ok(customUserService.myProfile());
     }
 
 
@@ -126,7 +125,7 @@ public class UserController {
             @RequestBody
             BusinessDto dto
     ) {
-        return ResponseEntity.ok(userService.businessApplication(dto));
+        return ResponseEntity.ok(customUserService.businessApplication(dto));
     }
 
     @GetMapping("/business-application/list")
@@ -135,7 +134,7 @@ public class UserController {
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청 목록을 확인할 수 있다.</p>"
     )
     public ResponseEntity<List<UserDto>> businessApplicationList() {
-        return ResponseEntity.ok(userService.businessApplicationList());
+        return ResponseEntity.ok(customUserService.businessApplicationList());
     }
 
 
@@ -150,7 +149,7 @@ public class UserController {
             @PathVariable(value = "uuid")
             UUID uuid
     ) {
-        return ResponseEntity.ok(userService.businessApplicationApproval(uuid));
+        return ResponseEntity.ok(customUserService.businessApplicationApproval(uuid));
     }
 
     @PutMapping("/business-application/{uuid}/rejection")
@@ -163,7 +162,7 @@ public class UserController {
             @PathVariable(value = "uuid")
             UUID uuid
     ) {
-        userService.businessApplicationRejection(uuid);
+        customUserService.businessApplicationRejection(uuid);
         return ResponseEntity.ok().build();
     }
 }

@@ -14,7 +14,7 @@ import com.example.market.domain.user.dto.LoginRequestDto;
 import com.example.market.domain.user.dto.JwtTokenDto;
 import com.example.market.domain.user.jwt.JwtTokenUtils;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.domain.user.dto.oauth2.PrincipalDetails;
+import com.example.market.domain.user.dto.PrincipalDetails;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.util.FileHandlerUtils;
@@ -40,7 +40,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class CustomUserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ShopRepository shopRepository;
     private final PasswordEncoder passwordEncoder;

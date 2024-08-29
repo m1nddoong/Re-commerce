@@ -8,7 +8,7 @@ import com.example.market.domain.user.dto.CreateUserDto;
 import com.example.market.domain.user.dto.UserDto;
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.domain.user.service.UserService;
+import com.example.market.domain.user.service.CustomUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class CustomUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -30,11 +30,11 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        ReflectionTestUtils.setField(userService, "passwordEncoder", passwordEncoder);
+        ReflectionTestUtils.setField(customUserService, "passwordEncoder", passwordEncoder);
     }
 
     @InjectMocks
-    private UserService userService;
+    private CustomUserService customUserService;
 
     @Test
     @DisplayName("CreateUserDto로 사용자 생성")
@@ -55,7 +55,7 @@ public class UserServiceTest {
                 .password(plainPassword)
                 .passwordCheck(plainPassword)
                 .build();
-        UserDto result = userService.signUp(createUserDto);
+        UserDto result = customUserService.signUp(createUserDto);
 
         assertEquals(email, result.getEmail());
     }

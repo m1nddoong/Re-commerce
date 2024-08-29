@@ -2,7 +2,7 @@ package com.example.market.global.config;
 
 import com.example.market.domain.user.jwt.JwtTokenFilter;
 import com.example.market.domain.user.jwt.JwtTokenUtils;
-import com.example.market.domain.user.service.UserService;
+import com.example.market.domain.user.service.CustomUserService;
 import com.example.market.domain.user.service.CustomSuccessHandler;
 import com.example.market.domain.user.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final UserService userService;
+    private final CustomUserService customUserService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
 
@@ -125,7 +125,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,
-                                userService
+                                customUserService
                         ),
                         UsernamePasswordAuthenticationFilter.class
                         // AuthorizationFilter.class
