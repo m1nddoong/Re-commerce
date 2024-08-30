@@ -1,10 +1,10 @@
 package com.example.market.domain.user.service;
 
-import com.example.market.domain.user.dto.JwtTokenDto;
+import com.example.market.global.jwt.JwtTokenDto;
 import com.example.market.domain.user.entity.RefreshToken;
 import com.example.market.domain.user.entity.User;
-import com.example.market.domain.user.jwt.JwtTokenUtils;
-import com.example.market.domain.user.jwt.TokenType;
+import com.example.market.global.jwt.JwtTokenUtils;
+import com.example.market.global.jwt.TokenType;
 import com.example.market.domain.user.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;

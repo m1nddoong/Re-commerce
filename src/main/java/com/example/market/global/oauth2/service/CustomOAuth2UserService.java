@@ -1,11 +1,13 @@
-package com.example.market.domain.user.service;
+package com.example.market.global.oauth2.service;
 
+import com.example.market.domain.user.constant.Role;
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
-import com.example.market.domain.user.dto.PrincipalDetails;
-import com.example.market.domain.user.dto.oauth2.GoogleResponse;
-import com.example.market.domain.user.dto.oauth2.NaverResponse;
-import com.example.market.domain.user.dto.oauth2.OAuth2Response;
+import com.example.market.global.oauth2.PrincipalDetails;
+import com.example.market.global.oauth2.constant.SocialType;
+import com.example.market.global.oauth2.dto.GoogleResponse;
+import com.example.market.global.oauth2.dto.NaverResponse;
+import com.example.market.global.oauth2.dto.OAuth2Response;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
 import jakarta.transaction.Transactional;
@@ -29,7 +31,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
         OAuth2User oAuth2User = super.loadUser(userRequest);
+
         // registrationId 가져오기 (naver, google 중 어디에서 온 요청인지)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = null;
@@ -51,7 +55,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .uuid(uuid)
                     .email(oAuth2Response.getEmail())
                     .username(oAuth2Response.getName())
-                    .roles("ROLE_INACTIVE")
+                    .socialType(SocialType.valueOf(registrationId))
+                    .role(Role.INACTIVE_USER)
                     .build()));
         } else {
             throw new GlobalCustomException(ErrorCode.USER_ALREADY_EXIST);

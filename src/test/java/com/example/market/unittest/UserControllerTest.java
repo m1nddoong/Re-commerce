@@ -68,8 +68,8 @@ public class UserControllerTest {
                 .id(1L)
                 .email(email)
                 .build();
-        when(customUserService.signUp(any()))
-                .thenReturn(responseDto);
+        // when(customUserService.signUp(any()))
+           //     .thenReturn(responseDto);
 
         // when
         ResultActions result = mockMvc.perform(

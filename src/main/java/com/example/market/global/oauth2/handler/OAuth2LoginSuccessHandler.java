@@ -1,23 +1,28 @@
-package com.example.market.domain.user.service;
+package com.example.market.global.oauth2.handler;
 
+import static com.example.market.domain.user.constant.Role.INACTIVE_USER;
+import static com.example.market.global.util.CookieUtil.createCookie;
+
+import com.example.market.domain.user.constant.Role;
 import com.example.market.domain.user.entity.RefreshToken;
 import com.example.market.domain.user.repository.RefreshTokenRepository;
-import com.example.market.domain.user.jwt.JwtTokenUtils;
-import com.example.market.domain.user.jwt.TokenType;
-import com.example.market.domain.user.dto.PrincipalDetails;
+import com.example.market.global.jwt.JwtTokenUtils;
+import com.example.market.global.jwt.TokenType;
+import com.example.market.global.oauth2.PrincipalDetails;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenUtils jwtTokenUtils;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -27,6 +32,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException, ServletException {
+        log.info("OAuth2 Login 성공!");
+
+
         // principal 정보 가져오기
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         String email = principalDetails.getName();
@@ -40,19 +48,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .uuid(String.valueOf(principalDetails.getUser().getUuid()))
                 .refreshToken(refreshToken)
                 .build());
-
         response.addCookie(createCookie("Authorization", accessToken));
-        // 로그인 성공 후 프론트 측 특정 URL 로 리다이렉팅
-        response.sendRedirect("http://localhost:3000/");
-    }
 
-    private Cookie createCookie(String key, String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge((int) TokenType.ACCESS.getTokenValidMillis());
-        // cookie.setSecure(true); // https 에서만 쿠키를 사용할 수 있도록 설정
-        cookie.setPath("/");
-        cookie.setHttpOnly(true); // javaScript 가 쿠키를 가져가지 못하게
-
-        return cookie;
+        // INACTIVE 인 User 의 경우 처음 로그인 요청한 회원이므로 회원가입 페이지로 리다이렉트
+        if (principalDetails.getUser().getRole() == INACTIVE_USER) {
+            // 추가 회원가입 폼으로 이동
+            response.sendRedirect("http://localhost:3000/profile-update");
+        } else {
+            response.sendRedirect("http://localhost:3000/");
+        }
     }
 }

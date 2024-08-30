@@ -1,4 +1,4 @@
-package com.example.market.domain.user.dto;
+package com.example.market.global.jwt;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

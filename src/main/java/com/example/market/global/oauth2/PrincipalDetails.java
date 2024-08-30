@@ -1,4 +1,4 @@
-package com.example.market.domain.user.dto;
+package com.example.market.global.oauth2;
 
 import com.example.market.domain.user.entity.User;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRoles().split(","))
+        return Arrays.stream(user.getRole().getRoles().split(","))
                 .sorted()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

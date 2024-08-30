@@ -31,7 +31,14 @@ public enum ErrorCode {
 
     // 사용자 관련 에러
     USER_ALREADY_EXIST(400, "3013", "이미 존재하는 회원입니다."),
-    USER_NOT_FOUND(404, "3014", "존재하지 않는 회원입니다.");
+    USER_NOT_FOUND(404, "3014", "존재하지 않는 회원입니다."),
+
+    // redis 관련 에러
+    REFRESH_TOKEN_NOT_FOUND(404, "3015", "리프레시 토큰이 존재하지 않습니다."),
+
+    // 회원가입 관련 에러
+    LOGIN_PASSWORD_CHECK_NOT_MATCH(400, "3016", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
+    LOGIN_DUPLICATED_EMAIL(400, "3017", "이미 존재하는 이메일 입니다.");
 
 
 

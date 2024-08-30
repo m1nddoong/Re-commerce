@@ -3,6 +3,7 @@ package com.example.market.global.infra;
 
 import com.example.market.domain.shop.entity.Category;
 import com.example.market.domain.user.constant.BusinessStatus;
+import com.example.market.domain.user.constant.Role;
 import com.example.market.domain.user.entity.User;
 import com.example.market.domain.user.repository.UserRepository;
 
@@ -17,6 +18,7 @@ import com.example.market.domain.shop.repository.SubCategoryRepository;
 import com.example.market.domain.shop.repository.ShopRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -40,35 +42,35 @@ public class DataInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         User[] users = {
                 createUser("admin@naver.com", "김태호", "PD", "605-46-5452",
-                        "ROLE_ACTIVE,ROLE_OWNER,ROLE_ADMIN"),
+                        Role.ACTIVE_USER),
                 createUser("jaeseok@naver.com", "유재석", "국민 MC", "603-46-2424",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("myeongsu@naver.com", "박명수", "박거성", "623-46-2424",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("junha@naver.com", "정준하", "주나", "533-24-4699",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("hyeongdon@naver.com", "정형돈", "항돈", "537-22-3885",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("gil@naver.com", "길", "빡빡이", "237-12-2335",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("hongchul@naver.com", "노홍철", "돌I", "787-90-3545",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("haha@naver.com", "하하", "꼬마", "545-05-4085",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("hodong@naver.com", "강호동", "천하장사", "603-46-2425",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("sugeun@naver.com", "이수근", "수그니", "623-46-2426",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("jiwon@naver.com", "은지원", "구미", "533-24-4679",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("gyuheon@naver.com", "조규현", "조정뱅이", "537-22-3285",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("jaehyeon@naver.com", "안재현", "신미", "237-12-2395",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("minho@naver.com", "송민호", "송가락", "787-90-1245",
-                        "ROLE_ACTIVE,ROLE_OWNER"),
+                        Role.BUSINESS_USER),
                 createUser("pio@naver.com", "피오", "트럼프", "545-05-4225",
-                        "ROLE_ACTIVE,ROLE_OWNER")
+                        Role.BUSINESS_USER)
         };
         userRepository.saveAll(Arrays.asList(users));
 
@@ -168,19 +170,19 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private User createUser(String email, String username, String nickname, String businessNum,
-                            String authorities) {
+                            Role role) {
         return User.builder()
                 .uuid(UUID.randomUUID())
                 .email(email)
                 .password(passwordEncoder.encode("1111"))
                 .username(username)
                 .nickname(nickname)
-                .age(37)  // 나이를 임시로 동일하게 설정
+                .birthday(LocalDate.parse("1999-03-21"))  // 나이를 임시로 동일하게 설정
                 .phone("010-0000-0000")  // 전화번호를 임시로 설정
                 .profileImg(null)
                 .businessNum(businessNum)
                 .businessStatus(BusinessStatus.APPROVED)
-                .roles(authorities)
+                .role(role)
                 .build();
     }
 

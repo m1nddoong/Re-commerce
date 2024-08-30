@@ -1,4 +1,4 @@
-package com.example.market.domain.user.dto.oauth2;
+package com.example.market.global.oauth2.dto;
 
 import java.util.Map;
 
@@ -31,4 +31,7 @@ public class NaverResponse implements OAuth2Response {
     public String getName() {
         return attribute.get("name").toString();
     }
+
+    @Override
+    public String getProfileUrl() { return attribute.get("profile_image").toString(); }
 }

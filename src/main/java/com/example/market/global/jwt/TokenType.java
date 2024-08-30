@@ -1,4 +1,4 @@
-package com.example.market.domain.user.jwt;
+package com.example.market.global.jwt;
 
 import lombok.Getter;
 

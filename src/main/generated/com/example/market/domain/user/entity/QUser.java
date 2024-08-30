@@ -24,7 +24,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final com.example.market.global.common.QBaseEntity _super = new com.example.market.global.common.QBaseEntity(this);
 
-    public final NumberPath<Integer> age = createNumber("age", Integer.class);
+    public final DatePath<java.time.LocalDate> birthday = createDate("birthday", java.time.LocalDate.class);
 
     public final StringPath businessNum = createString("businessNum");
 
@@ -48,9 +48,11 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath profileImg = createString("profileImg");
 
-    public final StringPath roles = createString("roles");
+    public final EnumPath<com.example.market.domain.user.constant.Role> role = createEnum("role", com.example.market.domain.user.constant.Role.class);
 
     public final com.example.market.domain.shop.entity.QShop shop;
+
+    public final EnumPath<com.example.market.global.oauth2.constant.SocialType> socialType = createEnum("socialType", com.example.market.global.oauth2.constant.SocialType.class);
 
     public final ListPath<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem> tradeItem = this.<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem>createList("tradeItem", com.example.market.domain.trade.entity.TradeItem.class, com.example.market.domain.trade.entity.QTradeItem.class, PathInits.DIRECT2);
 

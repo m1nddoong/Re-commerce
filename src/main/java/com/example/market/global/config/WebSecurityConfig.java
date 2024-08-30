@@ -1,10 +1,10 @@
 package com.example.market.global.config;
 
-import com.example.market.domain.user.jwt.JwtTokenFilter;
-import com.example.market.domain.user.jwt.JwtTokenUtils;
+import com.example.market.global.jwt.JwtTokenFilter;
+import com.example.market.global.jwt.JwtTokenUtils;
 import com.example.market.domain.user.service.CustomUserService;
-import com.example.market.domain.user.service.CustomSuccessHandler;
-import com.example.market.domain.user.service.CustomOAuth2UserService;
+import com.example.market.global.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.example.market.global.oauth2.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomUserService customUserService;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomSuccessHandler customSuccessHandler;
+    private final OAuth2LoginSuccessHandler OAuth2LoginSuccessHandler;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -58,7 +58,8 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService)))
-                        .successHandler(customSuccessHandler))
+                        .successHandler(OAuth2LoginSuccessHandler)) // 동의하고 계속하기 눌렀을 때 Handler 설정
+                        // .failureHandler(customFailureHandler))  // 소셜 로그인 실패 시 핸들러 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",

@@ -1,18 +1,29 @@
 package com.example.market.domain.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-// "서비스를 이용하려면 닉네임, 이름, 연령대, 이메일, 전화번호 정보를 추가해야 한다."
-// 위 요구사항을 회원가입 시의 필수요소로 포함
 public class CreateUserDto {
-    private String email; // ID
-    private String password; // 비밀번호
+    @NotBlank
+    private String email;
+    @NotBlank
+    private String password;
+    @NotBlank
     private String passwordCheck;
+    private String username;
+    private String phone;
+    private String nickname;
+    private LocalDate birthday;
 }

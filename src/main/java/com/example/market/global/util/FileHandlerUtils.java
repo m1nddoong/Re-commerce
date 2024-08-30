@@ -25,7 +25,7 @@ public class FileHandlerUtils {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return imgPath.toString();
+        return imgPath.toString().replaceAll("\\\\", "/");
     }
 
     public void deleteImage(String imagePath) {

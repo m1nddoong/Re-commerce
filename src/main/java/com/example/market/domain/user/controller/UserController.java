@@ -4,12 +4,13 @@ import com.example.market.domain.user.dto.BusinessDto;
 import com.example.market.domain.user.dto.CreateUserDto;
 import com.example.market.domain.user.dto.UpdateUserDto;
 import com.example.market.domain.user.dto.UserDto;
-import com.example.market.domain.user.dto.LoginRequestDto;
-import com.example.market.domain.user.dto.JwtTokenDto;
+import com.example.market.domain.user.dto.LoginDto;
+import com.example.market.global.jwt.JwtTokenDto;
 import com.example.market.domain.user.service.CustomUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,18 +36,23 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final CustomUserService customUserService;
 
-    @PostMapping("/sign-up")
+    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "회원가입",
             description = "<p>'이메일', '비밀번호', '비밀번호 확인' 을 전달하여 회원가입이 가능합니다.</p>"
                     + "<p>최초 회원가입 시 <b>비활성 사용자</b> 로 가입됩니다.</p>"
                     + "<p>네 종류의 사용자가 있다 (비활성 사용자, 일반 사용자, 사업자 사용자, 관리자)</p>"
+                    + "<p>사용자는 프로필 필수 정보 (닉네임, 성명, 나이, 전화번호)를 전달하여 자신의 프로필을 업데이트합니다. </p> "
+                    + "<p> 프로필 필수 정보가 모두 작성 되었다면 자동으로 <b>일반 사용자</b>로 승급됩니다. </p>"
     )
     public ResponseEntity<UserDto> signUp(
-            @RequestBody
-            CreateUserDto dto
+            @Valid @RequestPart(value = "createDto")
+            CreateUserDto dto,
+            @RequestPart(value = "profileImg", required = false)
+            MultipartFile profileImg
+
     ) {
-        return ResponseEntity.ok(customUserService.signUp(dto));
+        return ResponseEntity.ok(customUserService.signUp(dto, profileImg));
     }
 
 
@@ -57,7 +64,7 @@ public class UserController {
     )
     public ResponseEntity<JwtTokenDto> signIn(
             @RequestBody
-            LoginRequestDto dto,
+            LoginDto dto,
             HttpServletResponse response
     ) {
         return ResponseEntity.ok(customUserService.signIn(dto, response));
@@ -77,36 +84,23 @@ public class UserController {
         return ResponseEntity.ok("{}");
     }
 
-    @PutMapping("/update-profile-info")
+    @PutMapping(value = "/profile/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "프로필 업데이트",
             description = "<p>사용자는 프로필 필수 정보 (닉네임, 성명, 나이, 전화번호)를 전달하여 자신의 프로필을 업데이트합니다. </p> "
                     + "<p> 프로필 필수 정보가 모두 작성 되었다면 자동으로 <b>일반 사용자</b>로 승급됩니다. </p>"
+                    + "<p>사용자는 자신의 프로필 이미지를 업로드할 수 있습니다.</p>"
     )
     public ResponseEntity<UserDto> updateProfile(
-            @RequestBody
-            UpdateUserDto dto
-    ) {
-        return ResponseEntity.ok(customUserService.updateProfile(dto));
-    }
-
-    @PutMapping(
-            value = "/update-profile-img",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    @Operation(
-            summary = "프로필 이미지 업데이트",
-            description = "<p>사용자는 자신의 프로필 이미지를 업로드할 수 있습니다.</p>"
-    )
-    public ResponseEntity<String> updateProfileImg(
-            // 파일을 받아주는 자료형을 MutlipartFile
-            @RequestParam("file")
+            @Valid @RequestPart(value = "updateDto")
+            UpdateUserDto dto,
+            @RequestPart(value = "profileImg")
             MultipartFile profileImg
     ) {
-        return ResponseEntity.ok(customUserService.uploadProfileImage(profileImg));
+        return ResponseEntity.ok(customUserService.updateProfile(dto, profileImg));
     }
 
-    @GetMapping("/my-profile")
+    @GetMapping("/profile")
     @Operation(
             summary = "프로필 확인",
             description = "<p>현재 인증된 사용자는 자신의 프로필을 확인할 수 있습니다.</p>"

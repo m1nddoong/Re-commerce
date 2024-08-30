@@ -1,6 +1,6 @@
-package com.example.market.domain.user.jwt;
+package com.example.market.global.jwt;
 
-import com.example.market.domain.user.dto.PrincipalDetails;
+import com.example.market.global.oauth2.PrincipalDetails;
 import com.example.market.domain.user.service.CustomUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

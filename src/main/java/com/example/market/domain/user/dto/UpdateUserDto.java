@@ -1,6 +1,7 @@
 package com.example.market.domain.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class UpdateUserDto {
     @NotBlank
     private String username;
     @NotBlank
-    private Integer age;
+    private LocalDate birthday;
     @NotBlank
     private String phone;
 }
