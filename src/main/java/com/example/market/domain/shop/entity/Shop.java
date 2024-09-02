@@ -1,7 +1,7 @@
 package com.example.market.domain.shop.entity;
 
 
-import com.example.market.domain.user.entity.User;
+import com.example.market.domain.auth.entity.User;
 import com.example.market.domain.shop.constant.ShopStatus;
 import com.example.market.global.common.BaseEntity;
 import com.example.market.domain.shop.constant.ShopCategory;

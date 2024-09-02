@@ -1,6 +1,6 @@
 package com.example.market.domain.trade.entity;
 
-import com.example.market.domain.user.entity.User;
+import com.example.market.domain.auth.entity.User;
 import com.example.market.global.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

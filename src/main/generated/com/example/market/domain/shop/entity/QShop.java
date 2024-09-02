@@ -51,7 +51,7 @@ public class QShop extends EntityPathBase<Shop> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.example.market.domain.user.entity.QUser user;
+    public final com.example.market.domain.auth.entity.QUser user;
 
     public QShop(String variable) {
         this(Shop.class, forVariable(variable), INITS);
@@ -71,7 +71,7 @@ public class QShop extends EntityPathBase<Shop> {
 
     public QShop(Class<? extends Shop> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.market.domain.user.entity.QUser(forProperty("user"), inits.get("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.market.domain.auth.entity.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

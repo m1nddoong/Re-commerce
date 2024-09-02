@@ -1,8 +1,8 @@
 package com.example.market.unittest;
 
 
-import com.example.market.domain.user.entity.User;
-import com.example.market.domain.user.repository.UserRepository;
+import com.example.market.domain.auth.entity.User;
+import com.example.market.domain.auth.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

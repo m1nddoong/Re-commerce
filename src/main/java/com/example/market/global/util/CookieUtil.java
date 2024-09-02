@@ -1,11 +1,7 @@
 package com.example.market.global.util;
 
-import com.example.market.global.jwt.TokenType;
+import com.example.market.domain.auth.jwt.TokenType;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.Base64;
-import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +17,12 @@ public class CookieUtil {
     }
 
     // 쿠키의 이름을 입력받아 쿠키 삭제
+    public static Cookie deleteCookie(String key) {
+        Cookie cookie = new Cookie(key, null);
+        cookie.setPath("/"); // 클라이언트 측에서 접근 가능한 쿠키의 경로 지정 -> 모든 경로에서 쿠키가 전송될 수 있음
+        cookie.setMaxAge(0); // 쿠키 만료 시간을 0으로 설정하여 삭제
+        return cookie;
+    }
 
     // 객체를 직렬화해 쿠키의 값으로 변환
 

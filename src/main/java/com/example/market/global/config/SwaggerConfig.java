@@ -1,5 +1,6 @@
 package com.example.market.global.config;
 
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -23,7 +24,6 @@ public class SwaggerConfig {
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("Bearer")
                         .bearerFormat("JWT"));
-
         return new OpenAPI()
                 .components(components)
                 .addSecurityItem(securityRequirement)

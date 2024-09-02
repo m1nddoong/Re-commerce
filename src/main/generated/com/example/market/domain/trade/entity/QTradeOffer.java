@@ -26,7 +26,7 @@ public class QTradeOffer extends EntityPathBase<TradeOffer> {
 
     public final QTradeItem items;
 
-    public final com.example.market.domain.user.entity.QUser offeringUser;
+    public final com.example.market.domain.auth.entity.QUser offeringUser;
 
     public final EnumPath<TradeOffer.OfferStatus> offerStatus = createEnum("offerStatus", TradeOffer.OfferStatus.class);
 
@@ -49,7 +49,7 @@ public class QTradeOffer extends EntityPathBase<TradeOffer> {
     public QTradeOffer(Class<? extends TradeOffer> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.items = inits.isInitialized("items") ? new QTradeItem(forProperty("items"), inits.get("items")) : null;
-        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.domain.user.entity.QUser(forProperty("offeringUser"), inits.get("offeringUser")) : null;
+        this.offeringUser = inits.isInitialized("offeringUser") ? new com.example.market.domain.auth.entity.QUser(forProperty("offeringUser"), inits.get("offeringUser")) : null;
     }
 
 }

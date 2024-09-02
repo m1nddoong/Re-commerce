@@ -2,10 +2,10 @@ package com.example.market.global.infra;
 
 
 import com.example.market.domain.shop.entity.Category;
-import com.example.market.domain.user.constant.BusinessStatus;
-import com.example.market.domain.user.constant.Role;
-import com.example.market.domain.user.entity.User;
-import com.example.market.domain.user.repository.UserRepository;
+import com.example.market.domain.auth.constant.BusinessStatus;
+import com.example.market.domain.auth.constant.Role;
+import com.example.market.domain.auth.entity.User;
+import com.example.market.domain.auth.repository.UserRepository;
 
 import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.shop.constant.ShopCategory;

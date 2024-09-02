@@ -1,10 +1,10 @@
 package com.example.market.global.config;
 
-import com.example.market.global.jwt.JwtTokenFilter;
-import com.example.market.global.jwt.JwtTokenUtils;
-import com.example.market.domain.user.service.CustomUserService;
-import com.example.market.global.oauth2.handler.OAuth2LoginSuccessHandler;
-import com.example.market.global.oauth2.service.CustomOAuth2UserService;
+import com.example.market.domain.auth.service.PrincipalDetailsService;
+import com.example.market.domain.auth.jwt.JwtTokenFilter;
+import com.example.market.domain.auth.jwt.JwtTokenUtils;
+import com.example.market.domain.auth.handler.OAuth2LoginSuccessHandler;
+import com.example.market.domain.auth.service.PrincipalOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final CustomUserService customUserService;
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final PrincipalDetailsService principalDetailsService;
+    private final PrincipalOAuth2UserService principalOAuth2UserService;
     private final OAuth2LoginSuccessHandler OAuth2LoginSuccessHandler;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
@@ -37,18 +37,14 @@ public class WebSecurityConfig {
 
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-
                         CorsConfiguration configuration = new CorsConfiguration();
-
                         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
-
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
                         return configuration;
                     }
                 }))
@@ -57,14 +53,12 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService)))
+                                .userService(principalOAuth2UserService)))
                         .successHandler(OAuth2LoginSuccessHandler)) // 동의하고 계속하기 눌렀을 때 Handler 설정
-                        // .failureHandler(customFailureHandler))  // 소셜 로그인 실패 시 핸들러 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",
-                                "/v1/api-docs/*",
-                                "/v1/api-docs",
+                                "/v1/api-docs/**",
                                 "/",
                                 "/login/success",
                                 "/jwt/verify",
@@ -73,9 +67,9 @@ public class WebSecurityConfig {
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/api/v1/users/my-profile",
-                                "/api/v1/users/update-profile-info",
-                                "/api/v1/users/update-profile-img",
+                                "/api/v1/users/sign-out",
+                                "/api/v1/users/profile",
+                                "/api/v1/users/profile/update",
                                 "/api/v1/token/reissue-token"
                         )
                         .authenticated()
@@ -126,10 +120,9 @@ public class WebSecurityConfig {
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,
-                                customUserService
+                                principalDetailsService
                         ),
                         UsernamePasswordAuthenticationFilter.class
-                        // AuthorizationFilter.class
                 )
         ;
         return http.build();
