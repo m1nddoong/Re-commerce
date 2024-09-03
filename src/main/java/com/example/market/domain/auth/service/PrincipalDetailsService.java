@@ -1,7 +1,5 @@
 package com.example.market.domain.auth.service;
 
-import static com.example.market.global.util.CookieUtil.createCookie;
-
 import com.example.market.domain.auth.constant.BusinessStatus;
 import com.example.market.domain.auth.constant.Role;
 import com.example.market.domain.auth.entity.RefreshToken;
@@ -16,7 +14,7 @@ import com.example.market.domain.auth.dto.LoginDto;
 import com.example.market.domain.auth.jwt.JwtTokenDto;
 import com.example.market.domain.auth.jwt.JwtTokenUtils;
 import com.example.market.domain.auth.repository.UserRepository;
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.util.CookieUtil;
@@ -24,7 +22,6 @@ import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.shop.entity.Shop;
 import com.example.market.domain.shop.repository.ShopRepository;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -34,7 +31,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -134,7 +130,7 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .build());
 
         // 쿠키 생성
-        response.addCookie(createCookie("Authorization", newAccessToken));
+        response.addCookie(cookieUtil.createCookie("Authorization", newAccessToken));
 
         // JWT 토큰 발급 -> 이후 JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
@@ -168,7 +164,6 @@ public class PrincipalDetailsService implements UserDetailsService {
      * 프로필 조회
      */
     public UserDto myProfile(PrincipalDetails principalDetails) {
-        // User user = authenticationFacade.extractUser();
         return UserDto.fromEntity(principalDetails.getUser());
     }
 
@@ -203,7 +198,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      *
      * @param dto 사업자 등록 번호
      */
-    public UserDto businessApplication(BusinessDto dto) {
+    public UserDto applyForBusinessUpgrade(BusinessDto dto) {
         User currentUser = authenticationFacade.extractUser();
         currentUser.setBusinessNum(dto.getBusinessNum());
         return UserDto.fromEntity(userRepository.save(currentUser));
@@ -214,7 +209,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      *
      * @return 신청 목록
      */
-    public List<UserDto> businessApplicationList() {
+    public List<UserDto> listBusinessRequests() {
         List<User> userList = userRepository.findAllByBusinessStatus(BusinessStatus.APPLIED);
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : userList) {
@@ -229,7 +224,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param uuid 사용자 uuid
      * @return 사업자 전환 수락된 사용자
      */
-    public UserDto businessApplicationApproval(UUID uuid) {
+    public UserDto approveBusinessRequest(UUID uuid) {
         User user = userRepository.findUserByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setBusinessStatus(BusinessStatus.APPROVED);
@@ -246,12 +241,10 @@ public class PrincipalDetailsService implements UserDetailsService {
      *
      * @param uuid 사용자 uuid
      */
-    public void businessApplicationRejection(UUID uuid) {
+    public UserDto rejectBusinessRequest(UUID uuid) {
         User user = userRepository.findUserByUuid(uuid)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setBusinessStatus(BusinessStatus.REJECTED);
-        userRepository.save(user);
+        return UserDto.fromEntity(userRepository.save(user));
     }
-
-
 }

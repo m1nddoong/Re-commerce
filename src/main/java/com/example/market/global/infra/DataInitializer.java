@@ -41,39 +41,27 @@ public class DataInitializer implements ApplicationRunner {
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
         User[] users = {
-                createUser("admin@naver.com", "김태호", "PD", "605-46-5452",
-                        Role.ACTIVE_USER),
-                createUser("jaeseok@naver.com", "유재석", "국민 MC", "603-46-2424",
-                        Role.BUSINESS_USER),
-                createUser("myeongsu@naver.com", "박명수", "박거성", "623-46-2424",
-                        Role.BUSINESS_USER),
-                createUser("junha@naver.com", "정준하", "주나", "533-24-4699",
-                        Role.BUSINESS_USER),
-                createUser("hyeongdon@naver.com", "정형돈", "항돈", "537-22-3885",
-                        Role.BUSINESS_USER),
-                createUser("gil@naver.com", "길", "빡빡이", "237-12-2335",
-                        Role.BUSINESS_USER),
-                createUser("hongchul@naver.com", "노홍철", "돌I", "787-90-3545",
-                        Role.BUSINESS_USER),
-                createUser("haha@naver.com", "하하", "꼬마", "545-05-4085",
-                        Role.BUSINESS_USER),
-                createUser("hodong@naver.com", "강호동", "천하장사", "603-46-2425",
-                        Role.BUSINESS_USER),
-                createUser("sugeun@naver.com", "이수근", "수그니", "623-46-2426",
-                        Role.BUSINESS_USER),
-                createUser("jiwon@naver.com", "은지원", "구미", "533-24-4679",
-                        Role.BUSINESS_USER),
-                createUser("gyuheon@naver.com", "조규현", "조정뱅이", "537-22-3285",
-                        Role.BUSINESS_USER),
-                createUser("jaehyeon@naver.com", "안재현", "신미", "237-12-2395",
-                        Role.BUSINESS_USER),
-                createUser("minho@naver.com", "송민호", "송가락", "787-90-1245",
-                        Role.BUSINESS_USER),
-                createUser("pio@naver.com", "피오", "트럼프", "545-05-4225",
-                        Role.BUSINESS_USER)
+                createUser("admin@naver.com", "김태호", "PD", "605-46-5452", BusinessStatus.APPROVED, Role.ADMIN),
+                createUser("jaeseok@naver.com", "유재석", "국민 MC", "603-46-2424", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("myeongsu@naver.com", "박명수", "박거성", "623-46-2424", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("junha@naver.com", "정준하", "주나", "533-24-4699", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("hyeongdon@naver.com", "정형돈", "항돈", "537-22-3885", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("gil@naver.com", "길", "빡빡이", "237-12-2335", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("hongchul@naver.com", "노홍철", "돌I", "787-90-3545", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("haha@naver.com", "하하", "꼬마", "545-05-4085", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("hodong@naver.com", "강호동", "천하장사", "603-46-2425", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("sugeun@naver.com", "이수근", "수그니", "623-46-2426", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("jiwon@naver.com", "은지원", "구미", "533-24-4679", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("gyuheon@naver.com", "조규현", "조정뱅이", "537-22-3285", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("jaehyeon@naver.com", "안재현", "신미", "237-12-2395", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("minho@naver.com", "송민호", "송가락", "787-90-1245", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("pio@naver.com", "피오", "트럼프", "545-05-4225", BusinessStatus.APPROVED, Role.BUSINESS_USER),
+                createUser("jongmin@naver.com", "김종민", "우연히", "545-05-4227", BusinessStatus.APPLIED, Role.ACTIVE_USER),
+                createUser("mcmong@naver.com", "MC몽", "몽이", "545-05-4221", BusinessStatus.APPLIED, Role.ACTIVE_USER),
+                createUser("kimc@naver.com", "김C", "김씨", "545-05-4220", BusinessStatus.APPLIED, Role.ACTIVE_USER),
+                createUser("seunggi@naver.com", "이승기", "삭제", "545-02-6572", BusinessStatus.APPLIED, Role.ACTIVE_USER)
         };
         userRepository.saveAll(Arrays.asList(users));
-
 
         // 상품 분류
         Category[] itemCategories = {
@@ -137,39 +125,62 @@ public class DataInitializer implements ApplicationRunner {
         shopRepository.saveAll(Arrays.asList(shops));
 
         Item[] items = {
-                createShopItem("무한도전 맨투맨1", "남성 맨투맨1 입니다.", 15000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨2", "남성 맨투맨2 입니다.", 35000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨3", "남성 맨투맨3 입니다.", 14000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨4", "남성 맨투맨4 입니다.", 34000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨5", "남성 맨투맨5 입니다.", 13000, itemCategories[0], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨6", "여성 맨투맨6 입니다.", 33000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨7", "여성 맨투맨7 입니다.", 12000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨8", "여성 맨투맨8 입니다.", 32000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨9", "여성 맨투맨9 입니다.", 11000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 맨투맨10", "여성 맨투맨10 입니다.", 31000, itemCategories[1], itemSubCategories[0], 15, shops[0]),
-                createShopItem("무한도전 와이드팬츠1", "남성 와이드팬츠1 입니다.", 15000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠2", "남성 와이드팬츠2 입니다.", 35000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠3", "남성 와이드팬츠3 입니다.", 14000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠4", "남성 와이드팬츠4 입니다.", 34000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠5", "남성 와이드팬츠5 입니다.", 13000, itemCategories[0], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠6", "여성 와이드팬츠6 입니다.", 33000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠7", "여성 와이드팬츠7 입니다.", 12000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠8", "여성 와이드팬츠8 입니다.", 32000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠9", "여성 와이드팬츠9 입니다.", 11000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
-                createShopItem("무한도전 와이드팬츠10", "여성 와이드팬츠10 입니다.", 31000, itemCategories[1], itemSubCategories[1], 10, shops[0]),
+                createShopItem("무한도전 맨투맨1", "남성 맨투맨1 입니다.", 15000, itemCategories[0], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨2", "남성 맨투맨2 입니다.", 35000, itemCategories[0], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨3", "남성 맨투맨3 입니다.", 14000, itemCategories[0], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨4", "남성 맨투맨4 입니다.", 34000, itemCategories[0], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨5", "남성 맨투맨5 입니다.", 13000, itemCategories[0], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨6", "여성 맨투맨6 입니다.", 33000, itemCategories[1], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨7", "여성 맨투맨7 입니다.", 12000, itemCategories[1], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨8", "여성 맨투맨8 입니다.", 32000, itemCategories[1], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨9", "여성 맨투맨9 입니다.", 11000, itemCategories[1], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 맨투맨10", "여성 맨투맨10 입니다.", 31000, itemCategories[1], itemSubCategories[0], 15,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠1", "남성 와이드팬츠1 입니다.", 15000, itemCategories[0], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠2", "남성 와이드팬츠2 입니다.", 35000, itemCategories[0], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠3", "남성 와이드팬츠3 입니다.", 14000, itemCategories[0], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠4", "남성 와이드팬츠4 입니다.", 34000, itemCategories[0], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠5", "남성 와이드팬츠5 입니다.", 13000, itemCategories[0], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠6", "여성 와이드팬츠6 입니다.", 33000, itemCategories[1], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠7", "여성 와이드팬츠7 입니다.", 12000, itemCategories[1], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠8", "여성 와이드팬츠8 입니다.", 32000, itemCategories[1], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠9", "여성 와이드팬츠9 입니다.", 11000, itemCategories[1], itemSubCategories[1], 10,
+                        shops[0]),
+                createShopItem("무한도전 와이드팬츠10", "여성 와이드팬츠10 입니다.", 31000, itemCategories[1], itemSubCategories[1], 10,
+                        shops[0]),
                 // 통합할 두 카테고리와 서브카테고리
-                createShopItem("피부 메이크업 용품1", "피부 메이크업 용품1 입니다.", 10000, itemCategories[4], itemSubCategories[10], 10, shops[4]),
-                createShopItem("피부 보습 용품1", "피부 보습 용품1 입니다.", 12000, itemCategories[4], itemSubCategories[11], 10, shops[4]),
-                createShopItem("스킨 화장 용품1", "스킨 화장 용품1 입니다.", 10000, itemCategories[5], itemSubCategories[12], 10, shops[5]),
-                createShopItem("스킨 보습 용품1", "스킨 보습 용품1 입니다.", 12000, itemCategories[5], itemSubCategories[13], 10, shops[5])
-
+                createShopItem("피부 메이크업 용품1", "피부 메이크업 용품1 입니다.", 10000, itemCategories[4], itemSubCategories[10], 10,
+                        shops[4]),
+                createShopItem("피부 보습 용품1", "피부 보습 용품1 입니다.", 12000, itemCategories[4], itemSubCategories[11], 10,
+                        shops[4]),
+                createShopItem("스킨 화장 용품1", "스킨 화장 용품1 입니다.", 10000, itemCategories[5], itemSubCategories[12], 10,
+                        shops[5]),
+                createShopItem("스킨 보습 용품1", "스킨 보습 용품1 입니다.", 12000, itemCategories[5], itemSubCategories[13], 10,
+                        shops[5])
 
 
         };
         itemRepository.saveAll(Arrays.asList(items));
     }
 
-    private User createUser(String email, String username, String nickname, String businessNum,
+    private User createUser(String email, String username, String nickname, String businessNum, BusinessStatus businessStatus,
                             Role role) {
         return User.builder()
                 .uuid(UUID.randomUUID())
@@ -181,7 +192,7 @@ public class DataInitializer implements ApplicationRunner {
                 .phone("010-0000-0000")  // 전화번호를 임시로 설정
                 .profileImg(null)
                 .businessNum(businessNum)
-                .businessStatus(BusinessStatus.APPROVED)
+                .businessStatus(businessStatus)
                 .role(role)
                 .build();
     }

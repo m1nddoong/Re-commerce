@@ -1,12 +1,11 @@
 package com.example.market.domain.auth.handler;
 
-import static com.example.market.global.util.CookieUtil.createCookie;
-
 import com.example.market.domain.auth.entity.RefreshToken;
 import com.example.market.domain.auth.repository.RefreshTokenRepository;
 import com.example.market.domain.auth.jwt.JwtTokenUtils;
 import com.example.market.domain.auth.jwt.TokenType;
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
+import com.example.market.global.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenUtils jwtTokenUtils;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Override
     public void onAuthenticationSuccess(
@@ -39,7 +39,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // jwt 토큰 발급 및 쿠키에 저장
         String accessToken = jwtTokenUtils.createJwt(email, TokenType.ACCESS);
         String refreshToken = jwtTokenUtils.createJwt(email, TokenType.REFRESH);
-        response.addCookie(createCookie("Authorization", accessToken));
+        response.addCookie(cookieUtil.createCookie("Authorization", accessToken));
 
         // Redis에 'uuid - refreshToken' 저장
         refreshTokenRepository.save(RefreshToken.builder()

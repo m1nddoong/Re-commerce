@@ -1,6 +1,6 @@
 package com.example.market.domain.auth.jwt;
 
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.domain.auth.service.PrincipalDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;

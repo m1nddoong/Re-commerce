@@ -5,12 +5,11 @@ import com.example.market.domain.auth.dto.CreateUserDto;
 import com.example.market.domain.auth.dto.UpdateUserDto;
 import com.example.market.domain.auth.dto.UserDto;
 import com.example.market.domain.auth.dto.LoginDto;
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.domain.auth.service.PrincipalDetailsService;
 import com.example.market.domain.auth.jwt.JwtTokenDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -112,54 +110,53 @@ public class UserController {
     }
 
 
-    @PutMapping("/business-application")
+    @PutMapping("/business-apply")
     @Operation(
             summary = "사업자 사용자 전환 신청",
             description = "<p><b>일반 사용자</b> 는 자신의 사업자 등록번호(가정)을 전달해 사업자 사용자로 전환 신청할 수 있습니다.</p>"
     )
-    public ResponseEntity<UserDto> businessApplication(
+    public ResponseEntity<UserDto> applyForBusinessUpdate(
             @RequestBody
             BusinessDto dto
     ) {
-        return ResponseEntity.ok(principalDetailsService.businessApplication(dto));
+        return ResponseEntity.ok(principalDetailsService.applyForBusinessUpgrade(dto));
     }
 
-    @GetMapping("/business-application/list")
+    @GetMapping("/business-requests")
     @Operation(
             summary = "사업자 사용자 전환 신청 목록 조회",
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청 목록을 확인할 수 있다.</p>"
     )
-    public ResponseEntity<List<UserDto>> businessApplicationList() {
-        return ResponseEntity.ok(principalDetailsService.businessApplicationList());
+    public ResponseEntity<List<UserDto>> listBusinessRequests() {
+        return ResponseEntity.ok(principalDetailsService.listBusinessRequests());
     }
 
 
-    @PutMapping("/business-application/{uuid}/approval")
+    @PutMapping("/business-requests/{uuid}/approve")
     @Operation(
             summary = "사업자 사용자 전환 신청 수락",
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청을 수락할 수 있다.</p>"
                     + "<p>일반 사용자가 사업자 사용자로 전환될 때 <b>준비중</b> 상태의 쇼핑몰이 추가된다.</p>"
                     + "<p>사업자 사용자는 이 쇼핑몰의 주인이 된다.</p>"
     )
-    public ResponseEntity<UserDto> businessApplicationApproval(
+    public ResponseEntity<UserDto> approveBusinessRequest(
             @PathVariable(value = "uuid")
             UUID uuid
     ) {
-        return ResponseEntity.ok(principalDetailsService.businessApplicationApproval(uuid));
+        return ResponseEntity.ok(principalDetailsService.approveBusinessRequest(uuid));
     }
 
-    @PutMapping("/business-application/{uuid}/rejection")
+    @PutMapping("/business-requests/{uuid}/reject")
     @Operation(
             summary = "사업자 사용자 전환 신청 거절",
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청을 거절할 수 있다.</p>"
                     + "<p>다른 회원가입 과정을 통해 만들어진 사용자는 관리자가 될 수 없다.</p>"
     )
-    public ResponseEntity<Void> businessApplicationRejection(
+    public ResponseEntity<UserDto> rejectBusinessRequest(
             @PathVariable(value = "uuid")
             UUID uuid
     ) {
-        principalDetailsService.businessApplicationRejection(uuid);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(principalDetailsService.rejectBusinessRequest(uuid));
     }
 }
 

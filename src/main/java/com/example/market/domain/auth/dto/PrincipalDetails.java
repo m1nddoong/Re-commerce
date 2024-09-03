@@ -1,4 +1,4 @@
-package com.example.market.domain.auth.entity;
+package com.example.market.domain.auth.dto;
 
 import com.example.market.domain.auth.entity.User;
 import java.util.Arrays;

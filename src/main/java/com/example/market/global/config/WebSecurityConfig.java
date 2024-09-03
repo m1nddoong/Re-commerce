@@ -97,9 +97,7 @@ public class WebSecurityConfig {
                         )
                         .hasRole("OWNER")
                         .requestMatchers(
-                                "/api/v1/users/business-application/list",
-                                "/api/v1/users/business-application/{uuid}/approval",
-                                "/api/v1/users/business-application/{uuid}/rejection",
+                                "/api/v1/users/business-requests/**",
                                 "/api/v1/shop/open-request-list",
                                 "/api/v1/shop/open-request/{shopId}/approval",
                                 "/api/v1/shop/open-request/{shopId}/rejection",

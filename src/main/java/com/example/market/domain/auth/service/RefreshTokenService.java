@@ -6,6 +6,9 @@ import com.example.market.domain.auth.entity.User;
 import com.example.market.domain.auth.jwt.JwtTokenUtils;
 import com.example.market.domain.auth.jwt.TokenType;
 import com.example.market.domain.auth.repository.RefreshTokenRepository;
+import com.example.market.global.util.CookieUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +25,12 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationFacade authFacade;
+    private final CookieUtil cookieUtil;
 
     /**
      * accessToken, refreshToken 재발급
      */
-    public JwtTokenDto reIssueJwtToken() {
+    public JwtTokenDto reIssueJwtToken(HttpServletResponse response) {
         // 현재 인증된 사용자 정보 가져오기
         User currentUser = authFacade.extractUser();
         String uuid = String.valueOf(currentUser.getUuid());
@@ -48,6 +52,11 @@ public class RefreshTokenService {
                 .build()
         );
 
+        // 기존 Authroization 쿠키 삭제, 새 쿠키 생성 및 추가
+        Cookie deleteCookie = cookieUtil.deleteCookie("Authorization");
+        response.addCookie(deleteCookie);
+        Cookie newCookie = cookieUtil.createCookie("Authorization", newAccessToken);
+        response.addCookie(newCookie);
 
         return JwtTokenDto.builder()
                 .uuid(uuid)

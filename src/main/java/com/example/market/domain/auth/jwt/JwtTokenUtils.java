@@ -1,6 +1,6 @@
 package com.example.market.domain.auth.jwt;
 
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
 import java.nio.charset.StandardCharsets;

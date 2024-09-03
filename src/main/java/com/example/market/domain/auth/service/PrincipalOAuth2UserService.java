@@ -2,7 +2,7 @@ package com.example.market.domain.auth.service;
 
 import com.example.market.domain.auth.constant.Role;
 import com.example.market.domain.auth.entity.User;
-import com.example.market.domain.auth.entity.PrincipalDetails;
+import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.domain.auth.constant.SocialType;
 import com.example.market.domain.auth.dto.oauth2.GoogleResponse;
 import com.example.market.domain.auth.repository.UserRepository;
