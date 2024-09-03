@@ -9,6 +9,7 @@ import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.domain.auth.service.PrincipalDetailsService;
 import com.example.market.domain.auth.jwt.JwtTokenDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -29,9 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 
-@Tag(name = "user", description = "사용자에 관한 API")
+@Tag(name = "auth", description = "사용자 인증 관련 API")
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class UserController {
     private final PrincipalDetailsService principalDetailsService;
@@ -56,6 +57,7 @@ public class UserController {
 
 
     @PostMapping("/sign-in")
+    @ApiResponse()
     @Operation(
             summary = "로그인",
             description = "<p>사용자가 '이메일', '비밀번호' 를 입력하여 로그인 합니다. </p>"
@@ -109,6 +111,15 @@ public class UserController {
         return ResponseEntity.ok(principalDetailsService.updateProfile(dto, profileImg));
     }
 
+    @PostMapping("/token/refresh")
+    @Operation(
+            summary = "accessToken 재발급",
+            description = "<p>현재 인증된 사용자의 uuid 부터 redis 에 저장된 accessToken 을 찾고,</p>"
+                    + "<p>accessToken, refreshToken 재발급</p>"
+    )
+    public ResponseEntity<JwtTokenDto> refreshJwtToken(HttpServletResponse response) {
+        return ResponseEntity.ok(principalDetailsService.refreshJwtToken(response));
+    }
 
     @PutMapping("/business-apply")
     @Operation(

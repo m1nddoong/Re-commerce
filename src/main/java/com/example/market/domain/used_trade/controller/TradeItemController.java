@@ -1,7 +1,7 @@
-package com.example.market.domain.trade.controller;
+package com.example.market.domain.used_trade.controller;
 
-import com.example.market.domain.trade.service.TradeItemService;
-import com.example.market.domain.trade.dto.TradeItemDto;
+import com.example.market.domain.used_trade.service.TradeItemService;
+import com.example.market.domain.used_trade.dto.TradeItemDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class TradeItemController {
     private final TradeItemService tradeItemService;
 
-    // 물품 등록
     @PostMapping(
             value = "/create",
             consumes = {
@@ -50,7 +49,6 @@ public class TradeItemController {
         return ResponseEntity.ok(tradeItemService.createTradeItem(dto, tradeItemImg));
     }
 
-    // 물품 조회
     @GetMapping("/{tradeItemId}")
     @Operation(
             summary = "중고 거래 물품 조회",
@@ -59,13 +57,12 @@ public class TradeItemController {
 
     )
     public ResponseEntity<TradeItemDto> readTradeItem(
-            @PathVariable
+            @PathVariable(value = "tradeItemId")
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeItemService.readTradeItem(tradeItemId));
     }
 
-    // 물품 수정
     @PutMapping(
             value = "/update/{tradeItemId}",
             consumes = {
@@ -82,23 +79,22 @@ public class TradeItemController {
             TradeItemDto dto,
             @RequestPart(value = "img", required = false)
             MultipartFile tradeItemImg,
-            @PathVariable
+            @PathVariable(value = "tradeItemId")
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeItemService.updateTradeItem(dto, tradeItemImg, tradeItemId));
     }
 
-    // 물품 삭제
     @DeleteMapping("/delete/{tradeItemId}")
     @Operation(
             summary = "중고 거래 물품 삭제",
             description = "<p>등록된 물품 정보는 작성자가 삭제 가능하다.</p>"
     )
-    public ResponseEntity<Void> deleteTradeItem(
-            @PathVariable
+    public ResponseEntity<String> deleteTradeItem(
+            @PathVariable(value = "tradeItemId")
             Long tradeItemId
     ) {
         tradeItemService.deleteTradeItem(tradeItemId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("중고 거래 물품이 삭제되었습니다.");
     }
 }

@@ -1,8 +1,8 @@
-package com.example.market.domain.trade.repository;
+package com.example.market.domain.used_trade.repository;
 
-import com.example.market.domain.trade.entity.QTradeOffer;
-import com.example.market.domain.trade.entity.TradeOffer;
-import com.example.market.domain.trade.entity.TradeOffer.OfferStatus;
+import com.example.market.domain.used_trade.entity.QTradeOffer;
+import com.example.market.domain.used_trade.entity.TradeOffer;
+import com.example.market.domain.used_trade.entity.TradeOffer.OfferStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

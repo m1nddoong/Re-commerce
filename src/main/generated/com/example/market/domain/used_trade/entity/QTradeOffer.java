@@ -1,4 +1,4 @@
-package com.example.market.domain.trade.entity;
+package com.example.market.domain.used_trade.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QTradeOffer extends EntityPathBase<TradeOffer> {
 
-    private static final long serialVersionUID = -1971684880L;
+    private static final long serialVersionUID = 2110578336L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

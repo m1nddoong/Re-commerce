@@ -3,7 +3,7 @@ package com.example.market.domain.shop.service;
 import com.example.market.domain.auth.entity.User;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
-import com.example.market.domain.auth.service.AuthenticationFacade;
+import com.example.market.global.common.AuthenticationFacade;
 import com.example.market.domain.shop.dto.ShopDto;
 import com.example.market.domain.shop.dto.UpdateShopDto;
 import com.example.market.domain.shop.constant.ShopStatus;
@@ -76,7 +76,7 @@ public class ShopService {
      * @param shopId 쇼핑몰 ID
      * @return 쇼핑몰 정보
      */
-    public ShopDto openRequestApproval(Long shopId) {
+    public ShopDto openRequestApprove(Long shopId) {
         Shop targetShop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.OPEN);
@@ -121,7 +121,7 @@ public class ShopService {
      * @param shopId 쇼핑몰 ID
      * @return 폐쇄된 쇼핑몰 정보
      */
-    public ShopDto closeRequestApproval(Long shopId) {
+    public ShopDto closeRequestApprove(Long shopId) {
         Shop targetShop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.SHOP_NOT_EXISTS));
         targetShop.setStatus(ShopStatus.CLOSED);

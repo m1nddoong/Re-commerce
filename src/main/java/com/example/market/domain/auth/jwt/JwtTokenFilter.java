@@ -26,8 +26,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String[] excludePath = {
-                "/api/v1/users/sign-up",
-                "/api/v1/users/sign-in"
+                "/swagger-ui/**",
+                "/v1/api-docs/**",
+                "/api/v1/auth/sign-up",
+                "/api/v1/auth/sign-in"
         };
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
@@ -40,6 +42,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         // 쿠키에 담긴 Authorization값 Token으로 받아오고 검증하기
+        log.info("JWT 쿠키 검증 시작");
         String accessToken = getTokenFromCookie(request);
         if (accessToken == null) {
             log.info("토큰이 정보가 없습니다.");
@@ -64,7 +67,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Authorization")) {
                     authorization = cookie.getValue();
-                    log.info("authorization : {} ", authorization);
+                    log.info("authorization 쿠키: {} ", authorization);
                 }
             }
         } else {

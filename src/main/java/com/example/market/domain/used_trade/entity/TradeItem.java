@@ -1,7 +1,7 @@
-package com.example.market.domain.trade.entity;
-
+package com.example.market.domain.used_trade.entity;
 
 import com.example.market.domain.auth.entity.User;
+import com.example.market.global.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,36 +16,40 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Entity
 @Getter
-@Builder
+@SuperBuilder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradeOffer { // 구매 제안 테이블
+public class TradeItem extends BaseEntity { // 물품 정보
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // offerId
+    private Long id;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private TradeItem items; // 어떤 물품인지
-
+    private String title;
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "offering_user_id")
-    private User offeringUser; // 제안하는 사람이 누구인지
+    private String description;
+    @Setter
+    private String image;
+    @Setter
+    private Long price;
 
-
-    // 구매 제안의 상태 (거절 상태, 수락 상태, 확정 상태)
     @Setter
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    private OfferStatus offerStatus = OfferStatus.Wait;
-    public enum OfferStatus {
-        // 대기, 승인, 거절, 확정
-        Wait, Approval, Rejection, Confirm
+    private ItemStatus itemStatus = ItemStatus.ON_SALE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public enum ItemStatus {
+        // 판매중, 거래완료
+        ON_SALE, SOLD
     }
+
 
 }

@@ -54,10 +54,10 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<com.example.market.domain.auth.constant.SocialType> socialType = createEnum("socialType", com.example.market.domain.auth.constant.SocialType.class);
 
-    public final ListPath<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem> tradeItem = this.<com.example.market.domain.trade.entity.TradeItem, com.example.market.domain.trade.entity.QTradeItem>createList("tradeItem", com.example.market.domain.trade.entity.TradeItem.class, com.example.market.domain.trade.entity.QTradeItem.class, PathInits.DIRECT2);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
+
+    public final ListPath<com.example.market.domain.used_trade.entity.TradeItem, com.example.market.domain.used_trade.entity.QTradeItem> usedTradeItem = this.<com.example.market.domain.used_trade.entity.TradeItem, com.example.market.domain.used_trade.entity.QTradeItem>createList("usedTradeItem", com.example.market.domain.used_trade.entity.TradeItem.class, com.example.market.domain.used_trade.entity.QTradeItem.class, PathInits.DIRECT2);
 
     public final StringPath username = createString("username");
 

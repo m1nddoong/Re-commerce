@@ -1,7 +1,7 @@
-package com.example.market.domain.trade.controller;
+package com.example.market.domain.used_trade.controller;
 
-import com.example.market.domain.trade.dto.TradeOfferDto;
-import com.example.market.domain.trade.service.TradeOfferService;
+import com.example.market.domain.used_trade.dto.TradeOfferDto;
+import com.example.market.domain.used_trade.service.TradeOfferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -13,28 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "trade-offer", description = "중고 거래 품물 구매에 관한 API")
+@Tag(name = "trade-offers", description = "중고 거래 품물 구매에 관한 API")
 @RestController
-@RequestMapping("/api/v1/trade-offer")
+@RequestMapping("/api/v1/trade-offers")
 @RequiredArgsConstructor
 public class TradeOfferController {
     private final TradeOfferService tradeOfferService;
 
-    // 구매 제안 등록 (어떤 물품에 대한 제안인지 pathVariable)
-    @GetMapping("/{tradeItemId}")
+    @GetMapping("/{tradeItemId}/create")
     @Operation(
             summary = "구매 제안 등록",
             description = "<p><b>물품을 등록한 사용자</b>와 <b>비활성 사용자</b> 제외, 등록된 물품에 대하여 구매 제안을 등록할 수 있다.</p>"
     )
     public ResponseEntity<TradeOfferDto> requestTradeOffer(
-            @PathVariable("tradeItemId")
+            @PathVariable(value = "tradeItemId")
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeOfferService.requestTradeOffer(tradeItemId));
     }
 
 
-    // 구매 제안 조회 (제안 등록자, 물품 등록자만 가능)
     @GetMapping("/{tradeItemId}/list")
     @Operation(
             summary = "구매 제안 조회",
@@ -43,21 +41,21 @@ public class TradeOfferController {
                     + "<p><b>물품을 등록한 사용자</b>는 모든 제안이 확인 가능하다.</p>"
     )
     public ResponseEntity<List<TradeOfferDto>> getTadeOfferList(
-            @PathVariable("tradeItemId")
+            @PathVariable(value = "tradeItemId")
             Long tradeItemId
     ) {
         return ResponseEntity.ok(tradeOfferService.getTradeOfferList(tradeItemId));
     }
 
     // 구매 제안 수락
-    @GetMapping("/{tradeOfferId}/approval")
+    @GetMapping("/{tradeOfferId}/approve")
     @Operation(
             summary = "구매 제안 수락",
             description = "<p><b>물픔을 등록한 사용자</b>는 등록된 구매 제안을 수락할 수 있다.</p>"
                     + "<p>이때 구매 제안의 상태는 <b>수락</b>이 된다.</p>"
     )
     public ResponseEntity<TradeOfferDto> approvalTradeOffer(
-            @PathVariable("tradeOfferId")
+            @PathVariable(value = "tradeOfferId")
             Long tradeOfferId
     ) {
         return ResponseEntity.ok(tradeOfferService.approvalTradeOffer(tradeOfferId));
@@ -72,7 +70,7 @@ public class TradeOfferController {
                     + "<p>이때 구매 제안의 상태는 <b>거절</b>이 된다.</p>"
     )
     public ResponseEntity<TradeOfferDto> rejectionTradeOffer(
-            @PathVariable("tradeOfferId")
+            @PathVariable(value = "tradeOfferId")
             Long tradeOfferId
     ) {
         return ResponseEntity.ok(tradeOfferService.rejectTradeOffer(tradeOfferId));
@@ -88,7 +86,7 @@ public class TradeOfferController {
                     + "<p>구매 제안이 확정될 경우, 확정되지 않은 다른 구매 제안의 상태는 모두 <b>거절</b>이 된다.</p>"
     )
     public ResponseEntity<TradeOfferDto> confirmTradeOffer(
-            @PathVariable
+            @PathVariable(value = "tradeOfferId")
             Long tradeOfferId
     ) {
         return ResponseEntity.ok(tradeOfferService.confirmTradeOffer(tradeOfferId));

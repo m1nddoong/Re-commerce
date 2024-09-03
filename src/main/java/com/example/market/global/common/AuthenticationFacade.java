@@ -1,4 +1,4 @@
-package com.example.market.domain.auth.service;
+package com.example.market.global.common;
 
 import com.example.market.domain.auth.entity.User;
 import com.example.market.domain.auth.dto.PrincipalDetails;

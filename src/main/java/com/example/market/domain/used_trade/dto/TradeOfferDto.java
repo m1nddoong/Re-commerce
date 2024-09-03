@@ -1,7 +1,7 @@
-package com.example.market.domain.trade.dto;
+package com.example.market.domain.used_trade.dto;
 
 
-import com.example.market.domain.trade.entity.TradeOffer;
+import com.example.market.domain.used_trade.entity.TradeOffer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -8,7 +8,7 @@ import com.example.market.domain.shop.entity.SubCategory;
 import com.example.market.domain.auth.entity.User;
 import com.example.market.global.error.exception.GlobalCustomException;
 import com.example.market.global.error.exception.ErrorCode;
-import com.example.market.domain.auth.service.AuthenticationFacade;
+import com.example.market.global.common.AuthenticationFacade;
 import com.example.market.domain.shop.dto.SearchItemDto;
 import com.example.market.domain.shop.repository.ItemRepository;
 import com.example.market.domain.shop.dto.CreateItemDto;
@@ -46,7 +46,9 @@ public class ItemService {
      */
     public ItemDto createItem(CreateItemDto dto) {
         User user = authFacade.extractUser();
+        // 카테고리 지정
         Category targetCategory = getOrCreateCategory(dto.getItemCategory());
+        // 서브 카테고리 지정
         SubCategory targetSubCategory = getOrCreateSubCategory(dto.getItemSubCategory(), targetCategory);
         return ItemDto.fromEntity(itemRepository.save(Item.builder()
                 .name(dto.getName())
@@ -131,12 +133,11 @@ public class ItemService {
                     return categoryRepository.save(newCategory);
                 });
     }
-
     /**
      * 서브 카테고리 조회 및 생성
      */
     private SubCategory getOrCreateSubCategory(String subCategoryName, Category parentCategory) {
-        return subCategoryRepository.findByName(subCategoryName)
+        return subCategoryRepository.findByNameAndCategory(subCategoryName, parentCategory)
                 .orElseGet(() -> {
                     SubCategory newSubCategory = SubCategory.builder()
                             .name(subCategoryName)
@@ -145,6 +146,7 @@ public class ItemService {
                     return subCategoryRepository.save(newSubCategory);
                 });
     }
+
 
 
     /**

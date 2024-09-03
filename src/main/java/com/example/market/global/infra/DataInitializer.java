@@ -121,6 +121,7 @@ public class DataInitializer implements ApplicationRunner {
                 createShop("은지원 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN, users[10]),
                 createShop("조규현 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.OPEN, users[11]),
                 createShop("안재현 마켓", "스포츠 쇼핑몰", ShopCategory.SPORT, ShopStatus.CLOSE_REQUEST, users[12]),
+                createShop("송민호 마켓", "전자제품 쇼핑몰", ShopCategory.ELECTRONICS, ShopStatus.OPEN, users[13]),
         };
         shopRepository.saveAll(Arrays.asList(shops));
 

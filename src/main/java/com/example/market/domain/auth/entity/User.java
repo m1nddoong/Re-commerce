@@ -4,9 +4,9 @@ package com.example.market.domain.auth.entity;
 
 import com.example.market.domain.auth.constant.BusinessStatus;
 import com.example.market.domain.auth.constant.Role;
+import com.example.market.domain.used_trade.entity.TradeItem;
 import com.example.market.global.common.BaseEntity;
 import com.example.market.domain.shop.entity.Shop;
-import com.example.market.domain.trade.entity.TradeItem;
 import com.example.market.domain.auth.constant.SocialType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,7 +57,7 @@ public class User extends BaseEntity {
     private SocialType socialType;
 
     @OneToMany(mappedBy = "user")
-    private List<TradeItem> tradeItem;
+    private List<TradeItem> usedTradeItem;
 
     @OneToOne(mappedBy = "user")
     private Shop shop;

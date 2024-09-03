@@ -1,12 +1,12 @@
-package com.example.market.domain.trade.service;
+package com.example.market.domain.used_trade.service;
 
 import com.example.market.domain.auth.entity.User;
-import com.example.market.domain.auth.service.AuthenticationFacade;
+import com.example.market.domain.used_trade.entity.TradeItem;
+import com.example.market.global.common.AuthenticationFacade;
 import com.example.market.global.util.FileHandlerUtils;
-import com.example.market.domain.trade.dto.TradeItemDto;
-import com.example.market.domain.trade.entity.TradeItem;
-import com.example.market.domain.trade.entity.TradeItem.ItemStatus;
-import com.example.market.domain.trade.repository.TradeItemRepository;
+import com.example.market.domain.used_trade.dto.TradeItemDto;
+import com.example.market.domain.used_trade.entity.TradeItem.ItemStatus;
+import com.example.market.domain.used_trade.repository.TradeItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class TradeItemService {
         // 최초 물품 등록 시 이미지 업로드
         String imagePath = fileHandlerUtils.saveImage(tradeItemImg);
 
-        // tradeItem 생성 및 저장, dto 반환
+        // usedTradeItem 생성 및 저장, dto 반환
         return TradeItemDto.fromEntity(tradeItemRepository.save(TradeItem.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -56,38 +56,38 @@ public class TradeItemService {
     ) {
         // 현재 인증된 사용자가 누구인지, 어떤 물건인지 찾고
         User currentUser = authenticationFacade.extractUser();
-        TradeItem targetTradeItem = tradeItemRepository.findById(tradeItemId)
+        TradeItem targetUsedTradeItem = tradeItemRepository.findById(tradeItemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // 내가 수정하고자 하는 물건을 소유한 사람이 맞는지 email 을 가지고 판단
-        if (!currentUser.getEmail().equals(targetTradeItem.getUser().getEmail())) {
+        if (!currentUser.getEmail().equals(targetUsedTradeItem.getUser().getEmail())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         // 기존 이미지 삭제 후 새로운 이미지 저장
-        String oldImage = targetTradeItem.getImage();
+        String oldImage = targetUsedTradeItem.getImage();
         if (oldImage != null) fileHandlerUtils.deleteImage(oldImage);
 
         String imagePath = fileHandlerUtils.saveImage(tradeItemImg);
         imagePath = imagePath.replaceAll("\\\\", "/");
         currentUser.setProfileImg(imagePath);
 
-        targetTradeItem.setTitle(dto.getTitle());
-        targetTradeItem.setDescription(dto.getDescription());
-        targetTradeItem.setPrice(dto.getPrice());
-        targetTradeItem.setImage(imagePath);
+        targetUsedTradeItem.setTitle(dto.getTitle());
+        targetUsedTradeItem.setDescription(dto.getDescription());
+        targetUsedTradeItem.setPrice(dto.getPrice());
+        targetUsedTradeItem.setImage(imagePath);
 
-        return TradeItemDto.fromEntity(tradeItemRepository.save(targetTradeItem));
+        return TradeItemDto.fromEntity(tradeItemRepository.save(targetUsedTradeItem));
     }
 
     // 증고 거래 물품 삭제
     public void deleteTradeItem(Long tradeItemId) {
         User currentUser = authenticationFacade.extractUser();
-        TradeItem targetTradeItem = tradeItemRepository.findById(tradeItemId)
+        TradeItem targetUsedTradeItem = tradeItemRepository.findById(tradeItemId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // 내가 삭제하고자 하는 물건을 소유한 사람이 맞는지 email 을 가지고 판단
-        if (!currentUser.getEmail().equals(targetTradeItem.getUser().getEmail())) {
+        if (!currentUser.getEmail().equals(targetUsedTradeItem.getUser().getEmail())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         tradeItemRepository.deleteById(tradeItemId);

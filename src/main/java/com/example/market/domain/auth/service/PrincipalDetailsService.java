@@ -17,6 +17,7 @@ import com.example.market.domain.auth.repository.UserRepository;
 import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.global.error.exception.ErrorCode;
 import com.example.market.global.error.exception.GlobalCustomException;
+import com.example.market.global.common.AuthenticationFacade;
 import com.example.market.global.util.CookieUtil;
 import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.shop.entity.Shop;
@@ -46,24 +47,9 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
     private final CookieUtil cookieUtil;
-    private final AuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authFacade;
     private final FileHandlerUtils fileHandlerUtils;
     private final RefreshTokenRepository refreshTokenRepository;
-
-
-
-    /*
-    글 잘 읽었습니다 :) 이전 포스트에서 JWTFilter를 구현하신 부분에서 UserDetails에 회원 정보를 담교 세션에 사용자를 등록하셨잖아요. 그런데 OAuth2로 로그인한 사용자도
-     */
-
-    @Override
-    // 원래는 username 을 이용해 사용자 정보를 조회하지만 email 사용
-    public PrincipalDetails loadUserByUsername(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
-        // 조회된 사용자 정보를 바탕으로 CustomUserDetails 로 만들기
-        return new PrincipalDetails(user);
-    }
 
     /**
      * 회원 가입
@@ -146,7 +132,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      */
     public void signOut(HttpServletResponse response) {
         // 현재 인증된 사용자의 uuid 조회
-        String uuid = String.valueOf(authenticationFacade.extractUser().getUuid());
+        String uuid = String.valueOf(authFacade.extractUser().getUuid());
         // Redis 에서 refreshToken 삭제
         refreshTokenRepository.findById(uuid)
                 .ifPresentOrElse(
@@ -175,7 +161,7 @@ public class PrincipalDetailsService implements UserDetailsService {
             UpdateUserDto dto,
             MultipartFile profileImg
     ) {
-        User currentUser = authenticationFacade.extractUser();
+        User currentUser = authFacade.extractUser();
 
         // 기존 이미지 삭제
         String oldProfile = currentUser.getProfileImg();
@@ -183,15 +169,66 @@ public class PrincipalDetailsService implements UserDetailsService {
             fileHandlerUtils.deleteImage(oldProfile);
         }
 
+        // 필수정보를 전부 기입한 비활성 유저의 경우
+        Role role;
+        if (currentUser.getRole().equals(Role.INACTIVE_USER) &&
+                dto.getUsername() != null && !dto.getUsername().isEmpty() &&
+                dto.getNickname() != null && !dto.getNickname().isEmpty() &&
+                dto.getBirthday() != null &&
+                dto.getPhone() != null && !dto.getPhone().isEmpty()
+        ) {
+            role = Role.ACTIVE_USER;
+        } else {
+            role = currentUser.getRole();
+        }
+
         currentUser.setUsername(dto.getUsername());
         currentUser.setPhone(dto.getPhone());
         currentUser.setNickname(dto.getNickname());
         currentUser.setBirthday(dto.getBirthday());
         currentUser.setProfileImg(fileHandlerUtils.saveImage(profileImg));
-        currentUser.setRole(Role.ACTIVE_USER);
+        currentUser.setRole(role);
         return UserDto.fromEntity(userRepository.save(currentUser));
     }
 
+    /**
+     * accessToken, refreshToken 재발급
+     */
+    public JwtTokenDto refreshJwtToken(HttpServletResponse response) {
+        // 현재 인증된 사용자 정보 가져오기
+        User currentUser = authFacade.extractUser();
+        String uuid = String.valueOf(currentUser.getUuid());
+        String email = currentUser.getEmail();
+
+        // uuid 로 refreshToken 조회
+        RefreshToken storedRefreshToken = refreshTokenRepository.findById(uuid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // 사용자 정보를 바탕으로 새로운 accessToken, refreshToken 생성
+        String newAccessToken = jwtTokenUtils.createJwt(email, TokenType.ACCESS);
+        String newRefreshToken = jwtTokenUtils.createJwt(email, TokenType.REFRESH);
+
+        // 기존 refreshToken 삭제, 새 refreshToken을 redis 에 저장
+        refreshTokenRepository.delete(storedRefreshToken);
+        refreshTokenRepository.save(RefreshToken.builder()
+                .uuid(uuid)
+                .refreshToken(newRefreshToken)
+                .build()
+        );
+
+        // 기존 Authroization 쿠키 삭제, 새 쿠키 생성 및 추가
+        Cookie deleteCookie = cookieUtil.deleteCookie("Authorization");
+        response.addCookie(deleteCookie);
+        Cookie newCookie = cookieUtil.createCookie("Authorization", newAccessToken);
+        response.addCookie(newCookie);
+
+        return JwtTokenDto.builder()
+                .uuid(uuid)
+                .accessToken(newAccessToken)
+                .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
+                .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
+                .build();
+    }
 
     /**
      * 사업자 전환 신청
@@ -199,8 +236,9 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param dto 사업자 등록 번호
      */
     public UserDto applyForBusinessUpgrade(BusinessDto dto) {
-        User currentUser = authenticationFacade.extractUser();
+        User currentUser = authFacade.extractUser();
         currentUser.setBusinessNum(dto.getBusinessNum());
+        currentUser.setBusinessStatus(BusinessStatus.APPLIED);
         return UserDto.fromEntity(userRepository.save(currentUser));
     }
 
@@ -247,4 +285,14 @@ public class PrincipalDetailsService implements UserDetailsService {
         user.setBusinessStatus(BusinessStatus.REJECTED);
         return UserDto.fromEntity(userRepository.save(user));
     }
+
+    @Override
+    // 원래는 username 을 이용해 사용자 정보를 조회하지만 email 사용
+    public PrincipalDetails loadUserByUsername(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+        // 조회된 사용자 정보를 바탕으로 CustomUserDetails 로 만들기
+        return new PrincipalDetails(user);
+    }
+
 }

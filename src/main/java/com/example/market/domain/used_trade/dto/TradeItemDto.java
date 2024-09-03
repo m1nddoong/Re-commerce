@@ -1,8 +1,8 @@
-package com.example.market.domain.trade.dto;
+package com.example.market.domain.used_trade.dto;
 
 
-import com.example.market.domain.trade.entity.TradeItem.ItemStatus;
-import com.example.market.domain.trade.entity.TradeItem;
+import com.example.market.domain.used_trade.entity.TradeItem;
+import com.example.market.domain.used_trade.entity.TradeItem.ItemStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

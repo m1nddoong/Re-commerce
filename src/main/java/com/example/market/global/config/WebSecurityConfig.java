@@ -62,21 +62,21 @@ public class WebSecurityConfig {
                                 "/",
                                 "/login/success",
                                 "/jwt/verify",
-                                "/api/v1/users/sign-up",
-                                "/api/v1/users/sign-in"
+                                "/api/v1/auth/sign-up",
+                                "/api/v1/auth/sign-in"
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/api/v1/users/sign-out",
-                                "/api/v1/users/profile",
-                                "/api/v1/users/profile/update",
-                                "/api/v1/token/reissue-token"
+                                "/api/v1/auth/sign-out",
+                                "/api/v1/auth/profile",
+                                "/api/v1/auth/profile/update",
+                                "/api/v1/auth/token/refresh"
                         )
                         .authenticated()
                         .requestMatchers(
-                                "/api/v1/users/business-application",
+                                "/api/v1/auth/business-apply",
                                 "/api/v1/trade-item/**",
-                                "/api/v1/trade-offer/**",
+                                "/api/v1/trade-offers/**",
                                 "/api/v1/shop/search",
                                 "/api/v1/shop/update",
                                 "/api/v1/shop/open-request",
@@ -86,7 +86,6 @@ public class WebSecurityConfig {
                                 "/api/v1/item/categories/{categoryId}",
                                 "/api/v1/order/create",
                                 "/api/v1/order/cancel/{orderId}"
-
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers(
@@ -97,12 +96,12 @@ public class WebSecurityConfig {
                         )
                         .hasRole("OWNER")
                         .requestMatchers(
-                                "/api/v1/users/business-requests/**",
-                                "/api/v1/shop/open-request-list",
-                                "/api/v1/shop/open-request/{shopId}/approval",
-                                "/api/v1/shop/open-request/{shopId}/rejection",
-                                "/api/v1/shop/close-request-list",
-                                "/api/v1/shop/close-request/{shopId}/approval",
+                                "/api/v1/auth/business-requests/**",
+                                "/api/v1/shop/open-request/list",
+                                "/api/v1/shop/open-request/{shopId}/approve",
+                                "/api/v1/shop/open-request/{shopId}/reject",
+                                "/api/v1/shop/close-request/list",
+                                "/api/v1/shop/close-request/{shopId}/approve",
                                 "/api/v1/item/categories/merge/**",
                                 "/api/v1/item/categories/merge/sub/**",
                                 "/api/v1/order/approval/{orderId}"
