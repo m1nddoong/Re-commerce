@@ -77,6 +77,14 @@ public class PrincipalDetailsService implements UserDetailsService {
             role = Role.ACTIVE_USER;
         }
 
+        // 프로필 이미지 설정
+        String img;
+        if (profileImg != null && !profileImg.isEmpty()) {
+            img = fileHandlerUtils.saveImage(profileImg);
+        } else {
+            img = null;
+        }
+
         // 사용자 생성
         return UserDto.fromEntity(userRepository.save(User.builder()
                 .uuid(UUID.randomUUID())
@@ -86,7 +94,7 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .phone(dto.getPhone())
                 .nickname(dto.getNickname())
                 .birthday(dto.getBirthday())
-                .profileImg(fileHandlerUtils.saveImage(profileImg))
+                .profileImg(img)
                 .role(role)
                 .build()));
     }

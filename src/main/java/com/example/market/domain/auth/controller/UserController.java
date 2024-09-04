@@ -10,6 +10,7 @@ import com.example.market.domain.auth.service.PrincipalDetailsService;
 import com.example.market.domain.auth.jwt.JwtTokenDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Tag(name = "auth", description = "사용자 인증 관련 API")
+// @SecurityRequirement(name = "Authorization")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -50,7 +52,6 @@ public class UserController {
             CreateUserDto dto,
             @RequestPart(value = "profileImg", required = false)
             MultipartFile profileImg
-
     ) {
         return ResponseEntity.ok(principalDetailsService.signUp(dto, profileImg));
     }

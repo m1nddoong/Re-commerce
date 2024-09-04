@@ -81,3 +81,4 @@ springdoc:
   paths-to-match:
     - /api/v1/**
   show-oauth2-endpoints: true
+  show-login-endpoint: true

@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Component
 public class FileHandlerUtils {
     public String saveImage(MultipartFile image) {
+
         String imgDir = "media/img/profiles/";
         String imgName = UUID.randomUUID() + "_" + image.getOriginalFilename();
         Path imgPath = Path.of(imgDir + imgName);
