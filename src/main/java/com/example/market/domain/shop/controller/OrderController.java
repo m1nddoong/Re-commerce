@@ -37,33 +37,31 @@ public class OrderController {
     }
 
     // 상품 주문 전체 취소
-    @PutMapping("/cancel/{orderId}")
+    @PutMapping("/{orderId}/cancel")
     @Operation(
             summary = "상품 구매 요청 취소",
             description = "<p>구매 요청이 수락되기 전에는 구매 요청을 취소할 수 있다.</p>"
     )
-    public ResponseEntity<Void> cancelOrder(
+    public ResponseEntity<String> cancelOrder(
             @PathVariable(value = "orderId")
             Long orderId
     ) {
-        orderService.cancelOrder(orderId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(orderService.cancelOrder(orderId));
     }
 
 
     // 쇼핑몰 구매 요청 수락
-    @PutMapping("/approval/{orderId}")
+    @PutMapping("/{orderId}/approve")
     @Operation(
             summary = "상품 구매 요청 수락",
             description = "<p>주인이 구매 요청으로부터 전달된 금액을 확인하면 구매 요청을 수락할 수 있다.</p>"
                     + "<p>구매 요청이 수락되면, 상품 재고가 자동으로 갱신된다. 이후엔 구매 취소가 불가능하다.</p>"
     )
-            public ResponseEntity<Void> approvalOrder(
+            public ResponseEntity<String> approvalOrder(
             @PathVariable(value = "orderId")
             Long orderId
     ) {
-        orderService.approvalOrder(orderId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(orderService.approvalOrder(orderId));
     }
 
 }

@@ -63,7 +63,7 @@ public class OrderService {
     }
 
     // 상품 주문 전체 취소
-    public void cancelOrder(Long orderId) {
+    public String cancelOrder(Long orderId) {
         User currentUser = authFacade.extractUser();
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_EXISTS));
@@ -80,11 +80,12 @@ public class OrderService {
         }
         order.setStatus(OrderStatus.ORDER_CANCEL);
         orderRepository.save(order);
+        return "상품 구매 요청이 취소되었습니다.";
     }
 
     // 관리자의 상품 주문 수락, 재고 갱신
     @Transactional
-    public void approvalOrder(Long orderId) {
+    public String approvalOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_EXISTS));
 
@@ -117,5 +118,6 @@ public class OrderService {
         Shop shop = item.getShop();
         shop.setLastTransactionDate(LocalDateTime.now());
         shopRepository.save(shop);
+        return "상품 구매 요청을 수락하였습니다.";
     }
 }

@@ -124,14 +124,13 @@ public class ItemController {
                     + "<p>'categoryId2' PK를 가진 카테고리가 'categoryId1' PK를 가진 카테고리로 통합된다 (ex. \"피부\", \"스킨\" -> \"스킨\" 통합)</p>"
                     + "<p>이떄, 각 카테고리에 있던 서브 카테고리들 간 이름이 같은 것들은 서로 통합되고. 그렇지 않다면 서브 카테고리가 추가된다.</p>"
     )
-    public ResponseEntity<Void> mergeCategories(
+    public ResponseEntity<String> mergeCategories(
             @PathVariable("categoryId1") // 통합될 카테고리
             Long categoryId1,
             @PathVariable("categoryId2") // 통합할 카테고리
             Long categoryId2
     ) {
-        itemService.mergeCategories(categoryId1, categoryId2);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(itemService.mergeCategories(categoryId1, categoryId2));
     }
 
     @PutMapping("/categories/merge/sub/{subCategoryId1}/{subCategoryId2}")
@@ -140,14 +139,13 @@ public class ItemController {
             description = "<p>관리자는 상품 소분류 목록을 보고, 유사한 소분류를 같은 소분류가 될 수 있도록 소분류를 수정할 수 있다.</p>"
                     + "<p>'subCategoryId2' PK를 가진 서브 카테고리가 'subCategoryId1' PK를 가진 서브 카테고리로 통합된다</p>"
     )
-    public ResponseEntity<Void> mergeSubCategories(
+    public ResponseEntity<String> mergeSubCategories(
             @PathVariable("subCategoryId1")
             Long subCategoryId1,
             @PathVariable("subCategoryId2")
             Long subCategoryId2
     ) {
-        itemService.mergeSubCategories(subCategoryId1, subCategoryId2);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(itemService.mergeSubCategories(subCategoryId1, subCategoryId2));
     }
 
 

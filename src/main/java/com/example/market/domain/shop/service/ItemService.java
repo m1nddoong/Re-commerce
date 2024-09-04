@@ -147,8 +147,6 @@ public class ItemService {
                 });
     }
 
-
-
     /**
      * 전체 카테고리 조회
      *
@@ -191,7 +189,7 @@ public class ItemService {
      * @param categoryId1 통합될 카테고리
      * @param categoryId2 통합할 카테고리
      */
-    public void mergeCategories(Long categoryId1, Long categoryId2) {
+    public String mergeCategories(Long categoryId1, Long categoryId2) {
         Category category1 = categoryRepository.findById(categoryId1)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_CATEGORY_NOT_FOUND));
         Category category2 = categoryRepository.findById(categoryId2)
@@ -230,6 +228,7 @@ public class ItemService {
         // 병합할 카테고리 삭제
         categoryRepository.delete(category2);
 
+        return "'" + category2.getName() + "' 분류가 '" + category1.getName() + "' 분류로 통합되었습니다";
     }
 
     /**
@@ -238,7 +237,7 @@ public class ItemService {
      * @param subCategoryId1 통합될 서브 카테고리
      * @param subCategoryId2 통합할 서브 카테고리
      */
-    public void mergeSubCategories(Long subCategoryId1, Long subCategoryId2) {
+    public String mergeSubCategories(Long subCategoryId1, Long subCategoryId2) {
         // 일단 같은 카테고리여야함
         SubCategory subCategory1 = subCategoryRepository.findById(subCategoryId1).
                 orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_SUBCATEGORY_NOT_FOUND));
@@ -253,6 +252,7 @@ public class ItemService {
         }
         itemRepository.saveAll(items);
         subCategoryRepository.delete(subCategory2);
+        return "'" + subCategory2.getName() + "' 소뷴류가 '" + subCategory1.getName() + "' 소분류로 통합되었습니다.";
     }
 
     /**

@@ -85,7 +85,7 @@ public class WebSecurityConfig {
                                 "/api/v1/item/categories",
                                 "/api/v1/item/categories/{categoryId}",
                                 "/api/v1/order/create",
-                                "/api/v1/order/cancel/{orderId}"
+                                "/api/v1/order/{orderId}/cancel"
                         )
                         .hasRole("ACTIVE")
                         .requestMatchers(
@@ -104,7 +104,7 @@ public class WebSecurityConfig {
                                 "/api/v1/shop/close-request/{shopId}/approve",
                                 "/api/v1/item/categories/merge/**",
                                 "/api/v1/item/categories/merge/sub/**",
-                                "/api/v1/order/approval/{orderId}"
+                                "/api/v1/order/{orderId}/approve"
                         )
                         .hasRole("ADMIN")
 

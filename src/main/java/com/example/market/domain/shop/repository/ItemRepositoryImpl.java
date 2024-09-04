@@ -38,6 +38,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.img,
                         item.description,
                         item.price,
+                        item.discountedPrice,
+                        item.discountExpirationDate,
                         item.category.name,
                         item.subCategory.name,
                         item.stock,
