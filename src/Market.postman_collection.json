@@ -1,0 +1,1263 @@
+{
+	"info": {
+		"_postman_id": "63748e69-a1eb-4ab8-bffe-c8cbfcc95a56",
+		"name": "Market",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32354328"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "sign-up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "createDto",
+									"value": "{\"email\" : \"Brad@naver.com\", \"password\" : \"2222\", \"passwordCheck\" : \"2222\", \"username\" : \"Brad\", \"phone\" : \"010-1234-5678\",  \"nickname\" : \"브레드\", \"birthday\" : \"1999-03-21\"}\n",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "profileImg",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/sign-up",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sign-in",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"admin@naver.com\",\n    \"password\" : \"1111\"\n    \n    // \"email\" : \"Brad@naver.com\",\n    // \"password\" : \"2222\"\n\n    // \"email\" : \"myeongsu@naver.com\",\n    // \"password\" : \"1111\"\n\n    // \"email\" : \"jaeseok@naver.com\",\n    // \"password\" : \"1111\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/sign-in",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sign-out",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/sign-out",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile/update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "updateDto",
+									"value": "{\"nickname\": \"빵빵이\", \"username\": \"Brad\", \"birthday\": \"1999-03-21\", \"phone\": \"010-2222-3333\"}",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "profileImg",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/profile/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "token/refresh",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/token/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"token",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "business-apply",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessNum\": \"605-53-3412\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/business-apply",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"business-apply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "business-requests",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/business-requests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"business-requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "business-requests/{uuid}/approve",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/business-requests/69c511dc-5c88-47ff-911e-0d1d3e3bca7d/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"business-requests",
+								"69c511dc-5c88-47ff-911e-0d1d3e3bca7d",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "business-requests/{uuid}/reject",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/business-requests/707b4fd4-a1cf-46c3-8318-96e387865437/reject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"business-requests",
+								"707b4fd4-a1cf-46c3-8318-96e387865437",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Used-trade",
+			"item": [
+				{
+					"name": "TradeItem",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "dto",
+											"value": "{\"title\": \"아이패드\", \"description\": \"할인중\", \"price\": \"400000\"}",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "img",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-item/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-item",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{tradeItemId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-item/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-item",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update/{tradeItemId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "dto",
+											"value": "{\"title\": \"아이패드\", \"description\": \"배터리 효율 70%\", \"price\": \"400000\"}",
+											"contentType": "application/json",
+											"type": "text"
+										},
+										{
+											"key": "img",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-item/update/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-item",
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete/{tradeItemId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-item/delete/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-item",
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TradeOffer",
+					"item": [
+						{
+							"name": "{tradeItemId}/create",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-offers/1/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-offers",
+										"1",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{tradeItemId}/list",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-offers/1/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-offers",
+										"1",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{tradeOfferId}/approve",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjM0NDg3MjgsImV4cCI6MTcyMzQ1MjMyOCwic3ViIjoiOGI2MWVmNTgtNDg4Ni00ZWYwLWIxNmEtZjQ5NDc3YTdmNDRmIn0.zPluymmFuNZKDmwba1GV-6dFm7yLbnacyVwLwRaeC50",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-offers/1/approve",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-offers",
+										"1",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{tradeOfferId}/reject",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjM0NDg3MjgsImV4cCI6MTcyMzQ1MjMyOCwic3ViIjoiOGI2MWVmNTgtNDg4Ni00ZWYwLWIxNmEtZjQ5NDc3YTdmNDRmIn0.zPluymmFuNZKDmwba1GV-6dFm7yLbnacyVwLwRaeC50",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-offers/2/reject",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-offers",
+										"2",
+										"reject"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{tradeOfferId}/confirm",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjM0NDg3MjgsImV4cCI6MTcyMzQ1MjMyOCwic3ViIjoiOGI2MWVmNTgtNDg4Ni00ZWYwLWIxNmEtZjQ5NDc3YTdmNDRmIn0.zPluymmFuNZKDmwba1GV-6dFm7yLbnacyVwLwRaeC50",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/trade-offers/1/confirm",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"trade-offers",
+										"1",
+										"confirm"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shop",
+			"item": [
+				{
+					"name": "Item",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// 카테고리와 서브 카테고리 모두 존재\n// {\n//     \"name\" : \"무한도전 벨트\",\n//     \"img\" : \"belt.png\",\n//     \"description\" : \"한정판 남성 벨트\",\n//     \"price\" : 30000,\n//     \"itemCategory\" : \"남성 의류\",\n//     \"itemSubCategory\" : \"악세사리\",\n//     \"stock\" : 5\n// }\n\n\n// 카테고리만 새롭게 추가\n// {\n//     \"name\" : \"무한도전 양말\",\n//     \"img\" : \"socks.png\",\n//     \"description\" : \"한정판 양말\",\n//     \"price\" : 30000,\n//     \"itemCategory\" : \"공용 의류\",\n//     \"itemSubCategory\" : \"악세사리\",\n//     \"stock\" : 15\n// }\n\n\n// 서브 카테고리만 새롭게 추가\n// {\n//     \"name\" : \"무한도전 모자\",\n//     \"img\" : \"cap.png\",\n//     \"description\" : \"한정판 남성 모자\",\n//     \"price\" : 30000,\n//     \"itemCategory\" : \"남성 의류\",\n//     \"itemSubCategory\" : \"모자\",\n//     \"stock\" : 15\n// }\n\n\n// 새로 생성\n// {\n//     \"name\" : \"닌텐도 스위치\",\n//     \"img\" : \"nintendo.png\",\n//     \"description\" : \"닌텐도 스위치 판매합니다\",\n//     \"price\" : 300000,\n//     \"itemCategory\" : \"게임기\",\n//     \"itemSubCategory\" : \"닌텐도\",\n//     \"stock\" : 5\n// }\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update/{shopItemId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"티셔츠\",\n    \"img\" : \"t-shirt.png\",\n    \"description\" : \"티셔츠 판매합니다\",\n    \"price\" : 15000,\n    \"itemCategory\" : \"공용 의류\",\n    \"itemSubCategory\" : \"상의\",\n    \"stock\" : 5\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/update/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete/{shopItemId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/delete/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : \"무한도전\",\n    // \"itemCategory\" : \"남성 의류\",\n    \"itemSubCategory\" : \"하의\",\n    \"minPrice\" : 10000,\n    \"maxPrice\" : 100000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/search?page=0&size=5",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"search"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categories",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/categories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categories/{categoryId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/categories/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categories/merge/{categoryId1}/{categoryId2}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/categories/merge/5/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"categories",
+										"merge",
+										"5",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "categories/merge/sub/{subCategoryId1}/{subCateogryId2}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/categories/merge/sub/11/13",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"categories",
+										"merge",
+										"sub",
+										"11",
+										"13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sale",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"itemId\" : 1,\n    \"expirationDate\" : \"2024-09-04T14:50:00\",  // 예시: 2024년 9월 4일 14시 50분\n    \"discountRete\" : \"10.0\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/item/sale",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"item",
+										"sale"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": 1,\n            \"quantity\": 15\n        },\n        {\n            \"itemId\": 2,\n            \"quantity\": 15\n        },\n        {\n            \"itemId\": 3,\n            \"quantity\": 15\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/order/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cancel/{orderId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/order/1/cancel",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"1",
+										"cancel"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "approval/{orderId}",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/order/2/approve",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"order",
+										"2",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"빵빵이의 옷가게\",\n    \"introduction\" : \"빵빵이의 옷가게 입니다\"\n    // \"shopCategory\" : \"FASHION\"\n    // 모두 작성하지 않을 경우 쇼핑몰 개설 신청 불가\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "open-request",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/open-request",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"open-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "open-request/list",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/open-request/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"open-request",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "open-request/{shopId}/approve",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/open-request/3/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"open-request",
+								"3",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "open-request/{shopId}/reject",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/open-request/6/reject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"open-request",
+								"6",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "close-request",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/close-request",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"close-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "close-request/list",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/close-request/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"close-request",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "close-request/{shopId}/approve",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/close-request/9/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"close-request",
+								"9",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"마켓\",\n    \"shopCategory\" : \"FASHION\"\n    // \"itemCategory\" : \"MENS_CLOTHING\"\n    // \"itemSubCategory\" : \"MENS_TOPS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/shop/search?page=0&size=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"shop",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
