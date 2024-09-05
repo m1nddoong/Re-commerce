@@ -16,7 +16,7 @@
 - DB : `PostgreSQL`, `Redis`
 - ORM : `Spring Data JPA`
 - Test/Documentation
-  - `Postman`
+  - `Postman` : [Postman API 명세 다운로드](..%2F..%2F..%2FDownloads%2F%EC%9D%B4%EB%AF%B8%EC%A7%80%2FMarket.postman_collection.json) 
   - `Swagger`
 
 ## 아키텍처
