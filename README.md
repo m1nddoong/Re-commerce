@@ -204,7 +204,7 @@
 
 ## 기술적 도전
 - 외부 DB 사용 : SQlite -> PostgreSQL
-- 회원 엔티티 키 구성 : tsid 를 PK로 사용, uuid는 별도로 사용
+- 회원 엔티티 키 구성 uuid
 - 더미데이터 추가 : applicationRunner 사용
 - 테스트 코드 도입 
 - Spring Security + JWT + Redis 
@@ -221,7 +221,7 @@
 - 필터에서 RefreshToken 자동 발급 시 문제점 및 토큰 재발급에 대한 방향 (RTR)
 - JWT 토큰을 헤더에 노출시키면 위험한 이유
 - querydsl 쇼핑몰 조회 쿼리 작성 후 결과 dto 로 받는방법 - Projections 필드명 불일치 오류
-- 커스텀 에러 처리 시
+- 커스텀 에러 처리
 - 일반 회원가입, OAuth2 회원가입 통합 - PrincipalDetails, 쿠키 도입 후 필터 수정
 - 필터를 거치지 않는 URL 경로 설정 : shouldNotFilter 오버라이딩
 - 멀티파트 데이터 전송 시 Swagger 오류 : `'application/octet-stream' not supported`

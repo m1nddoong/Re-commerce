@@ -37,8 +37,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "users")
 public class User extends BaseEntity {
     @Id
-    @Tsid
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID uuid;
     @Column(nullable = false, unique = true)
