@@ -58,7 +58,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// TSID
-	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.6'
+	// implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.6'
+	// https://mvnrepository.com/artifact/com.github.f4b6a3/tsid-creator
+	implementation group: 'com.github.f4b6a3', name: 'tsid-creator', version: '5.2.6'
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
