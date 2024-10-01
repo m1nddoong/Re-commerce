@@ -5,16 +5,14 @@ import com.example.market.domain.auth.entity.Tsid;
 import com.example.market.domain.auth.entity.Tsid.FactorySupplierCustom;
 import com.example.market.domain.auth.entity.User;
 import com.example.market.domain.auth.repository.UserRepository;
-import com.example.market.global.config.QuerydslConfig;
+import com.example.market.global.config.JpaConfig;
 import com.github.f4b6a3.tsid.TsidFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test") // application-test.yaml 과 같은 파일을 자동으로 찾음
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(QuerydslConfig.class)
+@Import(JpaConfig.class)
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;

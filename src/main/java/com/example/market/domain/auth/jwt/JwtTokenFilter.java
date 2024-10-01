@@ -43,7 +43,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         // 쿠키에 담긴 Authorization값 Token으로 받아오고 검증하기
         log.info("JWT 쿠키 검증 시작");
-        String accessToken = getTokenFromCookie(request);
+        String accessToken = jwtTokenUtils.getTokenFromCookie(request);
         if (accessToken == null) {
             log.info("토큰이 정보가 없습니다.");
             filterChain.doFilter(request, response);
@@ -53,28 +53,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 토큰 소멸 시간 검증
         if (jwtTokenUtils.isExpired(accessToken)) {
             log.info("토큰이 만료되었습니다. 다시 로그인 하세요");
+
             filterChain.doFilter(request, response);
         }
 
+        // TODO: 블랙 리스트에 포함된 accessToken 인지 확인하는 로직 필요
+        // 만약 블랙리스트에 등록된 토큰인 경우 예외 처리하기
+
         setAuthentication(accessToken);
         filterChain.doFilter(request, response);
-    }
-
-    private String getTokenFromCookie(HttpServletRequest request) {
-        String authorization = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authorization")) {
-                    authorization = cookie.getValue();
-                    log.info("authorization 쿠키: {} ", authorization);
-                }
-            }
-        } else {
-            log.info("No cookies found");
-        }
-        return authorization;
-
     }
 
     private void setAuthentication(String accessToken) {

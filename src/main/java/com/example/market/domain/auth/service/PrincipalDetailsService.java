@@ -23,6 +23,7 @@ import com.example.market.global.util.FileHandlerUtils;
 import com.example.market.domain.shop.entity.Shop;
 import com.example.market.domain.shop.repository.ShopRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -117,7 +118,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         String newAccessToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.ACCESS);
         String newRefreshToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.REFRESH);
 
-        // redis에 uuid, accessToken, refreshToken 저장
+        // redis에 uuid, refreshToken 저장
         refreshTokenRepository.save(RefreshToken.builder()
                 .uuid(String.valueOf(user.getUuid()))
                 .refreshToken(newRefreshToken)
@@ -149,12 +150,14 @@ public class PrincipalDetailsService implements UserDetailsService {
                             throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
                         }
                 );
+        // TODO : accessToken 을 BlackList에 넣기
+
         // 쿠키 삭제
         Cookie cookie = cookieUtil.deleteCookie("Authorization");
         response.addCookie(cookie);
     }
 
-    /**
+    /**ㅛ
      * 프로필 조회
      */
     public UserDto myProfile(PrincipalDetails principalDetails) {

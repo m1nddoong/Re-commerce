@@ -1,8 +1,11 @@
 package com.example.market.domain.auth.jwt;
 
 import com.example.market.domain.auth.dto.PrincipalDetails;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
@@ -41,6 +44,8 @@ public class JwtTokenUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
+
+
     public String createJwt(String email, TokenType tokenType) {
         Instant now = Instant.now();
         return Jwts.builder()
@@ -57,4 +62,23 @@ public class JwtTokenUtils {
                 principalDetails, null, principalDetails.getAuthorities()
         );
     }
+
+    public String getTokenFromCookie(HttpServletRequest request) {
+        String authorization = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Authorization")) {
+                    authorization = cookie.getValue();
+                    log.info("authorization 쿠키: {} ", authorization);
+                }
+            }
+        } else {
+            log.info("No cookies found");
+        }
+        return authorization;
+
+    }
+
+
 }
