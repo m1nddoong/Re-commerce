@@ -56,9 +56,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
         else {
             log.info("{} 로그인이 최초 입니다.", oAuth2Response.getProvider());
             // 유저 생성
-            UUID uuid = UUID.randomUUID();
             User newUser = userRepository.save(User.builder()
-                    .uuid(uuid)
                     .email(oAuth2Response.getEmail())
                     .username(oAuth2Response.getName())
                     .socialType(SocialType.valueOf(registrationId))

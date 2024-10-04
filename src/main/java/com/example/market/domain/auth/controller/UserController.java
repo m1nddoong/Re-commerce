@@ -33,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Tag(name = "auth", description = "사용자 인증 관련 API")
-// @SecurityRequirement(name = "Authorization")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -80,9 +79,10 @@ public class UserController {
             description = "<p>현재 인증된 사용자는 로그이웃 합니다.</p>"
     )
     public ResponseEntity<String> signOut(
+            HttpServletRequest request,
             HttpServletResponse response
     ) {
-        principalDetailsService.signOut(response);
+        principalDetailsService.signOut(request, response);
         return ResponseEntity.ok("로그아웃 성공!");
     }
 
@@ -119,8 +119,12 @@ public class UserController {
             description = "<p>현재 인증된 사용자의 uuid 부터 redis 에 저장된 accessToken 을 찾고,</p>"
                     + "<p>accessToken, refreshToken 재발급</p>"
     )
-    public ResponseEntity<JwtTokenDto> refreshJwtToken(HttpServletResponse response) {
-        return ResponseEntity.ok(principalDetailsService.refreshJwtToken(response));
+    public ResponseEntity<JwtTokenDto> refreshJwtToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+
+    ) {
+        return ResponseEntity.ok(principalDetailsService.refreshJwtToken(request, response));
     }
 
     @PutMapping("/business-apply")
@@ -145,7 +149,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/business-requests/{uuid}/approve")
+    @PutMapping("/business-requests/{userId}/approve")
     @Operation(
             summary = "사업자 사용자 전환 신청 수락",
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청을 수락할 수 있다.</p>"
@@ -153,23 +157,23 @@ public class UserController {
                     + "<p>사업자 사용자는 이 쇼핑몰의 주인이 된다.</p>"
     )
     public ResponseEntity<UserDto> approveBusinessRequest(
-            @PathVariable(value = "uuid")
-            UUID uuid
+            @PathVariable(value = "userId")
+            Long userId
     ) {
-        return ResponseEntity.ok(principalDetailsService.approveBusinessRequest(uuid));
+        return ResponseEntity.ok(principalDetailsService.approveBusinessRequest(userId));
     }
 
-    @PutMapping("/business-requests/{uuid}/reject")
+    @PutMapping("/business-requests/{userId}/reject")
     @Operation(
             summary = "사업자 사용자 전환 신청 거절",
             description = "<p><b>관리자</b> 사업자 사용자 전환 신청을 거절할 수 있다.</p>"
                     + "<p>다른 회원가입 과정을 통해 만들어진 사용자는 관리자가 될 수 없다.</p>"
     )
     public ResponseEntity<UserDto> rejectBusinessRequest(
-            @PathVariable(value = "uuid")
-            UUID uuid
+            @PathVariable(value = "userId")
+            Long userId
     ) {
-        return ResponseEntity.ok(principalDetailsService.rejectBusinessRequest(uuid));
+        return ResponseEntity.ok(principalDetailsService.rejectBusinessRequest(userId));
     }
 }
 

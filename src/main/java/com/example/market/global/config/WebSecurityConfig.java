@@ -1,5 +1,6 @@
 package com.example.market.global.config;
 
+import com.example.market.domain.auth.repository.LogoutTokenRepository;
 import com.example.market.domain.auth.service.PrincipalDetailsService;
 import com.example.market.domain.auth.jwt.JwtTokenFilter;
 import com.example.market.domain.auth.jwt.JwtTokenUtils;
@@ -27,6 +28,7 @@ public class WebSecurityConfig {
     private final PrincipalDetailsService principalDetailsService;
     private final PrincipalOAuth2UserService principalOAuth2UserService;
     private final OAuth2LoginSuccessHandler OAuth2LoginSuccessHandler;
+    private final LogoutTokenRepository logoutTokenRepository;
 
     // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
     @Bean
@@ -119,7 +121,8 @@ public class WebSecurityConfig {
                 .addFilterBefore(
                         new JwtTokenFilter(
                                 jwtTokenUtils,
-                                principalDetailsService
+                                principalDetailsService,
+                                logoutTokenRepository
                         ),
                         UsernamePasswordAuthenticationFilter.class
                 )

@@ -38,7 +38,12 @@ public enum ErrorCode {
 
     // 회원가입 관련 에러
     LOGIN_PASSWORD_CHECK_NOT_MATCH(400, "3016", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
-    LOGIN_DUPLICATED_EMAIL(400, "3017", "이미 존재하는 이메일 입니다.");
+    LOGIN_DUPLICATED_EMAIL(400, "3017", "이미 존재하는 이메일 입니다."),
+
+    // 토큰 관련 에러
+    ACCESS_TOKEN_EXPIRED(401, "4001", "AccessToken 이 만료되었습니다."),
+    ACCESS_TOKEN_IS_BLACKLISTED(401, "4001", "사용할 수 없는 AccessToken 입니다.");
+
 
 
 

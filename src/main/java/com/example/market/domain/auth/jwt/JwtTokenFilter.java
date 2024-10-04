@@ -1,7 +1,11 @@
 package com.example.market.domain.auth.jwt;
 
 import com.example.market.domain.auth.dto.PrincipalDetails;
+import com.example.market.domain.auth.repository.LogoutTokenRepository;
 import com.example.market.domain.auth.service.PrincipalDetailsService;
+import com.example.market.global.error.exception.ErrorCode;
+import com.example.market.global.error.exception.GlobalCustomException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -21,6 +25,7 @@ import java.io.IOException;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final PrincipalDetailsService principalDetailsService;
+    private final LogoutTokenRepository logoutTokenRepository;
 
     // filter 에서 제외시킬 URL
     @Override
@@ -44,21 +49,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 쿠키에 담긴 Authorization값 Token으로 받아오고 검증하기
         log.info("JWT 쿠키 검증 시작");
         String accessToken = jwtTokenUtils.getTokenFromCookie(request);
-        if (accessToken == null) {
-            log.info("토큰이 정보가 없습니다.");
-            filterChain.doFilter(request, response);
-            return;
+
+        if (accessToken == null || jwtTokenUtils.isExpired(accessToken)) {
+            throw new ExpiredJwtException(null, null, "accessToken이 만료되었습니다.");
         }
 
-        // 토큰 소멸 시간 검증
-        if (jwtTokenUtils.isExpired(accessToken)) {
-            log.info("토큰이 만료되었습니다. 다시 로그인 하세요");
-
-            filterChain.doFilter(request, response);
+        // 블랙 리스트에 포함된 accessToken 인지 확인
+        if (logoutTokenRepository.existsByAccessToken(accessToken)) {
+            throw new GlobalCustomException(ErrorCode.ACCESS_TOKEN_IS_BLACKLISTED);
         }
-
-        // TODO: 블랙 리스트에 포함된 accessToken 인지 확인하는 로직 필요
-        // 만약 블랙리스트에 등록된 토큰인 경우 예외 처리하기
 
         setAuthentication(accessToken);
         filterChain.doFilter(request, response);

@@ -7,4 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class GlobalCustomException extends RuntimeException {
     private ErrorCode errorCode;
+
+    public GlobalCustomException(ErrorCode errorCode, Throwable cause) {
+        super(cause);
+        this.errorCode = errorCode;
+    }
 }

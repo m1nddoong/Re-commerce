@@ -1,20 +1,28 @@
 package com.example.market.domain.auth.entity;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@RedisHash(value = "RefreshToken", timeToLive = 60 * 20) // 20분 이후 자동 삭제
+@RedisHash(value = "refresh_token", timeToLive = 60*60*24*3) // 7일
 public class RefreshToken {
     @Id
-    private String uuid;
     private String refreshToken;
+    @Indexed
+    private String accessToken;
+    private Long userId;
+
+    @Transactional
+    public void updateRefreshToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

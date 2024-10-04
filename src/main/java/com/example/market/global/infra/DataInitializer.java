@@ -1,6 +1,7 @@
 package com.example.market.global.infra;
 
 
+import com.example.market.domain.auth.entity.TsidGenerator;
 import com.example.market.domain.shop.entity.Category;
 import com.example.market.domain.auth.constant.BusinessStatus;
 import com.example.market.domain.auth.constant.Role;
@@ -184,7 +185,6 @@ public class DataInitializer implements ApplicationRunner {
     private User createUser(String email, String username, String nickname, String businessNum, BusinessStatus businessStatus,
                             Role role) {
         return User.builder()
-                .uuid(UUID.randomUUID())
                 .email(email)
                 .password(passwordEncoder.encode("1111"))
                 .username(username)

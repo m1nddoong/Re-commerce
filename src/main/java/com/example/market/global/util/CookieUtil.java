@@ -1,6 +1,5 @@
 package com.example.market.global.util;
 
-import com.example.market.domain.auth.jwt.TokenType;
 import jakarta.servlet.http.Cookie;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,7 @@ public class CookieUtil {
         Cookie cookie = new Cookie(key, value);
         cookie.setPath("/");
         // cookie.setSecure(true); // https 에서만 쿠키를 사용할 수 있도록 설정
-        cookie.setMaxAge((int) TokenType.ACCESS.getTokenValidMillis());
+        cookie.setMaxAge(60*1000);
         cookie.setHttpOnly(true);
         return cookie;
     }

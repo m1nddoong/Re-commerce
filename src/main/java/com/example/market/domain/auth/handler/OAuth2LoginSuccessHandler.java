@@ -3,10 +3,8 @@ package com.example.market.domain.auth.handler;
 import com.example.market.domain.auth.entity.RefreshToken;
 import com.example.market.domain.auth.repository.RefreshTokenRepository;
 import com.example.market.domain.auth.jwt.JwtTokenUtils;
-import com.example.market.domain.auth.jwt.TokenType;
 import com.example.market.domain.auth.dto.PrincipalDetails;
 import com.example.market.global.util.CookieUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenUtils jwtTokenUtils;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final CookieUtil cookieUtil;
 
     @Override
@@ -29,23 +26,17 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication
-    ) throws IOException, ServletException {
+    ) throws IOException {
         log.info("OAuth2 Login 성공!");
 
         // principal 정보 가져오기
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        String email = principalDetails.getName();
+        Long userId = principalDetails.getUser().getId();
 
         // jwt 토큰 발급 및 쿠키에 저장
-        String accessToken = jwtTokenUtils.createJwt(email, TokenType.ACCESS);
-        String refreshToken = jwtTokenUtils.createJwt(email, TokenType.REFRESH);
+        String accessToken = jwtTokenUtils.generateAccessToken(userId);
+        jwtTokenUtils.generateRefreshToken(accessToken, userId);
         response.addCookie(cookieUtil.createCookie("Authorization", accessToken));
-
-        // Redis에 'uuid - refreshToken' 저장
-        refreshTokenRepository.save(RefreshToken.builder()
-                .uuid(String.valueOf(principalDetails.getUser().getUuid()))
-                .refreshToken(refreshToken)
-                .build());
 
         // .로그인 성공 후 리다이렉팅 페이지
         response.sendRedirect("http://localhost:3000/");

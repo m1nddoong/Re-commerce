@@ -61,8 +61,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath username = createString("username");
 
-    public final ComparablePath<java.util.UUID> uuid = createComparable("uuid", java.util.UUID.class);
-
     public QUser(String variable) {
         this(User.class, forVariable(variable), INITS);
     }

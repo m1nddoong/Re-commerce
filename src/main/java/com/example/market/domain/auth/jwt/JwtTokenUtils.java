@@ -1,7 +1,12 @@
 package com.example.market.domain.auth.jwt;
 
 import com.example.market.domain.auth.dto.PrincipalDetails;
-import io.jsonwebtoken.Claims;
+import com.example.market.domain.auth.entity.RefreshToken;
+import com.example.market.domain.auth.entity.User;
+import com.example.market.domain.auth.repository.RefreshTokenRepository;
+import com.example.market.domain.auth.repository.UserRepository;
+import com.example.market.global.error.exception.ErrorCode;
+import com.example.market.global.error.exception.GlobalCustomException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
 import jakarta.servlet.http.Cookie;
@@ -9,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
@@ -23,18 +29,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenUtils {
     private final SecretKey secretKey;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     public JwtTokenUtils(
             @Value("${jwt.secret}")
-            String secret
-    ) {
+            String secret,
+            RefreshTokenRepository refreshTokenRepository, UserRepository userRepository,
+            UserRepository userRepository1) {
         this.secretKey = new SecretKeySpec(
                 secret.getBytes(StandardCharsets.UTF_8),
                 SIG.HS256.key().build().getAlgorithm()
         );
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository1;
     }
 
-    // accessToken 으로 eamil 정보 취득
+    // accessToken 으로 userId 정보 취득
     public String getEmail(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload()
                 .get("email", String.class);
@@ -46,14 +57,21 @@ public class JwtTokenUtils {
 
 
 
-    public String createJwt(String email, TokenType tokenType) {
+    public String generateAccessToken(Long userId) {
         Instant now = Instant.now();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
         return Jwts.builder()
-                .claim("email", email)
+                .claim("email", user.getEmail())
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plusMillis(tokenType.getTokenValidMillis())))
+                .expiration(Date.from(now.plusMillis(60 * 1000)))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    public void generateRefreshToken(String accessToken, Long userId) {
+        RefreshToken token = new RefreshToken(UUID.randomUUID().toString(), accessToken, userId);
+        refreshTokenRepository.save(token);
     }
 
     public Authentication getAuthentication(PrincipalDetails principalDetails) {

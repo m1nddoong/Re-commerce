@@ -2,9 +2,10 @@ package com.example.market.domain.auth.service;
 
 import com.example.market.domain.auth.constant.BusinessStatus;
 import com.example.market.domain.auth.constant.Role;
+import com.example.market.domain.auth.entity.LogoutToken;
 import com.example.market.domain.auth.entity.RefreshToken;
 import com.example.market.domain.auth.entity.User;
-import com.example.market.domain.auth.jwt.TokenType;
+import com.example.market.domain.auth.repository.LogoutTokenRepository;
 import com.example.market.domain.auth.repository.RefreshTokenRepository;
 import com.example.market.domain.auth.dto.BusinessDto;
 import com.example.market.domain.auth.dto.CreateUserDto;
@@ -51,6 +52,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final AuthenticationFacade authFacade;
     private final FileHandlerUtils fileHandlerUtils;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LogoutTokenRepository logoutTokenRepository;
 
     /**
      * 회원 가입
@@ -88,7 +90,6 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         // 사용자 생성
         return UserDto.fromEntity(userRepository.save(User.builder()
-                .uuid(UUID.randomUUID())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .username(dto.getUsername())
@@ -107,57 +108,49 @@ public class PrincipalDetailsService implements UserDetailsService {
             LoginDto dto,
             HttpServletResponse response
     ) {
-        // 사용자 존재 확인
+        // 사용자 존재 확인 & 비밀번호 체크
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-        // 비밀번호 체크
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        // accessToken, refreshToken 생성
-        String newAccessToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.ACCESS);
-        String newRefreshToken = jwtTokenUtils.createJwt(user.getEmail(), TokenType.REFRESH);
-
-        // redis에 uuid, refreshToken 저장
-        refreshTokenRepository.save(RefreshToken.builder()
-                .uuid(String.valueOf(user.getUuid()))
-                .refreshToken(newRefreshToken)
-                .build());
+        // ATK, RTK 생성
+        String accessToken = jwtTokenUtils.generateAccessToken(user.getId());
+        jwtTokenUtils.generateRefreshToken(accessToken, user.getId());
 
         // 쿠키 생성
-        response.addCookie(cookieUtil.createCookie("Authorization", newAccessToken));
+        response.addCookie(cookieUtil.createCookie("Authorization", accessToken));
 
         // JWT 토큰 발급 -> 이후 JwtTokenFilter 에서 유효성 검증 후 인증 정보 저장
         return JwtTokenDto.builder()
-                .uuid(String.valueOf(user.getUuid()))
-                .accessToken(newAccessToken)
-                .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
-                .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
+                .userId(user.getId())
+                .accessToken(accessToken)
+                .expiredDate(LocalDateTime.now().plusSeconds(60))
+                .expiredSecond(60L)
                 .build();
     }
 
     /**
      * 로그아웃 (redis 에서 token 정보 삭제)
      */
-    public void signOut(HttpServletResponse response) {
-        // 현재 인증된 사용자의 uuid 조회
-        String uuid = String.valueOf(authFacade.extractUser().getUuid());
+    public void signOut(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String accessToken = jwtTokenUtils.getTokenFromCookie(request);
+
         // Redis 에서 refreshToken 삭제
-        refreshTokenRepository.findById(uuid)
-                .ifPresentOrElse(
-                        refreshTokenRepository::delete,
-                        () -> {
-                            throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
-                        }
-                );
-        // TODO : accessToken 을 BlackList에 넣기
+        RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+        refreshTokenRepository.deleteById(refreshToken.getRefreshToken());
+        logoutTokenRepository.save(new LogoutToken(UUID.randomUUID().toString(), accessToken));
 
         // 쿠키 삭제
         Cookie cookie = cookieUtil.deleteCookie("Authorization");
         response.addCookie(cookie);
     }
 
-    /**ㅛ
+    /**
      * 프로필 조회
      */
     public UserDto myProfile(PrincipalDetails principalDetails) {
@@ -203,29 +196,19 @@ public class PrincipalDetailsService implements UserDetailsService {
     }
 
     /**
-     * accessToken, refreshToken 재발급
+     * ATK 만료시 ATK, RTK 재발급
      */
-    public JwtTokenDto refreshJwtToken(HttpServletResponse response) {
-        // 현재 인증된 사용자 정보 가져오기
-        User currentUser = authFacade.extractUser();
-        String uuid = String.valueOf(currentUser.getUuid());
-        String email = currentUser.getEmail();
+    public JwtTokenDto refreshJwtToken(HttpServletRequest request, HttpServletResponse response) {
+        // ATK 을 통해 Redis 로 부터 RTK 조회
+        String accessToken = jwtTokenUtils.getTokenFromCookie(request);
+        RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+        Long userId = refreshToken.getUserId();
 
-        // uuid 로 refreshToken 조회
-        RefreshToken storedRefreshToken = refreshTokenRepository.findById(uuid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        // 사용자 정보를 바탕으로 새로운 accessToken, refreshToken 생성
-        String newAccessToken = jwtTokenUtils.createJwt(email, TokenType.ACCESS);
-        String newRefreshToken = jwtTokenUtils.createJwt(email, TokenType.REFRESH);
-
-        // 기존 refreshToken 삭제, 새 refreshToken을 redis 에 저장
-        refreshTokenRepository.delete(storedRefreshToken);
-        refreshTokenRepository.save(RefreshToken.builder()
-                .uuid(uuid)
-                .refreshToken(newRefreshToken)
-                .build()
-        );
+        // 기존 Token 삭제, 새로운 AT, RT 발급
+        refreshTokenRepository.delete(refreshToken);
+        String newAccessToken = jwtTokenUtils.generateAccessToken(userId);
+        jwtTokenUtils.generateRefreshToken(newAccessToken, userId);
 
         // 기존 Authroization 쿠키 삭제, 새 쿠키 생성 및 추가
         Cookie deleteCookie = cookieUtil.deleteCookie("Authorization");
@@ -234,10 +217,10 @@ public class PrincipalDetailsService implements UserDetailsService {
         response.addCookie(newCookie);
 
         return JwtTokenDto.builder()
-                .uuid(uuid)
+                .userId(userId)
                 .accessToken(newAccessToken)
-                .expiredDate(LocalDateTime.now().plusSeconds(TokenType.ACCESS.getTokenValidMillis() / 1000))
-                .expiredSecond(TokenType.ACCESS.getTokenValidMillis() / 1000)
+                .expiredDate(LocalDateTime.now().plusSeconds(60))
+                .expiredSecond(60L)
                 .build();
     }
 
@@ -270,11 +253,11 @@ public class PrincipalDetailsService implements UserDetailsService {
     /**
      * 사업자 전환 신청 수락 -> 사업자 사용자로 전환
      *
-     * @param uuid 사용자 uuid
+     * @param userId 사용자 id
      * @return 사업자 전환 수락된 사용자
      */
-    public UserDto approveBusinessRequest(UUID uuid) {
-        User user = userRepository.findUserByUuid(uuid)
+    public UserDto approveBusinessRequest(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setBusinessStatus(BusinessStatus.APPROVED);
         user.setRole(Role.BUSINESS_USER);
@@ -288,10 +271,10 @@ public class PrincipalDetailsService implements UserDetailsService {
     /**
      * 사업자 전환 신청 거절
      *
-     * @param uuid 사용자 uuid
+     * @param userId 사용자 id
      */
-    public UserDto rejectBusinessRequest(UUID uuid) {
-        User user = userRepository.findUserByUuid(uuid)
+    public UserDto rejectBusinessRequest(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         user.setBusinessStatus(BusinessStatus.REJECTED);
         return UserDto.fromEntity(userRepository.save(user));

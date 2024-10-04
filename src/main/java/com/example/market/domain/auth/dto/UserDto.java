@@ -16,7 +16,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
-    private String uuid;
     private String email;
     private String password;
     private String username;
@@ -32,7 +31,6 @@ public class UserDto {
     public static UserDto fromEntity(User entity) {
         return UserDto.builder()
                 .id(entity.getId())
-                .uuid(String.valueOf(entity.getUuid()))
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .nickname(entity.getNickname())

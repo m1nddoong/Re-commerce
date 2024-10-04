@@ -41,7 +41,7 @@ public class TradeOfferService {
         // 따라서 구매 제안을 하는 사람이 이 물품의 주인만 아니면 비활성 사용자는 알아서 제외
         // 구매를 제안하는 사람이 물품의 주인인지 아닌지
         User user = authenticationFacade.extractUser();
-        if (!usedTradeItem.getUser().getUuid().equals(user.getUuid())) {
+        if (!usedTradeItem.getUser().getId().equals(user.getId())) {
             // 구매 제안 생성
             TradeOffer usedTradeOffer = new TradeOffer();
             usedTradeOffer.setItems(usedTradeItem);
