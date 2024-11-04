@@ -32,9 +32,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // principal 정보 가져오기
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Long userId = principalDetails.getUser().getId();
+        String email = principalDetails.getUser().getEmail();
 
         // jwt 토큰 발급 및 쿠키에 저장
-        String accessToken = jwtTokenUtils.generateAccessToken(userId);
+        String accessToken = jwtTokenUtils.generateAccessToken(email);
         jwtTokenUtils.generateRefreshToken(accessToken, userId);
         response.addCookie(cookieUtil.createCookie("Authorization", accessToken));
 

@@ -37,7 +37,6 @@ import org.hibernate.annotations.GenericGenerator;
 public class User extends BaseEntity {
     @Id @Tsid
     private Long id;
-    // private UUID uuid;
     @Column(nullable = false, unique = true)
     private String email;
     private String password;

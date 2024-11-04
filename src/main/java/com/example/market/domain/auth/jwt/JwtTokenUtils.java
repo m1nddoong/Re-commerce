@@ -29,8 +29,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenUtils {
     private final SecretKey secretKey;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
 
     public JwtTokenUtils(
             @Value("${jwt.secret}")
@@ -41,8 +39,6 @@ public class JwtTokenUtils {
                 secret.getBytes(StandardCharsets.UTF_8),
                 SIG.HS256.key().build().getAlgorithm()
         );
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.userRepository = userRepository1;
     }
 
     // accessToken 으로 userId 정보 취득
@@ -55,23 +51,19 @@ public class JwtTokenUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-
-
-    public String generateAccessToken(Long userId) {
+    public String generateAccessToken(String email) {
         Instant now = Instant.now();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
         return Jwts.builder()
-                .claim("email", user.getEmail())
+                .claim("email", email)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(60 * 1000)))
                 .signWith(secretKey)
                 .compact();
     }
 
-    public void generateRefreshToken(String accessToken, Long userId) {
-        RefreshToken token = new RefreshToken(UUID.randomUUID().toString(), accessToken, userId);
-        refreshTokenRepository.save(token);
+    public RefreshToken generateRefreshToken(String accessToken, Long userId) {
+        return new RefreshToken(UUID.randomUUID().toString(), accessToken, userId);
+
     }
 
     public Authentication getAuthentication(PrincipalDetails principalDetails) {

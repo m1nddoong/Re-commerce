@@ -32,6 +32,7 @@ public enum ErrorCode {
     // 사용자 관련 에러
     USER_ALREADY_EXIST(400, "3013", "이미 존재하는 회원입니다."),
     USER_NOT_FOUND(404, "3014", "존재하지 않는 회원입니다."),
+    PHONE_NUMBER_DUPLICATED(400, "3013", "이미 존재하는 휴대폰 번호입니다.."),
 
     // redis 관련 에러
     REFRESH_TOKEN_NOT_FOUND(404, "3015", "리프레시 토큰이 존재하지 않습니다."),

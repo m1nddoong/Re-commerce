@@ -114,9 +114,10 @@ public class PrincipalDetailsService implements UserDetailsService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        // ATK, RTK 생성
-        String accessToken = jwtTokenUtils.generateAccessToken(user.getId());
-        jwtTokenUtils.generateRefreshToken(accessToken, user.getId());
+        // ATK 생성, RTK 생성 및 저장
+        String accessToken = jwtTokenUtils.generateAccessToken(user.getEmail());
+        RefreshToken token = jwtTokenUtils.generateRefreshToken(accessToken, user.getId());
+        refreshTokenRepository.save(token);
 
         // 쿠키 생성
         response.addCookie(cookieUtil.createCookie("Authorization", accessToken));
@@ -187,6 +188,10 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
 
         currentUser.setUsername(dto.getUsername());
+        User user = userRepository.findByPhone(dto.getPhone())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.PHONE_NUMBER_DUPLICATED));
+        // 휴대폰 번호가 겹치므로 기타 예외 처리
+        // 예를 들어서 계정 통합
         currentUser.setPhone(dto.getPhone());
         currentUser.setNickname(dto.getNickname());
         currentUser.setBirthday(dto.getBirthday());
@@ -203,11 +208,17 @@ public class PrincipalDetailsService implements UserDetailsService {
         String accessToken = jwtTokenUtils.getTokenFromCookie(request);
         RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
-        Long userId = refreshToken.getUserId();
 
-        // 기존 Token 삭제, 새로운 AT, RT 발급
+        // RTK 정보에 포함된 userId 를 이용하여 user 를 찾기
+        Long userId = refreshToken.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 기존 Token 삭제
         refreshTokenRepository.delete(refreshToken);
-        String newAccessToken = jwtTokenUtils.generateAccessToken(userId);
+
+        // 새로운 AT, RT 발급
+        String newAccessToken = jwtTokenUtils.generateAccessToken(user.getEmail());
         jwtTokenUtils.generateRefreshToken(newAccessToken, userId);
 
         // 기존 Authroization 쿠키 삭제, 새 쿠키 생성 및 추가
